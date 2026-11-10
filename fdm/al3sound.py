@@ -34,7 +34,7 @@ widened to hold that speed at any height), the gear by true airspeed with the ai
 speed with weight on its wheel, at its contact. A parked wheel's speed jitters about nil: its lowest loop's gate is
 where it falls to -60 dB.
 
-Kept from sound.xml: the rain and the crash; its generic wind, now PyWopWop's, is not. Not kept: the generic rotor, turbine, start and shutdown (the banks
+Kept from sound.xml: the rain (in the cockpit only) and the crash; its generic wind, now PyWopWop's, is not. Not kept: the generic rotor, turbine, start and shutdown (the banks
 replace them), a skid's scrape on touchdown (the Alouette has wheels) and an airspeed overspeed horn above 146 kt, out of
 the aircraft's reach.
 """
@@ -504,11 +504,17 @@ def tyre_entries(bank, g_min):
 # ---------------------------------------------------------------- the file
 
 def kept():
-    """the generic set's entries worth keeping, as they are"""
+    """the generic set's entries worth keeping: the crash as it is (both views), the rain on the canopy in the cockpit
+    only (its file is the windscreen's, as heard inside; the set has none for outside)"""
     root = ET.parse(os.path.join(SND, 'sound.xml')).getroot()
     out = []
     for el in root.find('fx'):
         if el.findtext('name') in KEEP:
+            if el.findtext('name') == 'rain':
+                both = el.find('condition').find('and')
+                view = ET.Element('property')
+                view.text = INTERNAL
+                both.insert(0, view)
             s = ET.tostring(el, encoding='unicode').strip()
             out.append('\t\t' + s + '\n')
     return out

@@ -3313,7 +3313,7 @@
 			<path>Sounds/rain-windshield.wav</path>
 			<condition>
 				<and>
-					<greater-than>
+					<property>sim/current-view/internal</property><greater-than>
 					<property>/environment/rain-norm</property>
 					<value>0.3</value>
 					</greater-than>
