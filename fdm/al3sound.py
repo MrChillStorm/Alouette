@@ -63,6 +63,12 @@ WOW = ('gear/gear[0]/wow', 'gear/gear[1]/wow')     # the two main wheels
 SPD = 'velocities/airspeed-kt'
 VS = 'velocities/vertical-speed-fps'
 AGL = 'position/altitude-agl-ft'
+# outside, the rotors as rendered from ahead and to the right, abeam and behind (PyWopWop's front_right, side and rear),
+# cross-faded by equal power over the listener's bearing from the aircraft (Nasal/al3listener.nas: 0 ahead, 180 behind,
+# the two sides alike); ahead of 45 deg the front quarter's held. A rotor's sound differs with the direction: the tail
+# rotor's tones nearly vanish on its axis, abeam, and stand out from behind and ahead
+AZ = 'sim/sound/al3/listener-az-deg'
+OUT_AZ = {'front_right': 45.0, 'side': 90.0, 'rear': 180.0}
 MASKED_DB = 40.0        # a layer this far (dB(A)) under its loop's loudest isn't wired
 HEARD = 1e-3            # -60 dB: where a fade's last loop stops
 FLAT_RPM = 0.01         # half the width of the rotor's flat tops at its run-up speeds, of its nominal speed
@@ -244,9 +250,16 @@ def rotor_entries(bank, door, g_min):
         plan[c['name']] = ([ramp(AGL, z_hi, z_lo), ramp(SPD, nxt, 0.0)] + ([rest] if rest else []),
                            [lt(AGL, z_hi), lt(SPD, nxt)])
     out, used, dropped = [], [], []
-    for view in ('side', 'cockpit', 'cockpit_open'):
+    outside = [o for o in OUT_AZ if any(k[1] == o for k in files)]
+    az_fade = {}
+    for (up, dn, a, b), o in zip(tents([OUT_AZ[o] for o in outside], [0.0] * len(outside)), outside):
+        w = ([ramp(AZ, *up)] if up else []) + ([ramp(AZ, *dn)] if dn else [])
+        az_fade[o] = ([e('sqrt', e('product', *w) if len(w) > 1 else w[0])] if w else [], gates(AZ, a, b))
+    for view in outside + ['cockpit', 'cockpit_open']:
         group = 'cockpit' if view.startswith('cockpit') else 'exterior'
         vg, vv = view_gate(view, door)
+        if view in az_fade:
+            vv, vg = vv + az_fade[view][0], vg + az_fade[view][1]
         # the run-up's loudest loop, against which its slowest fades out to HEARD
         top = max(files[(c['name'], view, 'mix')]['dba'] for c in runup)
         low = files[(runup[0]['name'], view, 'mix')]['dba']
@@ -288,7 +301,7 @@ def rotor_entries(bank, door, g_min):
                 if name != al3slap.SLAP_REF:
                     continue        # the slap is the reference state's loop alone, at the flight model's level
                 tab, _ = slap
-                key = 'ext' if view == 'side' else 'int'
+                key = 'int' if view.startswith('cockpit') else 'ext'
                 _, y = wavfile.read(os.path.join(bank, fname))
                 room = 10.0 ** (SLAP_PEAK_DBFS / 20.0) / (np.abs(y.astype(np.float64)).max() / 32768.0)
                 b = max(1.0, min(tab['peak'][key], room))

@@ -279,6 +279,8 @@ def flight(dt=0.5):
         t4[i] = t4[i - 1] + (ss[i] - t4[i - 1]) * (1.0 - np.exp(-dt / 1.5))
     P['fdm/jsbsim/eng/t4-degc'] = t4
     P.update(slap_amps(P['velocities/airspeed-kt'], P['velocities/vertical-speed-fps']))
+    # outside, the camera going round the aircraft every 90 s: the listener's bearing over 0-180 deg (al3listener.nas)
+    P['sim/sound/al3/listener-az-deg'] = 90.0 - 90.0 * np.cos(2 * np.pi * np.arange(n) * dt / 90.0)
     gs = col('gs') * 0.514444
     for k in range(3):
         P[f'gear/gear[{k}]/wow'] = col('wow')
@@ -384,6 +386,7 @@ def sweep(E, n=20000, seed=3):
     P['fdm/jsbsim/eng/lit'] = r.integers(0, 2, n).astype(float)
     P['fdm/jsbsim/eng/t4-degc'] = r.uniform(0, 500, n)
     P['rotors/main/slap-ext'] = r.uniform(0, 4, n)
+    P['sim/sound/al3/listener-az-deg'] = r.uniform(0, 180, n)
     P['rotors/main/slap-int'] = r.uniform(0, 4, n)
     P['environment/temperature-degc'] = r.uniform(-30, 45, n)
     w = r.integers(0, 2, n).astype(float)
