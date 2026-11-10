@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- the Alouette's glass: written by fdm/hdrmodel.py -->
+<PropertyList>
+  <name>al3-glass</name>
+  <inherits-from>Effects/model-pbr-transparent</inherits-from>
+  <parameters>
+    <base-color-factor type="vec4d">0.600 0.670 0.640 0.120</base-color-factor>
+    <metallic-factor type="float">1.000</metallic-factor>
+    <roughness-factor type="float">0.050</roughness-factor>
+  </parameters>
+</PropertyList>

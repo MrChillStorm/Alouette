@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- landing, written by fdm/hdrmodel.py (see there): the X-57 model's halo and, in
+     the HDR pipeline, a spot light out through the lens -->
+
+<PropertyList>
+
+  <path>landing-disc.ac</path>
+  <nopreview/>
+
+  <animation>
+    <type>noshadow</type>
+    <object-name>Light</object-name>
+  </animation>
+
+  <effect>      <!-- its glow: 200000 cd over the halo at 1500 m -->
+    <inherits-from>Effects/model-pbr-transparent</inherits-from>
+    <parameters>
+      <metallic-factor type="float">0</metallic-factor>
+      <roughness-factor type="float">1</roughness-factor>
+      <texture n="3">
+        <image>disc.png</image>
+        <type>2d</type>
+        <filter>linear-mipmap-linear</filter>
+        <wrap-s>clamp</wrap-s>
+        <wrap-t>clamp</wrap-t>
+      </texture>
+      <emissive-factor type="vec3d">844.3 776.7 675.4</emissive-factor>
+    </parameters>
+    <object-name>Light</object-name>
+  </effect>
+
+  <animation>
+    <type>alpha-test</type>
+    <alpha-factor>0.01</alpha-factor>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>Light</object-name>
+    <emission>
+      <red> 3 </red>
+      <green> 3 </green>
+      <blue> 3 </blue>
+    </emission>
+  </animation>
+
+  <animation>
+    <type>dist-scale</type>
+    <object-name>Light</object-name>
+    <interpolation>
+      <entry><ind> 0 </ind><dep> 0.15 </dep></entry>
+      <entry><ind> 20 </ind><dep> 0.35 </dep></entry>
+      <entry><ind> 1500 </ind><dep> 4 </dep></entry>
+    </interpolation>
+  </animation>
+
+  <animation>
+    <type>select</type>
+    <object-name>Light</object-name>
+    <condition>
+      <and>
+<property>fdm/jsbsim/electrical/landing-light</property>
+      </and>
+    </condition>
+  </animation>
+
+  <light>
+    <name>landing-light</name>
+    <type>spot</type>
+    <position>
+      <x-m> -0.0052 </x-m>
+      <y-m> 0 </y-m>
+      <z-m> -0.0047 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> -0.7483 </lookat-x-m>
+      <lookat-y-m> 0 </lookat-y-m>
+      <lookat-z-m> -0.6738 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 1 </r>
+      <g> 0.92 </g>
+      <b> 0.8 </b>
+    </color>
+    <intensity> 314.96063 </intensity>      <!-- 200000 cd -->
+    <spot-exponent> 20 </spot-exponent>
+    <spot-cutoff> 12 </spot-cutoff>
+    <range-m> 400 </range-m>
+  </light>
+
+  <animation>
+    <type>noshadow</type>
+    <object-name>landing-light</object-name>
+  </animation>
+
+  <animation>
+    <type>select</type>
+    <object-name>landing-light</object-name>
+    <condition>
+      <and>
+        <property>/sim/rendering/hdr/hdr-enabled</property>
+<property>fdm/jsbsim/electrical/landing-light</property>
+      </and>
+    </condition>
+  </animation>
+
+</PropertyList>

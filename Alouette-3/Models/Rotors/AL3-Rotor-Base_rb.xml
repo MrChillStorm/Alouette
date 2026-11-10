@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- One main rotor blade, written by fdm/rotorvis.py (see there): the 3-D model's blade
+     (Gerard Robin's) with its fading copy and the fan of its blur; AL3-Rotor-Pale<k>_rb.xml turn it -->
+
+<PropertyList>
+
+  <path>Models/al3-blade-rotor.ac</path>
+  <texture-path>Models/Textures</texture-path>
+  <offsets>
+    <heading-deg>180</heading-deg>
+  </offsets>
+
+  <!-- the fan fades in with the rpm; its shadow x 2: two wedges over each point -->
+  <effect>
+    <inherits-from>Aircraft/Alouette-3/Models/Effects/RotorBlur/rotor-blur</inherits-from>
+    <parameters>
+      <fade-from type="float"> 28.256 </fade-from>
+      <fade-to type="float"> 218.984 </fade-to>
+      <pbr-roughness type="float"> 1 </pbr-roughness>
+      <shadow-gain type="float"> 2 </shadow-gain>
+    </parameters>
+    <object-name>mr_blur0</object-name>
+    <object-name>mr_blur1</object-name>
+    <object-name>mr_blur2</object-name>
+    <object-name>mr_blur3</object-name>
+    <object-name>mr_blur4</object-name>
+    <object-name>mr_blur5</object-name>
+    <object-name>mr_blur6</object-name>
+    <object-name>mr_blur7</object-name>
+    <object-name>mr_blur8</object-name>
+    <object-name>mr_blur9</object-name>
+    <object-name>mr_blur10</object-name>
+    <object-name>mr_blur11</object-name>
+    <object-name>mr_blur12</object-name>
+    <object-name>mr_blur13</object-name>
+    <object-name>mr_blur14</object-name>
+    <object-name>mr_blur15</object-name>
+    <object-name>mr_blur16</object-name>
+    <object-name>mr_blur17</object-name>
+    <object-name>mr_blur18</object-name>
+    <object-name>mr_blur19</object-name>
+    <object-name>mr_blur20</object-name>
+    <object-name>mr_blur21</object-name>
+    <object-name>mr_blur22</object-name>
+    <object-name>mr_blur23</object-name>
+  </effect>
+
+  <!-- the blade fades out -->
+  <effect>
+    <inherits-from>Aircraft/Alouette-3/Models/Effects/RotorBlur/rotor-blur</inherits-from>
+    <parameters>
+      <fade-from type="float"> 218.984 </fade-from>
+      <fade-to type="float"> 28.256 </fade-to>
+      <pbr-roughness type="float"> 0.5 </pbr-roughness>
+      <shadow-gain type="float"> 1 </shadow-gain>
+    </parameters>
+    <object-name>tRotor-Pale-S0</object-name>
+    <object-name>tRotor-Pale-S1</object-name>
+    <object-name>tRotor-Pale-S2</object-name>
+    <object-name>tRotor-Pale-S3</object-name>
+    <object-name>tRotor-Pale-S4</object-name>
+    <object-name>tRotor-Pale-S5</object-name>
+    <object-name>tRotor-Pale-S6</object-name>
+    <object-name>tRotor-Pale-S7</object-name>
+  </effect>
+
+  <!-- the opaque blade at low rpm -->
+  <animation>
+    <type>select</type>
+    <object-name>Rotor-Pale-S0</object-name>
+    <object-name>Rotor-Pale-S1</object-name>
+    <object-name>Rotor-Pale-S2</object-name>
+    <object-name>Rotor-Pale-S3</object-name>
+    <object-name>Rotor-Pale-S4</object-name>
+    <object-name>Rotor-Pale-S5</object-name>
+    <object-name>Rotor-Pale-S6</object-name>
+    <object-name>Rotor-Pale-S7</object-name>
+    <condition>
+      <less-than><property>/rotors/main/rpm</property><value> 28.256 </value></less-than>
+    </condition>
+  </animation>
+
+  <!-- then its fading copy -->
+  <animation>
+    <type>select</type>
+    <object-name>tRotor-Pale-S0</object-name>
+    <object-name>tRotor-Pale-S1</object-name>
+    <object-name>tRotor-Pale-S2</object-name>
+    <object-name>tRotor-Pale-S3</object-name>
+    <object-name>tRotor-Pale-S4</object-name>
+    <object-name>tRotor-Pale-S5</object-name>
+    <object-name>tRotor-Pale-S6</object-name>
+    <object-name>tRotor-Pale-S7</object-name>
+    <condition>
+      <and>
+        <not><less-than><property>/rotors/main/rpm</property><value> 28.256 </value></less-than></not>
+        <less-than><property>/rotors/main/rpm</property><value> 218.984 </value></less-than>
+      </and>
+    </condition>
+  </animation>
+
+  <!-- and the fan -->
+  <animation>
+    <type>select</type>
+    <object-name>mr_blur0</object-name>
+    <object-name>mr_blur1</object-name>
+    <object-name>mr_blur2</object-name>
+    <object-name>mr_blur3</object-name>
+    <object-name>mr_blur4</object-name>
+    <object-name>mr_blur5</object-name>
+    <object-name>mr_blur6</object-name>
+    <object-name>mr_blur7</object-name>
+    <object-name>mr_blur8</object-name>
+    <object-name>mr_blur9</object-name>
+    <object-name>mr_blur10</object-name>
+    <object-name>mr_blur11</object-name>
+    <object-name>mr_blur12</object-name>
+    <object-name>mr_blur13</object-name>
+    <object-name>mr_blur14</object-name>
+    <object-name>mr_blur15</object-name>
+    <object-name>mr_blur16</object-name>
+    <object-name>mr_blur17</object-name>
+    <object-name>mr_blur18</object-name>
+    <object-name>mr_blur19</object-name>
+    <object-name>mr_blur20</object-name>
+    <object-name>mr_blur21</object-name>
+    <object-name>mr_blur22</object-name>
+    <object-name>mr_blur23</object-name>
+    <condition>
+      <not><less-than><property>/rotors/main/rpm</property><value> 28.256 </value></less-than></not>
+    </condition>
+  </animation>
+
+  <!-- the old blurred blade and disc sector: not shown (the fan replaces them) -->
+  <animation>
+    <type>select</type>
+    <object-name>Rotor-PaleD</object-name>
+    <object-name>Rotor-Disc_M-Pale</object-name>
+    <condition>
+      <property>sim/model/al3/old-rotor-blur</property>
+    </condition>
+  </animation>
+
+  <!-- wedge k trails the blade by k / 23 of the fan (the rotation is about -z) -->
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur1</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.0147718 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur2</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.0295436 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur3</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.0443153 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur4</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.0590871 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur5</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.0738589 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur6</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.0886307 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur7</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.103402 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur8</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.118174 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur9</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.132946 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur10</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.147718 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur11</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.16249 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur12</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.177261 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur13</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.192033 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur14</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.206805 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur15</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.221577 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur16</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.236348 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur17</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.25112 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur18</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.265892 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur19</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.280664 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur20</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.295436 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur21</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.310207 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur22</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.324979 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>mr_blur23</object-name>
+    <property>/rotors/main/rpm</property>
+    <factor> -0.339751 </factor>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <!-- the wedges as wide as twice their spacing at any rpm (al3-blade-rotor.ac: at 100 %) -->
+  <animation>
+    <type>scale</type>
+    <object-name>mr_blur0</object-name>
+    <object-name>mr_blur1</object-name>
+    <object-name>mr_blur2</object-name>
+    <object-name>mr_blur3</object-name>
+    <object-name>mr_blur4</object-name>
+    <object-name>mr_blur5</object-name>
+    <object-name>mr_blur6</object-name>
+    <object-name>mr_blur7</object-name>
+    <object-name>mr_blur8</object-name>
+    <object-name>mr_blur9</object-name>
+    <object-name>mr_blur10</object-name>
+    <object-name>mr_blur11</object-name>
+    <object-name>mr_blur12</object-name>
+    <object-name>mr_blur13</object-name>
+    <object-name>mr_blur14</object-name>
+    <object-name>mr_blur15</object-name>
+    <object-name>mr_blur16</object-name>
+    <object-name>mr_blur17</object-name>
+    <object-name>mr_blur18</object-name>
+    <object-name>mr_blur19</object-name>
+    <object-name>mr_blur20</object-name>
+    <object-name>mr_blur21</object-name>
+    <object-name>mr_blur22</object-name>
+    <object-name>mr_blur23</object-name>
+    <property>/rotors/main/rpm</property>
+    <x-factor> 0 </x-factor>
+    <x-offset> 1 </x-offset>
+    <y-factor> 0.0028313 </y-factor>
+    <y-offset> 0 </y-offset>
+    <y-min> 0.02 </y-min>
+    <y-max> 1 </y-max>
+    <z-factor> 0 </z-factor>
+    <z-offset> 1 </z-offset>
+  </animation>
+
+</PropertyList>

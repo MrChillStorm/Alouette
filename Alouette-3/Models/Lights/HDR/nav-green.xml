@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- nav-green, written by fdm/hdrmodel.py (see there): the X-57 model's halo and, in
+     the HDR pipeline, a spot light out through the lens -->
+
+<PropertyList>
+
+  <path>GreenLight.ac</path>
+  <nopreview/>
+
+  <animation>
+    <type>noshadow</type>
+    <object-name>Light</object-name>
+  </animation>
+
+  <effect>      <!-- its glow: 40 cd over the halo at 1500 m -->
+    <inherits-from>Effects/model-pbr-transparent</inherits-from>
+    <parameters>
+      <metallic-factor type="float">0</metallic-factor>
+      <roughness-factor type="float">1</roughness-factor>
+      <texture n="3">
+        <image>lights.png</image>
+        <type>2d</type>
+        <filter>linear-mipmap-linear</filter>
+        <wrap-s>clamp</wrap-s>
+        <wrap-t>clamp</wrap-t>
+      </texture>
+      <emissive-factor type="vec3d">0.02594 0.1729 0.07782</emissive-factor>
+    </parameters>
+    <object-name>Light</object-name>
+  </effect>
+
+  <animation>
+    <type>alpha-test</type>
+    <alpha-factor>0.01</alpha-factor>
+  </animation>
+
+  <animation>
+    <type>billboard</type>
+    <object-name>Light</object-name>
+    <spherical type="bool">true</spherical>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>Light</object-name>
+    <emission>
+      <red> 0 </red>
+      <green> 2 </green>
+      <blue> 0 </blue>
+    </emission>
+  </animation>
+
+  <animation>
+    <type>dist-scale</type>
+    <object-name>Light</object-name>
+    <interpolation>
+      <entry><ind> 0 </ind><dep> 0.15 </dep></entry>
+      <entry><ind> 20 </ind><dep> 0.35 </dep></entry>
+      <entry><ind> 1500 </ind><dep> 4 </dep></entry>
+    </interpolation>
+  </animation>
+
+  <animation>
+    <type>select</type>
+    <object-name>Light</object-name>
+    <condition>
+      <and>
+<and>
+<property>fdm/jsbsim/systems/effets/lights/blinker-kinemat-in</property>
+<property>fdm/jsbsim/electrical/strobe-lights</property>
+</and>
+      </and>
+    </condition>
+  </animation>
+
+  <light>
+    <name>nav-green-light</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0 </x-m>
+      <y-m> 0.029 </y-m>
+      <z-m> 0 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0 </lookat-x-m>
+      <lookat-y-m> 1.029 </lookat-y-m>
+      <lookat-z-m> 0 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.15 </r>
+      <g> 1 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity> 0.06299 </intensity>      <!-- 40 cd -->
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 70 </spot-cutoff>
+    <range-m> 20 </range-m>
+  </light>
+
+  <animation>
+    <type>noshadow</type>
+    <object-name>nav-green-light</object-name>
+  </animation>
+
+  <animation>
+    <type>select</type>
+    <object-name>nav-green-light</object-name>
+    <condition>
+      <and>
+        <property>/sim/rendering/hdr/hdr-enabled</property>
+<and>
+<property>fdm/jsbsim/systems/effets/lights/blinker-kinemat-in</property>
+<property>fdm/jsbsim/electrical/strobe-lights</property>
+</and>
+      </and>
+    </condition>
+  </animation>
+
+</PropertyList>

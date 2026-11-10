@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!--
+    Usable with FlightGear
+    Gerard Robin  14-01-2009
+    Copyright License:  CREATIVE-COMMON
+-->
+<PropertyList>
+    <default>
+        <menu n="10">
+            <label>Alouette-III</label>
+            <enabled type="bool">true</enabled>
+	    <!--<item>
+                <label>Aircraft_Control</label>
+                <binding>
+                    <command>nasal</command>
+                    <script>
+                        var start = gui.Dialog.new("/sim/gui/dialogs/AL3/menu/control/dialog",
+                        "Aircraft/Alouette-3/Inputs/propulsion-control.xml");
+                        start.open();
+                    </script>
+                </binding>
+            </item>-->
+	    
+
+	    
+	    <item>
+                <label>Autostart</label>
+                <binding>
+                    <command>nasal</command>
+                    <script>al3.init_Run();</script>
+                </binding>
+            </item>
+
+	   <item>
+                <!-- FlightGear's File > Input Devices, which the Mac's native menu bar may not show -->
+                <label>Input Devices</label>
+                <binding>
+                    <command>dialog-show</command>
+                    <dialog-name>input-systems</dialog-name>
+                </binding>
+            </item>
+
+	   <item>
+                <label>Configuration</label>
+                <binding>
+                    <command>nasal</command>
+                    <script>
+                        var startctl2 = gui.Dialog.new("/sim/gui/dialogs/AL3/menu/control/dialog",
+                        "Aircraft/Alouette-3/Inputs/equipment-control.xml");
+                        startctl2.open();
+                    </script>
+                </binding>
+            </item>
+
+	   <item>
+                <label>Amelia</label>
+		<name>amelia-mnu</name>
+		<enabled>false</enabled>
+                <binding>
+                    <command>nasal</command>
+                    <script>
+			if (getprop("/fdm/jsbsim/animation/amelia") == 0) {return;}
+		
+                        var amtalk = gui.Dialog.new("/sim/gui/dialogs/AL3/menu/amelia/dialog",
+                        "Aircraft/Alouette-3/Inputs/amelia_talk.xml");
+                        amtalk.open();
+                    </script>
+                </binding>
+            </item>
+	   
+            <!--<item>
+                <label>Fcs Devel Help</label>
+                <binding>
+                    <command>nasal</command>
+                    <script>al3.display_helper();</script>
+                </binding>
+            </item>
+	    
+	    <item>
+                <label>Fcs Devel Help close</label>
+                <binding>
+                    <command>nasal</command>
+                    <script>al3.close_helper();</script>
+                </binding>
+            </item>-->
+	   
+	   </menu>
+	   </default>
+</PropertyList>

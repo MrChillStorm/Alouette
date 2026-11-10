@@ -1,0 +1,507 @@
+<?xml version="1.0"?>
+
+<!--
+    Dedicated only to FlightGear
+    Property of Gerard Robin
+    License: GPLv2
+-->
+
+
+
+<PropertyList>
+
+    <path>Models/al3-panel-top.ac</path>
+    <texture-path>Models/Textures</texture-path>
+
+
+    <!--===================GABARIT DE CENTRAGE====ne pas enlever========-->
+   <!-- <animation>
+        <type>select</type>
+        <object-name>Gabarit-Position</object-name>
+        <condition>
+                <equals>
+                    <property>sim/current-view/view-number</property>
+                    <value>999</value>
+                </equals>
+        </condition>
+    </animation>-->
+    
+    
+     <animation>
+        <type>pick</type>
+        <object-name>Inter-Gener</object-name>
+        <action>
+            <button>0</button>
+            <binding>
+                <command>property-toggle</command>
+		<property>fdm/jsbsim/electrical/switch/alternator</property>
+            </binding>
+        </action>
+	<hovered>
+	     <binding>
+		    <command>set-tooltip</command>
+		    <tooltip-id>alternator</tooltip-id>
+		    <label>Alternator: %s</label>
+		    <property>/fdm/jsbsim/electrical/switch/alternator</property>
+		    <mapping>nasal</mapping>
+		    <script>
+		         var modes = ['OFF', 'ON'];
+		         return modes[arg[0]];
+		     </script>
+	      </binding>
+	  </hovered>
+    </animation>
+    
+     <animation>
+        <type>rotate</type>
+        <object-name>Inter-Gener</object-name>
+	<property>fdm/jsbsim/electrical/switch/alternator</property>
+      <interpolation>
+	    <entry>
+		<ind>0.0 </ind>
+		<dep>-40</dep>
+	    </entry>
+	    <entry>
+		<ind>1.0</ind> 
+		<dep>40.0</dep>
+	    </entry>
+	</interpolation>
+        <center>
+            <x-m>0.135603</x-m>
+            <y-m>0</y-m>
+            <z-m>-0.0333249</z-m>
+        </center>
+        <axis>
+            <x>0</x>
+            <y>1</y>
+            <z>0</z>
+        </axis>
+    </animation>
+    
+    <animation>
+        <type>pick</type>
+        <object-name>Inter-Battery</object-name>
+        <action>
+            <button>0</button>
+            <binding>
+                <command>property-toggle</command>
+		<property>fdm/jsbsim/electrical/switch/battery</property>
+            </binding>
+        </action>
+	<hovered>
+	     <binding>
+		    <command>set-tooltip</command>
+		    <tooltip-id>battery</tooltip-id>
+		    <label>Battery: %s</label>
+		    <property>/fdm/jsbsim/electrical/switch/battery</property>
+		    <mapping>nasal</mapping>
+		    <script>
+		         var modes = ['OFF', 'ON'];
+		         return modes[arg[0]];
+		     </script>
+	      </binding>
+	  </hovered>
+    </animation>
+    
+     <animation>
+        <type>rotate</type>
+        <object-name>Inter-Battery</object-name>
+	<property>fdm/jsbsim/electrical/switch/battery</property>
+      <interpolation>
+	    <entry>
+		<ind>0.0 </ind>
+		<dep>-40</dep>
+	    </entry>
+	    <entry>
+		<ind>1.0</ind> 
+		<dep>40.0</dep>
+	    </entry>
+	</interpolation>
+        <center>
+            <x-m>0.135603</x-m>
+            <y-m>0</y-m>
+            <z-m>-0.0333249</z-m>
+        </center>
+        <axis>
+            <x>0</x>
+            <y>1</y>
+            <z>0</z>
+        </axis>
+    </animation>
+    
+    
+    <animation>
+        <type>rotate</type>
+        <object-name>Inverseur-f_pos</object-name>
+	<property>fdm/jsbsim/electrical/switch/WAIT</property>
+      <interpolation>
+	    <entry>
+		<ind>0.0 </ind>
+		<dep>-40</dep>
+	    </entry>
+	    <entry>
+		<ind>1.0</ind> 
+		<dep>40.0</dep>
+	    </entry>
+	</interpolation>
+        <center>
+            <x-m>0.135603</x-m>
+            <y-m>0</y-m>
+            <z-m>-0.0333249</z-m>
+        </center>
+        <axis>
+            <x>0</x>
+            <y>1</y>
+            <z>0</z>
+        </axis>
+    </animation>
+    
+    
+    <animation>
+        <type>rotate</type>
+        <object-name>Inter-gene_alternative</object-name>
+	<property>fdm/jsbsim/electrical/switch/WAIT</property>
+      <interpolation>
+	    <entry>
+		<ind>0.0 </ind>
+		<dep>-40</dep>
+	    </entry>
+	    <entry>
+		<ind>1.0</ind> 
+		<dep>40.0</dep>
+	    </entry>
+	</interpolation>
+        <center>
+            <x-m>0.135603</x-m>
+            <y-m>0</y-m>
+            <z-m>-0.0333249</z-m>
+        </center>
+        <axis>
+            <x>0</x>
+            <y>1</y>
+            <z>0</z>
+        </axis>
+    </animation>
+    
+    <animation>
+        <type>rotate</type>
+        <object-name>Inter-chauff_pitot</object-name>
+	<property>fdm/jsbsim/electrical/switch/WAIT</property>
+      <interpolation>
+	    <entry>
+		<ind>0.0 </ind>
+		<dep>-40</dep>
+	    </entry>
+	    <entry>
+		<ind>1.0</ind> 
+		<dep>40.0</dep>
+	    </entry>
+	</interpolation>
+        <center>
+            <x-m>0.135603</x-m>
+            <y-m>0</y-m>
+            <z-m>-0.0333249</z-m>
+        </center>
+        <axis>
+            <x>0</x>
+            <y>1</y>
+            <z>0</z>
+        </axis>
+    </animation>
+    
+    
+    <animation>
+        <type>rotate</type>
+        <object-name>Inter-silence_HF</object-name>
+	<property>fdm/jsbsim/electrical/switch/WAIT</property>
+      <interpolation>
+	    <entry>
+		<ind>0.0 </ind>
+		<dep>-40</dep>
+	    </entry>
+	    <entry>
+		<ind>1.0</ind> 
+		<dep>40.0</dep>
+	    </entry>
+	</interpolation>
+        <center>
+            <x-m>0.135603</x-m>
+            <y-m>0</y-m>
+            <z-m>-0.0333249</z-m>
+        </center>
+        <axis>
+            <x>0</x>
+            <y>1</y>
+            <z>0</z>
+        </axis>
+    </animation>
+    
+    <animation>
+        <type>rotate</type>
+        <object-name>Inter-HOMING_HF</object-name>
+	<property>fdm/jsbsim/electrical/switch/WAIT</property>
+      <interpolation>
+	    <entry>
+		<ind>0.0 </ind>
+		<dep>-40</dep>
+	    </entry>
+	    <entry>
+		<ind>1.0</ind> 
+		<dep>40.0</dep>
+	    </entry>
+	</interpolation>
+        <center>
+            <x-m>0.135603</x-m>
+            <y-m>0</y-m>
+            <z-m>-0.0333249</z-m>
+        </center>
+        <axis>
+            <x>0</x>
+            <y>1</y>
+            <z>0</z>
+        </axis>
+    </animation>
+    
+    <animation>
+        <type>rotate</type>
+        <object-name>Inter-Telephone</object-name>
+	<property>fdm/jsbsim/electrical/switch/WAIT</property>
+      <interpolation>
+	    <entry>
+		<ind>0.0 </ind>
+		<dep>-40</dep>
+	    </entry>
+	    <entry>
+		<ind>1.0</ind> 
+		<dep>40.0</dep>
+	    </entry>
+	</interpolation>
+        <center>
+            <x-m>0.135603</x-m>
+            <y-m>0</y-m>
+            <z-m>-0.0333249</z-m>
+        </center>
+        <axis>
+            <x>0</x>
+            <y>1</y>
+            <z>0</z>
+        </axis>
+    </animation>
+    
+    
+    <animation>
+        <type>rotate</type>
+        <object-name>Inter-Degivrage</object-name>
+	<property>fdm/jsbsim/electrical/switch/WAIT</property>
+      <interpolation>
+	    <entry>
+		<ind>0.0 </ind>
+		<dep>-40</dep>
+	    </entry>
+	    <entry>
+		<ind>1.0</ind> 
+		<dep>40.0</dep>
+	    </entry>
+	</interpolation>
+        <center>
+            <x-m>0.21502</x-m>
+            <y-m>0</y-m>
+            <z-m>-0.0333249</z-m>
+        </center>
+        <axis>
+            <x>0</x>
+            <y>1</y>
+            <z>0</z>
+        </axis>
+    </animation>
+    
+    
+     <!-- ========mission================-->
+    
+    <animation>
+        <type>pick</type>
+        <object-name>Cmd-Mission-Lock</object-name>
+        <action>
+            <button>0</button>
+            <binding>
+                <command>property-toggle</command>
+		<property>fdm/jsbsim/animation/mission-switch-lock</property>
+            </binding>
+        </action>
+    </animation>
+
+    <animation>
+        <type>pick</type>
+        <object-name>Cmd-Mission</object-name>
+        <action>
+            <button>0</button>
+            <binding>
+                <command>property-toggle</command>
+                <property>fdm/jsbsim/animation/mission-switch</property>
+            </binding>
+        </action>
+	<hovered>
+	     <binding>
+		 <command>set-tooltip</command>
+		 <tooltip-id>winch</tooltip-id>
+		 <label>Winch: %s</label>
+		 <property>/fdm/jsbsim/animation/mission-switch</property>
+		 <mapping>nasal</mapping>
+		 <script>
+		         var modes = ['RETRACTED', 'DEPLOYED'];
+		         return modes[arg[0]];
+		  </script>
+	      </binding>
+	  </hovered>
+    </animation>
+
+    <animation>
+        <type>rotate</type>
+        <object-name>Cmd-Mission-Lock</object-name>
+        <property>fdm/jsbsim/animation/mission-switch-lock</property>
+	<interpolation>
+	    <entry>
+		<ind>0.0 </ind>
+		<dep>-85</dep>
+	    </entry>
+	    <entry>
+		<ind>1</ind> 
+		<dep>0</dep>
+	    </entry>
+	</interpolation>
+        <center>
+            <x-m>0.21959</x-m>
+            <y-m>0.0</y-m>
+            <z-m>-0.04696</z-m>
+        </center>
+        <axis>
+            <x>0</x>
+            <y>1</y>
+            <z>0</z>
+        </axis>
+    </animation>
+
+    <animation>
+        <type>rotate</type>
+        <object-name>Cmd-Mission</object-name>
+        <property>fdm/jsbsim/animation/mission-switch</property>
+	<interpolation>
+	    <entry>
+		<ind>0.0 </ind>
+		<dep>40</dep>
+	    </entry>
+	    <entry>
+		<ind>1</ind> 
+		<dep>-5</dep>
+	    </entry>
+	</interpolation>
+        <center>
+            <x-m>0.201778</x-m>
+            <y-m>0</y-m>
+            <z-m>-0.0323931</z-m>
+        </center>
+        <axis>
+            <x>0</x>
+            <y>1</y>
+            <z>0</z>
+        </axis>
+    </animation>
+    
+    
+     <!-- ======== instrument lighting ================-->
+
+ 	<animation>
+		<type>knob</type>
+		<object-name>Eclairage_pupitre</object-name>
+		<property>/sim/model/al3/instrument-lights</property>
+		<factor>-280</factor>
+		<center>
+			<x-m>0.21549</x-m>
+			<y-m>0.118395</y-m>
+			<z-m>0</z-m>
+		</center>
+		<axis>
+			<x>0</x>
+			<y>0</y>
+			<z>1</z>
+		</axis>
+		<action>
+		    <binding>
+		        <command>property-adjust</command>
+		        <property>/sim/model/al3/instrument-lights</property>
+		        <factor>0.05</factor>
+		        <min>0.0</min>
+		        <max>1.0</max>
+		        <wrap>false</wrap>
+		    </binding>
+		</action>
+	    	<hovered>
+			<binding>
+			    <command>set-tooltip</command>
+			    <tooltip-id>instrument_lights</tooltip-id>
+			    <label>Instrument lights: %s</label>
+			    <property>/sim/model/al3/instrument-lights</property>
+			    <mapping>nasal</mapping>
+			    <script>
+				                     var modes = ['0%', '5%', '10%', '15%', '20%', '25%', '30%', '35%', '40%', '45%', '50%', '55%', '60%', '65%', '70%', '75%', '80%', '85%', '90%', '95%', '100%'];
+		            return modes[int (arg[0] * 20.0)];
+			     </script>
+			 </binding>
+	      	</hovered>
+    	</animation>
+
+
+        <animation>
+            <type>pick</type>
+            <object-name>Eclairage-Panel</object-name>
+            <action>
+                <button>0</button>
+                <binding>
+                    <command>property-adjust</command>
+                    <property>/sim/model/al3/panel-lights</property>
+                    <step>0.05</step>
+                    <min>0</min>
+                    <max>1</max>
+                    <wrap>1</wrap>
+                </binding>
+            </action>
+        </animation>
+
+        <animation>
+            <type>pick</type>
+            <object-name>Eclairage-Panel</object-name>
+            <action>
+                <button>1</button>
+                <binding>
+                    <command>property-adjust</command>
+                    <property>/sim/model/al3/panel-lights</property>
+                    <step>-0.05</step>
+                    <min>0</min>
+                    <max>1</max>
+                    <wrap>1</wrap>
+                </binding>
+            </action>
+        </animation>
+
+
+	<animation>
+		<type>rotate</type>
+		<object-name>Eclairage-Panel</object-name>
+		<object-name>Eclairage-Panel_Fleche</object-name>
+		<property>/sim/model/al3/panel-lights</property>
+		<factor>-280</factor>
+		<center>
+			<x-m>0.21549</x-m>
+			<y-m>-0.118395</y-m>
+			<z-m>0</z-m>
+		</center>
+		<axis>
+			<x>0</x>
+			<y>0</y>
+			<z>1</z>
+		</axis>
+	</animation>
+
+        
+
+</PropertyList>

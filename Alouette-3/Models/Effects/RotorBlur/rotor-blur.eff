@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- The rotors' blur in the HDR pipeline (fdm/rotorvis.py, the Bo 105 and UH-60 models'): Effects/model-transparent with the alpha scaled by
+     the rotor's rpm, clamp((rpm - fade-from) / (fade-to - fade-from), 0, 1): the blur fades in (from < to) and the
+     blade fades out (from > to) as the rotor speeds up, and casts a partial shadow (a dithered fraction alpha x
+     shadow-gain of it), which model-transparent doesn't. Other pipelines keep model-transparent (no fade; the
+     model's select animations switch them at the same rpm). -->
+
+<PropertyList>
+
+  <name>rotor-blur</name>
+  <inherits-from>Effects/model-transparent</inherits-from>
+
+  <parameters>
+    <rotor-rpm type="float"><use>/rotors/main/rpm</use></rotor-rpm>
+    <fade-from type="float">0.0</fade-from>
+    <fade-to type="float">1.0</fade-to>
+    <shadow-gain type="float">1.0</shadow-gain>
+  </parameters>
+
+  <!-- model-transparent leaves this out: the shadow -->
+  <technique n="118">
+    <scheme>hdr-shadow</scheme>
+    <pass>
+      <color-mask type="vec4d">0 0 0 0</color-mask>
+      <cull-face>off</cull-face>
+      <blend>0</blend>
+      <polygon-offset>
+        <factor>1.1</factor>
+        <units>4.0</units>
+      </polygon-offset>
+      <texture-unit>
+        <unit>0</unit>
+        <type><use>texture[0]/type</use></type>
+        <image><use>texture[0]/image</use></image>
+        <filter><use>texture[0]/filter</use></filter>
+        <wrap-s><use>texture[0]/wrap-s</use></wrap-s>
+        <wrap-t><use>texture[0]/wrap-t</use></wrap-t>
+      </texture-unit>
+      <program>
+        <vertex-shader>Shaders/HDR/model_default_shadow.vert</vertex-shader>
+        <fragment-shader>Aircraft/Alouette-3/Shaders/HDR/rotor_blur_shadow.frag</fragment-shader>
+      </program>
+      <uniform>
+        <name>color_tex</name>
+        <type>sampler-2d</type>
+        <value type="int">0</value>
+      </uniform>
+      <uniform>
+        <name>rotor_rpm</name>
+        <type>float</type>
+        <value><use>rotor-rpm</use></value>
+      </uniform>
+      <uniform>
+        <name>fade_from</name>
+        <type>float</type>
+        <value><use>fade-from</use></value>
+      </uniform>
+      <uniform>
+        <name>fade_to</name>
+        <type>float</type>
+        <value><use>fade-to</use></value>
+      </uniform>
+      <uniform>
+        <name>shadow_gain</name>
+        <type>float</type>
+        <value><use>shadow-gain</use></value>
+      </uniform>
+    </pass>
+  </technique>
+
+  <technique n="128">
+    <pass>
+      <program>
+        <fragment-shader n="0">Aircraft/Alouette-3/Shaders/HDR/rotor_blur.frag</fragment-shader>
+      </program>
+      <uniform n="30">
+        <name>rotor_rpm</name>
+        <type>float</type>
+        <value><use>rotor-rpm</use></value>
+      </uniform>
+      <uniform n="31">
+        <name>fade_from</name>
+        <type>float</type>
+        <value><use>fade-from</use></value>
+      </uniform>
+      <uniform n="32">
+        <name>fade_to</name>
+        <type>float</type>
+        <value><use>fade-to</use></value>
+      </uniform>
+    </pass>
+  </technique>
+
+</PropertyList>

@@ -1,0 +1,905 @@
+<?xml version="1.0"?>
+<system name="Alouette III rotor">
+<property value="36.987018">rotor/omega-rad_sec</property>
+<property value="0">rotor/psi-rad</property>
+<property value="0">rotor/tr/psi-rad</property>
+<property value="0">rotor/b0/beta-rad</property>
+<property value="0">rotor/b0/betadot-rad_sec</property>
+<property value="0">rotor/b0/delta-rad</property>
+<property value="0">rotor/b0/deltadot-rad_sec</property>
+<property value="0">rotor/b1/beta-rad</property>
+<property value="0">rotor/b1/betadot-rad_sec</property>
+<property value="0">rotor/b1/delta-rad</property>
+<property value="0">rotor/b1/deltadot-rad_sec</property>
+<property value="0">rotor/b2/beta-rad</property>
+<property value="0">rotor/b2/betadot-rad_sec</property>
+<property value="0">rotor/b2/delta-rad</property>
+<property value="0">rotor/b2/deltadot-rad_sec</property>
+<property value="0">rotor/v0-fps</property>
+<property value="0">rotor/vrs-dv</property>
+<property value="0">rotor/ph/c0</property>
+<property value="0">rotor/ph/c1</property>
+<property value="0">rotor/ph/c2</property>
+<property value="0">rotor/ph/c3</property>
+<property value="0">rotor/ph/s0</property>
+<property value="0">rotor/tr/b0/beta-rad</property>
+<property value="0">rotor/tr/b0/betadot-rad_sec</property>
+<property value="0">rotor/tr/b1/beta-rad</property>
+<property value="0">rotor/tr/b1/betadot-rad_sec</property>
+<property value="0">rotor/tr/b2/beta-rad</property>
+<property value="0">rotor/tr/b2/betadot-rad_sec</property>
+<property value="0">rotor/tr/v0-fps</property>
+<property value="0">rotor/accel-hold</property>
+<property value="0">rotor/initialized</property>
+<channel name="shaft kinematics">
+<fcs_function name="rotor/ps"><function><sum><product><value>0.99904822</value><property>mir/velocities-p-rad_sec</property></product><product><value>0.043619387</value><property>mir/velocities-r-rad_sec</property></product></sum></function></fcs_function>
+<fcs_function name="rotor/qs"><function><property>velocities/q-rad_sec</property></function></fcs_function>
+<fcs_function name="rotor/pds"><function><ifthen><gt><property>rotor/accel-hold</property><value>0.5</value></gt><property>rotor/pds</property><sum><product><value>0.99904822</value><property>mir/accelerations-pdot-rad_sec2</property></product><product><value>0.043619387</value><property>mir/accelerations-rdot-rad_sec2</property></product></sum></ifthen></function></fcs_function>
+<fcs_function name="rotor/qds"><function><ifthen><gt><property>rotor/accel-hold</property><value>0.5</value></gt><property>rotor/qds</property><property>accelerations/qdot-rad_sec2</property></ifthen></function></fcs_function>
+<fcs_function name="rotor/Az"><description>hub specific force along the shaft (down +)</description><function><ifthen><gt><property>rotor/accel-hold</property><value>0.5</value></gt><property>rotor/Az</property><difference><product><value>0.99904822</value><sum><product><value>-32.174</value><property>accelerations/Nz</property></product><difference><product><property>mir/accelerations-pdot-rad_sec2</property><quotient><difference><value>-0</value><property>mir/inertia-cg-y-in</property></difference><value>12</value></quotient></product><product><property>accelerations/qdot-rad_sec2</property><quotient><difference><property>inertia/cg-x-in</property><value>118.11024</value></difference><value>12</value></quotient></product></difference><difference><product><property>mir/velocities-p-rad_sec</property><difference><product><property>mir/velocities-r-rad_sec</property><quotient><difference><property>inertia/cg-x-in</property><value>118.11024</value></difference><value>12</value></quotient></product><product><property>mir/velocities-p-rad_sec</property><quotient><difference><property>inertia/cg-z-in</property><value>67.220509</value></difference><value>12</value></quotient></product></difference></product><product><property>velocities/q-rad_sec</property><difference><product><property>velocities/q-rad_sec</property><quotient><difference><property>inertia/cg-z-in</property><value>67.220509</value></difference><value>12</value></quotient></product><product><property>mir/velocities-r-rad_sec</property><quotient><difference><value>-0</value><property>mir/inertia-cg-y-in</property></difference><value>12</value></quotient></product></difference></product></difference></sum></product><product><value>0.043619387</value><sum><product><value>32.174</value><property>accelerations/Nx</property></product><difference><product><property>accelerations/qdot-rad_sec2</property><quotient><difference><property>inertia/cg-z-in</property><value>67.220509</value></difference><value>12</value></quotient></product><product><property>mir/accelerations-rdot-rad_sec2</property><quotient><difference><value>-0</value><property>mir/inertia-cg-y-in</property></difference><value>12</value></quotient></product></difference><difference><product><property>velocities/q-rad_sec</property><difference><product><property>mir/velocities-p-rad_sec</property><quotient><difference><value>-0</value><property>mir/inertia-cg-y-in</property></difference><value>12</value></quotient></product><product><property>velocities/q-rad_sec</property><quotient><difference><property>inertia/cg-x-in</property><value>118.11024</value></difference><value>12</value></quotient></product></difference></product><product><property>mir/velocities-r-rad_sec</property><difference><product><property>mir/velocities-r-rad_sec</property><quotient><difference><property>inertia/cg-x-in</property><value>118.11024</value></difference><value>12</value></quotient></product><product><property>mir/velocities-p-rad_sec</property><quotient><difference><property>inertia/cg-z-in</property><value>67.220509</value></difference><value>12</value></quotient></product></difference></product></difference></sum></product></difference></ifthen></function></fcs_function>
+<fcs_function name="rotor/Ax"><description>hub specific force along the shaft x (forward +)</description><function><ifthen><gt><property>rotor/accel-hold</property><value>0.5</value></gt><property>rotor/Ax</property><sum><product><value>0.99904822</value><sum><product><value>32.174</value><property>accelerations/Nx</property></product><difference><product><property>accelerations/qdot-rad_sec2</property><quotient><difference><property>inertia/cg-z-in</property><value>67.220509</value></difference><value>12</value></quotient></product><product><property>mir/accelerations-rdot-rad_sec2</property><quotient><difference><value>-0</value><property>mir/inertia-cg-y-in</property></difference><value>12</value></quotient></product></difference><difference><product><property>velocities/q-rad_sec</property><difference><product><property>mir/velocities-p-rad_sec</property><quotient><difference><value>-0</value><property>mir/inertia-cg-y-in</property></difference><value>12</value></quotient></product><product><property>velocities/q-rad_sec</property><quotient><difference><property>inertia/cg-x-in</property><value>118.11024</value></difference><value>12</value></quotient></product></difference></product><product><property>mir/velocities-r-rad_sec</property><difference><product><property>mir/velocities-r-rad_sec</property><quotient><difference><property>inertia/cg-x-in</property><value>118.11024</value></difference><value>12</value></quotient></product><product><property>mir/velocities-p-rad_sec</property><quotient><difference><property>inertia/cg-z-in</property><value>67.220509</value></difference><value>12</value></quotient></product></difference></product></difference></sum></product><product><value>0.043619387</value><sum><product><value>-32.174</value><property>accelerations/Nz</property></product><difference><product><property>mir/accelerations-pdot-rad_sec2</property><quotient><difference><value>-0</value><property>mir/inertia-cg-y-in</property></difference><value>12</value></quotient></product><product><property>accelerations/qdot-rad_sec2</property><quotient><difference><property>inertia/cg-x-in</property><value>118.11024</value></difference><value>12</value></quotient></product></difference><difference><product><property>mir/velocities-p-rad_sec</property><difference><product><property>mir/velocities-r-rad_sec</property><quotient><difference><property>inertia/cg-x-in</property><value>118.11024</value></difference><value>12</value></quotient></product><product><property>mir/velocities-p-rad_sec</property><quotient><difference><property>inertia/cg-z-in</property><value>67.220509</value></difference><value>12</value></quotient></product></difference></product><product><property>velocities/q-rad_sec</property><difference><product><property>velocities/q-rad_sec</property><quotient><difference><property>inertia/cg-z-in</property><value>67.220509</value></difference><value>12</value></quotient></product><product><property>mir/velocities-r-rad_sec</property><quotient><difference><value>-0</value><property>mir/inertia-cg-y-in</property></difference><value>12</value></quotient></product></difference></product></difference></sum></product></sum></ifthen></function></fcs_function>
+<fcs_function name="rotor/Ay"><function><ifthen><gt><property>rotor/accel-hold</property><value>0.5</value></gt><property>rotor/Ay</property><sum><product><value>32.174</value><property>mir/accelerations-Ny</property></product><difference><product><property>mir/accelerations-rdot-rad_sec2</property><quotient><difference><property>inertia/cg-x-in</property><value>118.11024</value></difference><value>12</value></quotient></product><product><property>mir/accelerations-pdot-rad_sec2</property><quotient><difference><property>inertia/cg-z-in</property><value>67.220509</value></difference><value>12</value></quotient></product></difference><difference><product><property>mir/velocities-r-rad_sec</property><difference><product><property>velocities/q-rad_sec</property><quotient><difference><property>inertia/cg-z-in</property><value>67.220509</value></difference><value>12</value></quotient></product><product><property>mir/velocities-r-rad_sec</property><quotient><difference><value>-0</value><property>mir/inertia-cg-y-in</property></difference><value>12</value></quotient></product></difference></product><product><property>mir/velocities-p-rad_sec</property><difference><product><property>mir/velocities-p-rad_sec</property><quotient><difference><value>-0</value><property>mir/inertia-cg-y-in</property></difference><value>12</value></quotient></product><product><property>velocities/q-rad_sec</property><quotient><difference><property>inertia/cg-x-in</property><value>118.11024</value></difference><value>12</value></quotient></product></difference></product></difference></sum></ifthen></function></fcs_function>
+<fcs_function name="rotor/rds-in"><function><ifthen><gt><property>rotor/accel-hold</property><value>0.5</value></gt><property>rotor/rds-in</property><property>mir/accelerations-rdot-rad_sec2</property></ifthen></function></fcs_function>
+<fcs_function name="rotor/pds-in"><function><ifthen><gt><property>rotor/accel-hold</property><value>0.5</value></gt><property>rotor/pds-in</property><property>mir/accelerations-pdot-rad_sec2</property></ifthen></function></fcs_function>
+<fcs_function name="rotor/b0/ch"><function><cos><sum><property>rotor/psi-rad</property><value>0</value></sum></cos></function></fcs_function>
+<fcs_function name="rotor/b0/sh"><function><sin><sum><property>rotor/psi-rad</property><value>0</value></sum></sin></function></fcs_function>
+<fcs_function name="rotor/b1/ch"><function><cos><sum><property>rotor/psi-rad</property><value>2.0943951</value></sum></cos></function></fcs_function>
+<fcs_function name="rotor/b1/sh"><function><sin><sum><property>rotor/psi-rad</property><value>2.0943951</value></sum></sin></function></fcs_function>
+<fcs_function name="rotor/b2/ch"><function><cos><sum><property>rotor/psi-rad</property><value>4.1887902</value></sum></cos></function></fcs_function>
+<fcs_function name="rotor/b2/sh"><function><sin><sum><property>rotor/psi-rad</property><value>4.1887902</value></sum></sin></function></fcs_function>
+</channel>
+<channel name="flapping">
+<fcs_function name="rotor/b0/betaddot"><description>flap acceleration</description><function><quotient><sum><property>aero/rotor/b0/Mflap</property><product><value>28.002482</value><property>rotor/Az</property></product><product><value>676.57895</value><property>rotor/omega-rad_sec</property><difference><product><property>rotor/ps</property><property>rotor/b0/ch</property></product><product><property>rotor/qs</property><property>rotor/b0/sh</property></product></difference></product><product><value>-1</value><product><sum><product><value>327.35675</value><cos><property>rotor/b0/beta-rad</property></cos><sum><pow><property>rotor/omega-rad_sec</property><value>2</value></pow><product><value>2</value><property>rotor/omega-rad_sec</property><property>rotor/b0/deltadot-rad_sec</property></product></sum></product><product><value>10.932728</value><cos><property>rotor/b0/delta-rad</property></cos><pow><property>rotor/omega-rad_sec</property><value>2</value></pow></product></sum><sin><property>rotor/b0/beta-rad</property></sin></product></product><product><value>338.28947</value><sum><product><property>rotor/pds</property><property>rotor/b0/sh</property></product><product><property>rotor/qds</property><property>rotor/b0/ch</property></product></sum></product></sum><value>327.35675</value></quotient></function></fcs_function>
+<fcs_function name="rotor/b0/betadot-next"><function><ifthen><lt><sum><property>rotor/b0/beta-rad</property><product><sum><property>rotor/b0/betadot-rad_sec</property><product><property>rotor/b0/betaddot</property><property>simulation/dt</property></product></sum><property>simulation/dt</property></product></sum><value>-0.052359878</value></lt><max><sum><property>rotor/b0/betadot-rad_sec</property><product><property>rotor/b0/betaddot</property><property>simulation/dt</property></product></sum><value>0</value></max><ifthen><gt><sum><property>rotor/b0/beta-rad</property><product><sum><property>rotor/b0/betadot-rad_sec</property><product><property>rotor/b0/betaddot</property><property>simulation/dt</property></product></sum><property>simulation/dt</property></product></sum><value>0.34906585</value></gt><min><sum><property>rotor/b0/betadot-rad_sec</property><product><property>rotor/b0/betaddot</property><property>simulation/dt</property></product></sum><value>0</value></min><sum><property>rotor/b0/betadot-rad_sec</property><product><property>rotor/b0/betaddot</property><property>simulation/dt</property></product></sum></ifthen></ifthen></function><output>rotor/b0/betadot-rad_sec</output></fcs_function>
+<fcs_function name="rotor/b0/beta-next"><function><ifthen><product><gt><property>ctl/init-fast</property><value>0.5</value></gt><lt><property>rotor/omega-rad_sec</property><value>5</value></lt></product><value>-0.052359878</value><max><value>-0.052359878</value><min><value>0.34906585</value><sum><property>rotor/b0/beta-rad</property><product><property>rotor/b0/betadot-rad_sec</property><property>simulation/dt</property></product></sum></min></max></ifthen></function><output>rotor/b0/beta-rad</output></fcs_function>
+<fcs_function name="rotor/b1/betaddot"><description>flap acceleration</description><function><quotient><sum><property>aero/rotor/b1/Mflap</property><product><value>28.002482</value><property>rotor/Az</property></product><product><value>676.57895</value><property>rotor/omega-rad_sec</property><difference><product><property>rotor/ps</property><property>rotor/b1/ch</property></product><product><property>rotor/qs</property><property>rotor/b1/sh</property></product></difference></product><product><value>-1</value><product><sum><product><value>327.35675</value><cos><property>rotor/b1/beta-rad</property></cos><sum><pow><property>rotor/omega-rad_sec</property><value>2</value></pow><product><value>2</value><property>rotor/omega-rad_sec</property><property>rotor/b1/deltadot-rad_sec</property></product></sum></product><product><value>10.932728</value><cos><property>rotor/b1/delta-rad</property></cos><pow><property>rotor/omega-rad_sec</property><value>2</value></pow></product></sum><sin><property>rotor/b1/beta-rad</property></sin></product></product><product><value>338.28947</value><sum><product><property>rotor/pds</property><property>rotor/b1/sh</property></product><product><property>rotor/qds</property><property>rotor/b1/ch</property></product></sum></product></sum><value>327.35675</value></quotient></function></fcs_function>
+<fcs_function name="rotor/b1/betadot-next"><function><ifthen><lt><sum><property>rotor/b1/beta-rad</property><product><sum><property>rotor/b1/betadot-rad_sec</property><product><property>rotor/b1/betaddot</property><property>simulation/dt</property></product></sum><property>simulation/dt</property></product></sum><value>-0.052359878</value></lt><max><sum><property>rotor/b1/betadot-rad_sec</property><product><property>rotor/b1/betaddot</property><property>simulation/dt</property></product></sum><value>0</value></max><ifthen><gt><sum><property>rotor/b1/beta-rad</property><product><sum><property>rotor/b1/betadot-rad_sec</property><product><property>rotor/b1/betaddot</property><property>simulation/dt</property></product></sum><property>simulation/dt</property></product></sum><value>0.34906585</value></gt><min><sum><property>rotor/b1/betadot-rad_sec</property><product><property>rotor/b1/betaddot</property><property>simulation/dt</property></product></sum><value>0</value></min><sum><property>rotor/b1/betadot-rad_sec</property><product><property>rotor/b1/betaddot</property><property>simulation/dt</property></product></sum></ifthen></ifthen></function><output>rotor/b1/betadot-rad_sec</output></fcs_function>
+<fcs_function name="rotor/b1/beta-next"><function><ifthen><product><gt><property>ctl/init-fast</property><value>0.5</value></gt><lt><property>rotor/omega-rad_sec</property><value>5</value></lt></product><value>-0.052359878</value><max><value>-0.052359878</value><min><value>0.34906585</value><sum><property>rotor/b1/beta-rad</property><product><property>rotor/b1/betadot-rad_sec</property><property>simulation/dt</property></product></sum></min></max></ifthen></function><output>rotor/b1/beta-rad</output></fcs_function>
+<fcs_function name="rotor/b2/betaddot"><description>flap acceleration</description><function><quotient><sum><property>aero/rotor/b2/Mflap</property><product><value>28.002482</value><property>rotor/Az</property></product><product><value>676.57895</value><property>rotor/omega-rad_sec</property><difference><product><property>rotor/ps</property><property>rotor/b2/ch</property></product><product><property>rotor/qs</property><property>rotor/b2/sh</property></product></difference></product><product><value>-1</value><product><sum><product><value>327.35675</value><cos><property>rotor/b2/beta-rad</property></cos><sum><pow><property>rotor/omega-rad_sec</property><value>2</value></pow><product><value>2</value><property>rotor/omega-rad_sec</property><property>rotor/b2/deltadot-rad_sec</property></product></sum></product><product><value>10.932728</value><cos><property>rotor/b2/delta-rad</property></cos><pow><property>rotor/omega-rad_sec</property><value>2</value></pow></product></sum><sin><property>rotor/b2/beta-rad</property></sin></product></product><product><value>338.28947</value><sum><product><property>rotor/pds</property><property>rotor/b2/sh</property></product><product><property>rotor/qds</property><property>rotor/b2/ch</property></product></sum></product></sum><value>327.35675</value></quotient></function></fcs_function>
+<fcs_function name="rotor/b2/betadot-next"><function><ifthen><lt><sum><property>rotor/b2/beta-rad</property><product><sum><property>rotor/b2/betadot-rad_sec</property><product><property>rotor/b2/betaddot</property><property>simulation/dt</property></product></sum><property>simulation/dt</property></product></sum><value>-0.052359878</value></lt><max><sum><property>rotor/b2/betadot-rad_sec</property><product><property>rotor/b2/betaddot</property><property>simulation/dt</property></product></sum><value>0</value></max><ifthen><gt><sum><property>rotor/b2/beta-rad</property><product><sum><property>rotor/b2/betadot-rad_sec</property><product><property>rotor/b2/betaddot</property><property>simulation/dt</property></product></sum><property>simulation/dt</property></product></sum><value>0.34906585</value></gt><min><sum><property>rotor/b2/betadot-rad_sec</property><product><property>rotor/b2/betaddot</property><property>simulation/dt</property></product></sum><value>0</value></min><sum><property>rotor/b2/betadot-rad_sec</property><product><property>rotor/b2/betaddot</property><property>simulation/dt</property></product></sum></ifthen></ifthen></function><output>rotor/b2/betadot-rad_sec</output></fcs_function>
+<fcs_function name="rotor/b2/beta-next"><function><ifthen><product><gt><property>ctl/init-fast</property><value>0.5</value></gt><lt><property>rotor/omega-rad_sec</property><value>5</value></lt></product><value>-0.052359878</value><max><value>-0.052359878</value><min><value>0.34906585</value><sum><property>rotor/b2/beta-rad</property><product><property>rotor/b2/betadot-rad_sec</property><property>simulation/dt</property></product></sum></min></max></ifthen></function><output>rotor/b2/beta-rad</output></fcs_function>
+</channel>
+<channel name="lead-lag">
+<fcs_function name="rotor/b0/lag-stop-ftlb"><function><sum><product><value>-299128.06</value><min><value>0</value><difference><property>rotor/b0/delta-rad</property><value>-0.20943951</value></difference></min></product><product><value>-299128.06</value><max><value>0</value><difference><property>rotor/b0/delta-rad</property><value>0.13962634</value></difference></max></product></sum></function></fcs_function>
+<fcs_function name="rotor/b0/Fl-free"><description>lag equation but for the hub's angular acceleration</description><function><sum><quotient><sum><property>aero/rotor/b0/Mlag</property><product><value>-1</value><product><value>1106.3543</value><property>rotor/b0/deltadot-rad_sec</property></product></product><property>rotor/b0/lag-stop-ftlb</property></sum><pow><cos><property>rotor/b0/beta-rad</property></cos><value>2</value></pow></quotient><product><value>-1</value><product><quotient><value>10.932728</value><cos><property>rotor/b0/beta-rad</property></cos></quotient><pow><property>rotor/omega-rad_sec</property><value>2</value></pow><sin><property>rotor/b0/delta-rad</property></sin></product></product><product><value>654.71349</value><quotient><sin><property>rotor/b0/beta-rad</property></sin><cos><property>rotor/b0/beta-rad</property></cos></quotient><property>rotor/b0/betadot-rad_sec</property><sum><property>rotor/omega-rad_sec</property><property>rotor/b0/deltadot-rad_sec</property></sum></product><product><value>-1</value><product><value>28.002482</value><sum><product><property>rotor/b0/sh</property><property>rotor/Ax</property></product><product><property>rotor/b0/ch</property><property>rotor/Ay</property></product></sum></product></product></sum></function></fcs_function>
+<fcs_function name="rotor/b1/lag-stop-ftlb"><function><sum><product><value>-299128.06</value><min><value>0</value><difference><property>rotor/b1/delta-rad</property><value>-0.20943951</value></difference></min></product><product><value>-299128.06</value><max><value>0</value><difference><property>rotor/b1/delta-rad</property><value>0.13962634</value></difference></max></product></sum></function></fcs_function>
+<fcs_function name="rotor/b1/Fl-free"><description>lag equation but for the hub's angular acceleration</description><function><sum><quotient><sum><property>aero/rotor/b1/Mlag</property><product><value>-1</value><product><value>1106.3543</value><property>rotor/b1/deltadot-rad_sec</property></product></product><property>rotor/b1/lag-stop-ftlb</property></sum><pow><cos><property>rotor/b1/beta-rad</property></cos><value>2</value></pow></quotient><product><value>-1</value><product><quotient><value>10.932728</value><cos><property>rotor/b1/beta-rad</property></cos></quotient><pow><property>rotor/omega-rad_sec</property><value>2</value></pow><sin><property>rotor/b1/delta-rad</property></sin></product></product><product><value>654.71349</value><quotient><sin><property>rotor/b1/beta-rad</property></sin><cos><property>rotor/b1/beta-rad</property></cos></quotient><property>rotor/b1/betadot-rad_sec</property><sum><property>rotor/omega-rad_sec</property><property>rotor/b1/deltadot-rad_sec</property></sum></product><product><value>-1</value><product><value>28.002482</value><sum><product><property>rotor/b1/sh</property><property>rotor/Ax</property></product><product><property>rotor/b1/ch</property><property>rotor/Ay</property></product></sum></product></product></sum></function></fcs_function>
+<fcs_function name="rotor/b2/lag-stop-ftlb"><function><sum><product><value>-299128.06</value><min><value>0</value><difference><property>rotor/b2/delta-rad</property><value>-0.20943951</value></difference></min></product><product><value>-299128.06</value><max><value>0</value><difference><property>rotor/b2/delta-rad</property><value>0.13962634</value></difference></max></product></sum></function></fcs_function>
+<fcs_function name="rotor/b2/Fl-free"><description>lag equation but for the hub's angular acceleration</description><function><sum><quotient><sum><property>aero/rotor/b2/Mlag</property><product><value>-1</value><product><value>1106.3543</value><property>rotor/b2/deltadot-rad_sec</property></product></product><property>rotor/b2/lag-stop-ftlb</property></sum><pow><cos><property>rotor/b2/beta-rad</property></cos><value>2</value></pow></quotient><product><value>-1</value><product><quotient><value>10.932728</value><cos><property>rotor/b2/beta-rad</property></cos></quotient><pow><property>rotor/omega-rad_sec</property><value>2</value></pow><sin><property>rotor/b2/delta-rad</property></sin></product></product><product><value>654.71349</value><quotient><sin><property>rotor/b2/beta-rad</property></sin><cos><property>rotor/b2/beta-rad</property></cos></quotient><property>rotor/b2/betadot-rad_sec</property><sum><property>rotor/omega-rad_sec</property><property>rotor/b2/deltadot-rad_sec</property></sum></product><product><value>-1</value><product><value>28.002482</value><sum><product><property>rotor/b2/sh</property><property>rotor/Ax</property></product><product><property>rotor/b2/ch</property><property>rotor/Ay</property></product></sum></product></product></sum></function></fcs_function>
+<fcs_function name="drive/r-dot-shaft"><description>airframe angular acceleration about the main rotor shaft (down +)</description><function><sum><product><value>0.99904822</value><property>rotor/rds-in</property></product><product><value>-0.043619387</value><property>rotor/pds-in</property></product></sum></function></fcs_function>
+<fcs_function name="drive/stuck"><description>1: the rotor held by friction</description><function><product><lt><property>rotor/omega-rad_sec</property><value>0.05</value></lt><lt><abs><property>drive/net-torque-ftlb</property></abs><sum><product><property>/controls/rotor/brake</property><value>4000</value></product><value>150</value></sum></lt></product></function></fcs_function>
+<fcs_function name="drive/omega-dot"><description>rotor speed acceleration relative to the airframe, rad/s2</description><function><ifthen><gt><sum><gt><sum><property>drive/hold-rpm</property><gt><property>ctl/init-fast</property><value>0.5</value></gt></sum><value>0.5</value></gt><property>drive/stuck</property></sum><value>0.5</value></gt><value>0</value><quotient><sum><property>drive/net-torque-ftlb</property><product><value>-1.033397</value><sum><property>rotor/b0/Fl-free</property><property>rotor/b1/Fl-free</property><property>rotor/b2/Fl-free</property></sum></product><product><value>0.49326657</value><property>drive/r-dot-shaft</property></product></sum><sum><value>8.2819213</value><product><value>995.26336</value><property>eng/engaged</property></product></sum></quotient></ifthen></function></fcs_function>
+<fcs_function name="rotor/omega-dot-abs"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><value>0</value><difference><property>drive/omega-dot</property><property>drive/r-dot-shaft</property></difference></ifthen></function></fcs_function>
+<fcs_function name="rotor/blade-init"><function><lt><property>rotor/initialized</property><value>0.5</value></lt></function></fcs_function>
+<fcs_function name="rotor/initialized-next"><function><gt><property>simulation/sim-time-sec</property><value>0.02</value></gt></function><output>rotor/initialized</output></fcs_function>
+<fcs_function name="rotor/b0/deltadot-next"><function><ifthen><gt><property>rotor/blade-init</property><value>0.5</value></gt><value>0</value><sum><property>rotor/b0/deltadot-rad_sec</property><product><quotient><difference><property>rotor/b0/Fl-free</property><product><value>338.28947</value><property>rotor/omega-dot-abs</property></product></difference><value>327.35675</value></quotient><property>simulation/dt</property></product></sum></ifthen></function><output>rotor/b0/deltadot-rad_sec</output></fcs_function>
+<fcs_function name="rotor/b0/delta-next"><function><ifthen><gt><property>rotor/blade-init</property><value>0.5</value></gt><max><value>-0.20943951</value><min><value>0.13962634</value><quotient><property>aero/rotor/b0/Mlag</property><product><value>10.932728</value><max><pow><property>rotor/omega-rad_sec</property><value>2</value></pow><value>25</value></max><cos><property>rotor/b0/beta-rad</property></cos></product></quotient></min></max><sum><property>rotor/b0/delta-rad</property><product><property>rotor/b0/deltadot-rad_sec</property><property>simulation/dt</property></product></sum></ifthen></function><output>rotor/b0/delta-rad</output></fcs_function>
+<fcs_function name="rotor/b1/deltadot-next"><function><ifthen><gt><property>rotor/blade-init</property><value>0.5</value></gt><value>0</value><sum><property>rotor/b1/deltadot-rad_sec</property><product><quotient><difference><property>rotor/b1/Fl-free</property><product><value>338.28947</value><property>rotor/omega-dot-abs</property></product></difference><value>327.35675</value></quotient><property>simulation/dt</property></product></sum></ifthen></function><output>rotor/b1/deltadot-rad_sec</output></fcs_function>
+<fcs_function name="rotor/b1/delta-next"><function><ifthen><gt><property>rotor/blade-init</property><value>0.5</value></gt><max><value>-0.20943951</value><min><value>0.13962634</value><quotient><property>aero/rotor/b1/Mlag</property><product><value>10.932728</value><max><pow><property>rotor/omega-rad_sec</property><value>2</value></pow><value>25</value></max><cos><property>rotor/b1/beta-rad</property></cos></product></quotient></min></max><sum><property>rotor/b1/delta-rad</property><product><property>rotor/b1/deltadot-rad_sec</property><property>simulation/dt</property></product></sum></ifthen></function><output>rotor/b1/delta-rad</output></fcs_function>
+<fcs_function name="rotor/b2/deltadot-next"><function><ifthen><gt><property>rotor/blade-init</property><value>0.5</value></gt><value>0</value><sum><property>rotor/b2/deltadot-rad_sec</property><product><quotient><difference><property>rotor/b2/Fl-free</property><product><value>338.28947</value><property>rotor/omega-dot-abs</property></product></difference><value>327.35675</value></quotient><property>simulation/dt</property></product></sum></ifthen></function><output>rotor/b2/deltadot-rad_sec</output></fcs_function>
+<fcs_function name="rotor/b2/delta-next"><function><ifthen><gt><property>rotor/blade-init</property><value>0.5</value></gt><max><value>-0.20943951</value><min><value>0.13962634</value><quotient><property>aero/rotor/b2/Mlag</property><product><value>10.932728</value><max><pow><property>rotor/omega-rad_sec</property><value>2</value></pow><value>25</value></max><cos><property>rotor/b2/beta-rad</property></cos></product></quotient></min></max><sum><property>rotor/b2/delta-rad</property><product><property>rotor/b2/deltadot-rad_sec</property><property>simulation/dt</property></product></sum></ifthen></function><output>rotor/b2/delta-rad</output></fcs_function>
+</channel>
+<channel name="inflow">
+<fcs_function name="aero/rotor/vrs/vh-fps"><description>hover induced velocity of the forcing: the steady uniform inflow times its mass flow, ft/s</description><function><product><property>aero/rotor/ph/omega-r-fps</property><sqrt><max><value>1e-08</value><product><value>0.8660254</value><sum><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 0.75
+0.05 0.75
+0.1 0.75
+0.15 0.75
+0.2 0.75
+0.25 0.75
+0.3 0.75
+0.35 0.75
+0.4 0.75
+0.45 0.75
+0.5 0.75
+0.55 0.75
+0.6 0.75
+0.65 0.75
+0.7 0.75
+0.75 0.75
+0.8 0.75
+0.85 0.75
+0.9 0.75
+0.95 0.75
+1 0.75
+</tableData></table><property>aero/rotor/ph/tau-c0</property></product><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 0.190941
+0.05 0.190941
+0.1 0.190941
+0.15 0.190941
+0.2 0.190941
+0.25 0.190941
+0.3 0.190941
+0.35 0.190941
+0.4 0.190941
+0.45 0.190941
+0.5 0.190941
+0.55 0.190941
+0.6 0.190941
+0.65 0.190941
+0.7 0.190941
+0.75 0.190941
+0.8 0.190941
+0.85 0.190941
+0.9 0.190941
+0.95 0.190941
+1 0.190941
+</tableData></table><property>aero/rotor/ph/tau-c1</property></product><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 -0.0299196
+0.05 -0.0299196
+0.1 -0.0299196
+0.15 -0.0299196
+0.2 -0.0299196
+0.25 -0.0299196
+0.3 -0.0299196
+0.35 -0.0299196
+0.4 -0.0299196
+0.45 -0.0299196
+0.5 -0.0299196
+0.55 -0.0299196
+0.6 -0.0299196
+0.65 -0.0299196
+0.7 -0.0299196
+0.75 -0.0299196
+0.8 -0.0299196
+0.85 -0.0299196
+0.9 -0.0299196
+0.95 -0.0299196
+1 -0.0299196
+</tableData></table><property>aero/rotor/ph/tau-c2</property></product><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 -0
+0.05 -0.0248365
+0.1 -0.0496729
+0.15 -0.0745094
+0.2 -0.0993459
+0.25 -0.124182
+0.3 -0.149019
+0.35 -0.173855
+0.4 -0.198692
+0.45 -0.223528
+0.5 -0.248365
+0.55 -0.273201
+0.6 -0.298038
+0.65 -0.322874
+0.7 -0.347711
+0.75 -0.372547
+0.8 -0.397384
+0.85 -0.42222
+0.9 -0.447056
+0.95 -0.471893
+1 -0.496729
+</tableData></table><sum><product><property>aero/rotor/ph/tau-c3</property><property>aero/rotor/ph/cd</property></product><product><property>aero/rotor/ph/tau-s0</property><property>aero/rotor/ph/sd</property></product></sum></product></sum></product></max></sqrt></product></function></fcs_function>
+<fcs_function name="aero/rotor/vrs/z"><description>axial velocity (climb +) over vh</description><function><quotient><product><value>-1</value><property>aero/rotor/Vhz-fps</property></product><property>aero/rotor/vrs/vh-fps</property></quotient></function></fcs_function>
+<fcs_function name="aero/rotor/vrs/x"><description>edgewise velocity over vh, with the mass flow's floor</description><function><quotient><sqrt><sum><pow><property>aero/rotor/Vinplane-fps</property><value>2</value></pow><value>25</value></sum></sqrt><property>aero/rotor/vrs/vh-fps</property></quotient></function></fcs_function>
+<fcs_function name="aero/rotor/vrs/s"><description>the tables' coordinate across (vrs.py)</description><function><pow><max><value>0</value><difference><value>1</value><pow><quotient><property>aero/rotor/vrs/x</property><value>0.95</value></quotient><value>2</value></pow></difference></max><value>0.2</value></pow></function></fcs_function>
+<fcs_function name="aero/rotor/vrs/in"><description>in the region where Johnson's model departs from momentum theory</description><function><product><lt><property>aero/rotor/vrs/z</property><value>-0.2</value></lt><lt><property>aero/rotor/vrs/x</property><value>0.95</value></lt><gt><property>aero/rotor/vrs/z</property><table><independentVar lookup="row">aero/rotor/vrs/x</independentVar><tableData>
+0 -2.1
+0.01 -2.09996
+0.02 -2.09986
+0.03 -2.09968
+0.04 -2.09943
+0.05 -2.09911
+0.06 -2.09872
+0.07 -2.09826
+0.08 -2.09772
+0.09 -2.09712
+0.1 -2.09644
+0.11 -2.0957
+0.12 -2.09488
+0.13 -2.09399
+0.14 -2.09303
+0.15 -2.092
+0.16 -2.0909
+0.17 -2.08972
+0.18 -2.08848
+0.19 -2.08716
+0.2 -2.08578
+0.21 -2.08432
+0.22 -2.08279
+0.23 -2.08119
+0.24 -2.07952
+0.25 -2.07778
+0.26 -2.07596
+0.27 -2.07408
+0.28 -2.07212
+0.29 -2.0701
+0.3 -2.068
+0.31 -2.06583
+0.32 -2.06359
+0.33 -2.06128
+0.34 -2.0589
+0.35 -2.05644
+0.36 -2.05392
+0.37 -2.05132
+0.38 -2.04866
+0.39 -2.04589
+0.4 -2.04299
+0.41 -2.03989
+0.42 -2.03655
+0.43 -2.03293
+0.44 -2.02898
+0.45 -2.02464
+0.46 -2.01987
+0.47 -2.01463
+0.48 -2.00886
+0.49 -2.00252
+0.5 -1.99556
+0.51 -1.98792
+0.52 -1.97958
+0.53 -1.97047
+0.54 -1.96054
+0.55 -1.94976
+0.56 -1.93807
+0.57 -1.92542
+0.58 -1.91178
+0.59 -1.89708
+0.6 -1.88128
+0.61 -1.86434
+0.62 -1.8462
+0.63 -1.82682
+0.64 -1.80615
+0.65 -1.78414
+0.66 -1.76075
+0.67 -1.73592
+0.68 -1.70962
+0.69 -1.68178
+0.7 -1.65237
+0.71 -1.62898
+0.72 -1.62077
+0.73 -1.61259
+0.74 -1.60446
+0.75 -1.5964
+0.76 -1.5884
+0.77 -1.58048
+0.78 -1.57266
+0.79 -1.56495
+0.8 -1.55735
+0.81 -1.54989
+0.82 -1.54259
+0.83 -1.53545
+0.84 -1.5285
+0.85 -1.52176
+0.86 -1.51526
+0.87 -1.50902
+0.88 -1.50307
+0.89 -1.49746
+0.9 -1.49223
+0.91 -1.48743
+0.92 -1.48314
+0.93 -1.47946
+0.94 -1.47659
+0.95 -1.475
+</tableData></table></gt></product></function></fcs_function>
+<fcs_function name="aero/rotor/vrs/nu-base"><description>the baseline's v / vh</description><function><table><independentVar lookup="row">aero/rotor/vrs/z</independentVar><independentVar lookup="column">aero/rotor/vrs/s</independentVar><tableData>
+        0 0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6 0.63407 0.68577 0.72438 0.75532 0.78115 0.8033 0.82263 0.83975 0.85506 0.86886 0.88137 0.89278 0.90321 0.91279 0.9216 0.92971 0.93719 0.94409 0.95045 0.95632 0.96172 0.96669 0.97125 0.97541 0.97921 0.98265 0.98575 0.98852 0.99097 0.99312 0.99496 0.99651 0.99777 0.99875 0.99945 0.99986 1
+-2.3 0.488982 0.488982 0.488983 0.488987 0.489004 0.489048 0.489145 0.489334 0.48967 0.490223 0.491091 0.492395 0.494293 0.496028 0.499548 0.50306 0.506561 0.51005 0.513522 0.51697 0.520394 0.523788 0.527147 0.530464 0.533738 0.536957 0.540123 0.543226 0.546258 0.549215 0.55209 0.554873 0.557563 0.560147 0.562624 0.564984 0.567213 0.569317 0.57128 0.573098 0.574763 0.576269 0.577618 0.578792 0.579796 0.580623 0.581272 0.58174 0.582015 0.582109
+-2.28 0.49442 0.49442 0.494421 0.494425 0.494442 0.494488 0.494589 0.494786 0.495134 0.49571 0.496612 0.497968 0.499942 0.501748 0.505413 0.509074 0.512727 0.516371 0.520001 0.523609 0.527197 0.530756 0.534283 0.537769 0.541213 0.544605 0.547944 0.55122 0.554425 0.557554 0.5606 0.563553 0.56641 0.569157 0.571793 0.574308 0.576686 0.578932 0.58103 0.582975 0.584758 0.586372 0.587818 0.589079 0.590157 0.591045 0.591743 0.592246 0.592541 0.592643
+-2.26 0.499992 0.499992 0.499993 0.499997 0.500015 0.500063 0.500168 0.500372 0.500735 0.501333 0.502271 0.503682 0.505737 0.507618 0.511438 0.515257 0.519072 0.522881 0.526679 0.53046 0.534222 0.53796 0.541667 0.545336 0.548965 0.552544 0.556071 0.559536 0.56293 0.566249 0.569483 0.572621 0.575663 0.578591 0.581404 0.584091 0.586635 0.589041 0.59129 0.593378 0.595293 0.597029 0.598586 0.599943 0.601105 0.602063 0.602816 0.603358 0.603678 0.603787
+-2.24 0.505703 0.505703 0.505704 0.505709 0.505727 0.505777 0.505886 0.506099 0.506476 0.507099 0.508075 0.509544 0.511685 0.513645 0.517629 0.521616 0.525604 0.529589 0.533568 0.537533 0.541484 0.545413 0.549316 0.553183 0.557013 0.560795 0.564528 0.5682 0.571802 0.575328 0.57877 0.582115 0.585361 0.588491 0.591501 0.594381 0.597111 0.599697 0.602116 0.604365 0.606431 0.608305 0.609987 0.611455 0.612713 0.61375 0.614566 0.615154 0.615501 0.615619
+-2.22 0.51156 0.51156 0.51156 0.511566 0.511585 0.511636 0.51175 0.511972 0.512364 0.513013 0.51403 0.51556 0.517792 0.519836 0.523995 0.528161 0.532333 0.536507 0.54068 0.544843 0.548997 0.553133 0.557247 0.561329 0.565379 0.569383 0.57334 0.57724 0.58107 0.584827 0.588499 0.592073 0.595547 0.598903 0.602135 0.605232 0.608172 0.610961 0.613575 0.616007 0.618245 0.620277 0.622103 0.623699 0.625067 0.626196 0.627085 0.627726 0.628103 0.628232
+-2.2 0.517567 0.517567 0.517567 0.517573 0.517593 0.517646 0.517765 0.517996 0.518405 0.519081 0.520141 0.521737 0.524065 0.526198 0.530543 0.534901 0.539269 0.543646 0.548027 0.552403 0.556776 0.561137 0.56548 0.569797 0.574086 0.578333 0.582538 0.586688 0.590772 0.594784 0.598712 0.602544 0.606274 0.609883 0.613366 0.616709 0.619889 0.62291 0.625746 0.62839 0.630826 0.633041 0.635034 0.636777 0.638274 0.63951 0.640484 0.641187 0.641601 0.641742
+-2.18 0.52373 0.52373 0.523731 0.523737 0.523758 0.523814 0.523937 0.524178 0.524604 0.525309 0.526415 0.52808 0.530511 0.532739 0.537282 0.541844 0.546424 0.551017 0.555622 0.560229 0.564839 0.569444 0.574037 0.57861 0.583161 0.587676 0.592154 0.596582 0.600947 0.605244 0.60946 0.61358 0.6176 0.621497 0.625266 0.62889 0.632345 0.635634 0.638728 0.641616 0.644283 0.646712 0.648901 0.650819 0.652468 0.653831 0.654905 0.655681 0.656138 0.656295
+-2.16 0.530058 0.530058 0.530058 0.530064 0.530086 0.530144 0.530273 0.530524 0.530969 0.531705 0.532859 0.534598 0.537137 0.539468 0.544221 0.549002 0.553808 0.558635 0.563482 0.568338 0.573206 0.578075 0.582941 0.587795 0.592635 0.597445 0.602225 0.606963 0.611643 0.61626 0.620801 0.625248 0.629596 0.633823 0.63792 0.641869 0.645643 0.649244 0.65264 0.655817 0.658756 0.66144 0.663862 0.665988 0.667819 0.669334 0.67053 0.671394 0.671904 0.672078
+-2.14 0.536555 0.536555 0.536556 0.536562 0.536584 0.536645 0.53678 0.537042 0.537507 0.538275 0.539481 0.541298 0.543954 0.546392 0.551371 0.556387 0.561435 0.566514 0.571622 0.576749 0.581896 0.587055 0.59222 0.597383 0.602541 0.607679 0.612797 0.61788 0.622915 0.627894 0.632802 0.637623 0.642349 0.646956 0.651434 0.655763 0.659912 0.663881 0.667634 0.671156 0.674423 0.677413 0.680119 0.682498 0.684551 0.686253 0.687598 0.688571 0.689146 0.689343
+-2.12 0.543229 0.543229 0.54323 0.543236 0.54326 0.543324 0.543465 0.543738 0.544224 0.545027 0.546288 0.548188 0.550968 0.553521 0.558742 0.564009 0.569319 0.57467 0.58006 0.585481 0.590933 0.59641 0.601904 0.607408 0.612919 0.618422 0.623918 0.629391 0.634827 0.640217 0.645547 0.650798 0.655963 0.661013 0.665939 0.670717 0.675312 0.679723 0.683909 0.68785 0.691518 0.694885 0.697942 0.700637 0.702968 0.704906 0.70644 0.70755 0.708207 0.708432
+-2.1 0.550088 0.550088 0.550089 0.550096 0.55012 0.550187 0.550334 0.550621 0.551128 0.551969 0.553288 0.555277 0.558189 0.560866 0.566346 0.571883 0.577474 0.583119 0.588817 0.594558 0.600344 0.606169 0.612027 0.617908 0.623814 0.629727 0.635648 0.641563 0.647455 0.653319 0.659136 0.664888 0.670567 0.676141 0.681601 0.686919 0.692054 0.697006 0.701725 0.706188 0.710359 0.714204 0.717708 0.72081 0.723501 0.725744 0.727525 0.728817 0.729581 0.729844
+-2.08 0.557139 0.557139 0.55714 0.557147 0.557173 0.557243 0.557397 0.557697 0.558228 0.559108 0.560489 0.562574 0.565627 0.568436 0.574194 0.580021 0.585917 0.591882 0.597913 0.604004 0.610158 0.616367 0.622627 0.62893 0.635277 0.641651 0.648055 0.654474 0.660893 0.667304 0.673692 0.680034 0.686325 0.692529 0.698636 0.704615 0.71042 0.71605 0.721445 0.726576 0.740281 0.761523 0.780472 0.796916 0.810929 0.822428 0.831437 0.837908 0.841711 0.843013
+-2.06 0.564392 0.564392 0.564393 0.5644 0.564427 0.5645 0.564661 0.564976 0.565532 0.566454 0.567902 0.570088 0.573292 0.576243 0.5823 0.588441 0.594666 0.600977 0.607374 0.613848 0.620405 0.62704 0.633749 0.640524 0.647368 0.654266 0.661223 0.668223 0.675253 0.682307 0.689369 0.696418 0.703449 0.710424 0.717334 0.724144 0.741067 0.771053 0.798959 0.824717 0.848216 0.869376 0.888231 0.904578 0.918498 0.929914 0.938854 0.945273 0.949045 0.950335
+-2.04 0.571853 0.571853 0.571854 0.571862 0.57189 0.571967 0.572136 0.572465 0.573049 0.574016 0.575535 0.57783 0.581196 0.584299 0.590677 0.597157 0.60374 0.610428 0.617224 0.62412 0.631125 0.638233 0.645443 0.652749 0.660159 0.667655 0.675249 0.682926 0.690674 0.698492 0.706366 0.714277 0.722222 0.741965 0.777882 0.81168 0.843577 0.873587 0.901461 0.927147 0.950548 0.971593 0.990327 1.00656 1.02036 1.03168 1.04054 1.0469 1.05064 1.05191
+-2.02 0.579533 0.579533 0.579534 0.579542 0.579572 0.579652 0.57983 0.580175 0.580788 0.581803 0.583398 0.58581 0.58935 0.592617 0.599341 0.606187 0.613159 0.62026 0.627494 0.634856 0.642356 0.649993 0.657768 0.665677 0.673732 0.68192 0.690255 0.69873 0.707335 0.716076 0.724946 0.75121 0.79844 0.838792 0.874903 0.908823 0.940756 0.970736 0.998532 1.02411 1.04737 1.06827 1.08686 1.10295 1.11663 1.12784 1.1366 1.1429 1.14659 1.14785
+-2 0.587441 0.587441 0.587442 0.58745 0.587482 0.587566 0.587752 0.588115 0.588759 0.589825 0.591502 0.594039 0.597766 0.601209 0.608307 0.615551 0.622947 0.630499 0.638216 0.646094 0.654148 0.662379 0.670792 0.67939 0.688189 0.697183 0.706393 0.71582 0.725465 0.735345 0.78723 0.843183 0.890192 0.930581 0.966812 1.00079 1.0327 1.0626 1.09027 1.11569 1.13879 1.15952 1.17794 1.19386 1.2074 1.21848 1.22714 1.23336 1.23701 1.23826
+-1.98 0.595586 0.595586 0.595588 0.595596 0.595629 0.595718 0.595914 0.596296 0.596973 0.598094 0.599859 0.60253 0.606457 0.61009 0.617593 0.62527 0.633128 0.641177 0.649427 0.657879 0.666553 0.675455 0.684597 0.693988 0.703653 0.713596 0.723854 0.734439 0.745371 0.808816 0.875084 0.930343 0.977067 1.01742 1.0537 1.08767 1.1195 1.14927 1.17677 1.20201 1.22491 1.24543 1.26365 1.2794 1.29277 1.30371 1.31226 1.31839 1.32199 1.32322
+-1.96 0.60398 0.60398 0.603981 0.603991 0.604025 0.604118 0.604325 0.604726 0.605439 0.60662 0.608478 0.611294 0.615438 0.619276 0.627218 0.635365 0.64373 0.652325 0.661167 0.670261 0.679633 0.689299 0.699277 0.709589 0.720276 0.731354 0.742885 0.754909 0.815484 0.893277 0.958258 1.01278 1.05915 1.0994 1.13566 1.16955 1.20125 1.23084 1.25814 1.28314 1.30581 1.32611 1.34411 1.35965 1.37284 1.38363 1.39206 1.3981 1.40165 1.40286
+-1.94 0.612632 0.612632 0.612634 0.612644 0.61268 0.612778 0.612996 0.613419 0.614169 0.615414 0.617374 0.620344 0.624722 0.628782 0.6372 0.645862 0.654783 0.663983 0.673483 0.683297 0.693461 0.704 0.714949 0.726344 0.738249 0.750708 0.763822 0.80703 0.897358 0.973169 1.03684 1.09057 1.13654 1.17661 1.21278 1.24654 1.27805 1.30741 1.33446 1.3592 1.38161 1.40165 1.4194 1.43473 1.44772 1.45834 1.46664 1.47259 1.47608 1.47727
+-1.92 0.621554 0.621555 0.621556 0.621566 0.621605 0.621708 0.621938 0.622384 0.623175 0.624488 0.626557 0.629695 0.634326 0.638626 0.647562 0.656786 0.66632 0.67619 0.686427 0.697054 0.708121 0.719669 0.731753 0.744435 0.757818 0.771991 0.787127 0.887179 0.974743 1.04857 1.1109 1.1638 1.2093 1.24914 1.28515 1.31872 1.34999 1.37908 1.40584 1.43028 1.45239 1.47215 1.48964 1.50473 1.51751 1.52796 1.53611 1.54195 1.54538 1.54655
+-1.9 0.630758 0.630758 0.63076 0.63077 0.630811 0.63092 0.631162 0.631633 0.632469 0.633856 0.636042 0.639361 0.644264 0.648826 0.658326 0.668166 0.678377 0.688993 0.700058 0.711607 0.723711 0.736434 0.749862 0.7641 0.779311 0.795668 0.862847 0.962886 1.04772 1.11957 1.18054 1.23256 1.27754 1.31708 1.35287 1.38618 1.41716 1.44594 1.47237 1.49648 1.51827 1.53772 1.55493 1.56975 1.58231 1.59257 1.60057 1.6063 1.60967 1.61082
+-1.88 0.640254 0.640254 0.640256 0.640267 0.64031 0.640425 0.640681 0.641179 0.642062 0.643528 0.645841 0.649356 0.654555 0.659399 0.669516 0.680033 0.690993 0.702443 0.714441 0.727044 0.740349 0.754455 0.769497 0.785647 0.803175 0.825495 0.937736 1.03424 1.11637 1.18625 1.24584 1.29694 1.34134 1.38051 1.41602 1.44903 1.47967 1.50808 1.53414 1.5579 1.57933 1.59845 1.61535 1.6299 1.64222 1.65228 1.66012 1.66574 1.66903 1.67016
+-1.86 0.650054 0.650054 0.650056 0.650068 0.650114 0.650236 0.650506 0.651033 0.651967 0.653519 0.655969 0.659694 0.665215 0.670367 0.681157 0.692421 0.704213 0.716597 0.729655 0.743469 0.758176 0.773929 0.790939 0.809493 0.830049 0.900375 1.00828 1.10131 1.18078 1.24869 1.30688 1.35702 1.40079 1.43953 1.47469 1.50734 1.5376 1.56561 1.59127 1.61463 1.63569 1.65445 1.67102 1.68528 1.69735 1.70719 1.71487 1.72036 1.72358 1.72468
+-1.84 0.660171 0.660171 0.660173 0.660186 0.660234 0.660363 0.660649 0.661206 0.662197 0.663841 0.666438 0.670392 0.676261 0.681749 0.693276 0.705364 0.718083 0.73152 0.745787 0.761003 0.777365 0.795104 0.814559 0.836219 0.860901 0.970891 1.07456 1.16419 1.24104 1.30698 1.36374 1.41289 1.45597 1.49423 1.52899 1.56122 1.59104 1.61862 1.64384 1.66677 1.68743 1.70581 1.72204 1.73599 1.74779 1.75741 1.76491 1.77027 1.77342 1.7745
+-1.82 0.670614 0.670615 0.670617 0.67063 0.670681 0.670818 0.671121 0.671712 0.672762 0.674506 0.677263 0.681465 0.687712 0.693566 0.705901 0.718901 0.732656 0.747283 0.762936 0.779789 0.798123 0.818299 0.840865 0.866678 0.925402 1.03713 1.13666 1.22295 1.29721 1.36119 1.41651 1.46463 1.50698 1.54469 1.57899 1.61076 1.6401 1.6672 1.69195 1.71443 1.73465 1.75264 1.7685 1.78213 1.79365 1.80303 1.81035 1.81558 1.81865 1.8197
+-1.8 0.681397 0.681397 0.681399 0.681413 0.681467 0.681613 0.681934 0.682561 0.683676 0.685527 0.688457 0.692928 0.699586 0.705839 0.719062 0.733071 0.747987 0.763966 0.781217 0.799996 0.820712 0.843931 0.870565 0.902207 0.992073 1.09916 1.19467 1.27769 1.34938 1.41141 1.46528 1.51232 1.55389 1.591 1.6248 1.65605 1.68487 1.71145 1.7357 1.75769 1.77746 1.79503 1.81051 1.8238 1.83502 1.84417 1.85129 1.85639 1.85937 1.8604
+-1.78 0.692527 0.692527 0.69253 0.692545 0.692602 0.692757 0.693098 0.693764 0.694948 0.696916 0.700033 0.704794 0.7119 0.718589 0.732788 0.747918 0.764137 0.781657 0.800763 0.821828 0.845458 0.872557 0.90471 0.948876 1.05451 1.15709 1.24866 1.32847 1.39765 1.45773 1.51012 1.55606 1.5968 1.63326 1.66649 1.69718 1.72544 1.75147 1.77518 1.79667 1.81596 1.83308 1.84816 1.8611 1.87202 1.88092 1.88784 1.89279 1.8957 1.89669
+-1.76 0.704015 0.704015 0.704018 0.704034 0.704095 0.704259 0.704622 0.70533 0.706589 0.708683 0.712001 0.717078 0.72467 0.731835 0.747107 0.763482 0.78117 0.800451 0.821721 0.845526 0.872773 0.904944 0.944932 1.01126 1.1128 1.21098 1.29871 1.37539 1.44208 1.50022 1.55112 1.59593 1.63579 1.67156 1.70417 1.73425 1.76191 1.78734 1.81049 1.83144 1.85023 1.8669 1.88157 1.89414 1.90475 1.91338 1.9201 1.9249 1.92772 1.92868
+-1.74 0.715868 0.715868 0.71587 0.715888 0.715953 0.716127 0.716513 0.717266 0.718606 0.720836 0.724372 0.729791 0.737911 0.745596 0.762047 0.779808 0.799149 0.82045 0.844259 0.871372 0.903177 0.94217 0.99396 1.0695 1.16703 1.26092 1.34492 1.41853 1.48276 1.53897 1.58837 1.63201 1.67096 1.70598 1.73791 1.76735 1.79437 1.81918 1.84173 1.86213 1.88039 1.89659 1.91082 1.92301 1.93329 1.94166 1.94816 1.95281 1.95554 1.95647
+-1.72 0.728089 0.728089 0.728092 0.728111 0.72818 0.728365 0.728776 0.729578 0.731005 0.733381 0.737152 0.74294 0.751635 0.759886 0.777633 0.796933 0.81814 0.841761 0.868556 0.899693 0.937322 0.985756 1.05405 1.12368 1.21727 1.30701 1.38736 1.45796 1.51977 1.57406 1.62194 1.66439 1.70238 1.7366 1.76783 1.79657 1.82292 1.84707 1.869 1.88881 1.90654 1.92223 1.93602 1.94782 1.95777 1.96585 1.97214 1.97664 1.97927 1.98017
+-1.7 0.740681 0.740681 0.740684 0.740704 0.740778 0.740975 0.741413 0.742267 0.743787 0.74632 0.750346 0.756532 0.765848 0.774716 0.793884 0.814892 0.8382 0.864484 0.894794 0.930843 0.975977 1.03775 1.10482 1.17389 1.26363 1.34931 1.42611 1.49377 1.5532 1.60558 1.65193 1.69316 1.73015 1.76353 1.794 1.82201 1.84764 1.87111 1.8924 1.91159 1.92876 1.94394 1.95727 1.96867 1.97827 1.98607 1.99214 1.99647 1.999 1.99987
+-1.68 0.753641 0.753641 0.753644 0.753666 0.753744 0.753954 0.754421 0.755331 0.756951 0.759653 0.76395 0.770566 0.780553 0.79009 0.810811 0.833707 0.859372 0.888701 0.923135 0.965154 1.0199 1.10015 1.15186 1.2202 1.30617 1.38792 1.46127 1.52605 1.58313 1.6336 1.67842 1.7184 1.75436 1.78685 1.81652 1.84375 1.86864 1.8914 1.91201 1.93058 1.94716 1.96182 1.97467 1.98566 1.9949 2.00241 2.00825 2.01241 2.01485 2.01568
+-1.66 0.766961 0.766961 0.766964 0.766987 0.76707 0.767294 0.767791 0.768761 0.770488 0.77337 0.777958 0.785034 0.795743 0.806003 0.828413 0.853385 0.881677 0.914458 0.953671 1.00281 1.06937 1.17157 1.19526 1.26272 1.34499 1.42291 1.4929 1.55486 1.60963 1.65821 1.70149 1.74019 1.77508 1.80665 1.83547 1.86189 1.88601 1.90802 1.92794 1.94586 1.96184 1.97596 1.98832 1.99889 2.00777 2.01498 2.02058 2.02458 2.02692 2.02771
+-1.64 0.780625 0.780625 0.780628 0.780652 0.780741 0.78098 0.781509 0.782542 0.784383 0.787456 0.792354 0.79992 0.811402 0.822436 0.84667 0.873904 0.90509 0.941723 0.98634 1.04358 1.12307 1.21932 1.23509 1.30152 1.38018 1.45438 1.52109 1.58031 1.6328 1.6795 1.72122 1.75863 1.79242 1.82302 1.85096 1.87653 1.89984 1.92109 1.94028 1.95753 1.9729 1.98646 1.99833 2.00846 2.01697 2.02387 2.02923 2.03306 2.0353 2.03606
+-1.62 0.79461 0.79461 0.794614 0.79464 0.794734 0.794988 0.795552 0.796652 0.798612 0.801887 0.807113 0.815197 0.827498 0.839357 0.86554 0.895208 0.929526 0.970344 1.0208 1.08646 1.17693 1.2496 1.27143 1.33668 1.41181 1.4824 1.54593 1.60246 1.65271 1.69754 1.7377 1.7738 1.80645 1.83605 1.86306 1.88776 1.91023 1.93069 1.94914 1.9657 1.98044 1.99343 2.00479 2.01447 2.0226 2.0292 2.03431 2.03796 2.0401 2.04082
+-1.6 0.808885 0.808885 0.808889 0.808916 0.809016 0.809287 0.809886 0.811056 0.813141 0.816628 0.822196 0.830825 0.843986 0.856713 0.88495 0.917189 0.954809 0.999993 1.05632 1.12942 1.22541 1.27721 1.30437 1.36831 1.43998 1.50707 1.5675 1.6214 1.66944 1.71243 1.75102 1.78578 1.81726 1.84582 1.87188 1.89567 1.91727 1.93691 1.9546 1.97046 1.98455 1.99696 2.0078 2.01703 2.02478 2.03105 2.03592 2.03939 2.04142 2.04211
+-1.58 0.823405 0.823405 0.823409 0.823438 0.823544 0.823831 0.824468 0.825709 0.827925 0.83163 0.837554 0.846747 0.8608 0.874427 0.904792 0.939678 0.980655 1.03012 1.09171 1.16978 1.26517 1.3022 1.33398 1.39647 1.46476 1.52845 1.58588 1.63721 1.68309 1.72423 1.76125 1.79465 1.82495 1.85244 1.8775 1.90034 1.92106 1.93986 1.95677 1.97191 1.98534 1.99716 2.00746 2.01623 2.02359 2.02954 2.03416 2.03745 2.03937 2.04003
+-1.56 0.838114 0.838114 0.838118 0.838149 0.838262 0.838566 0.83924 0.840556 0.842904 0.846834 0.853121 0.86289 0.877853 0.892396 0.924913 0.96244 1.00666 1.05999 1.12552 1.20537 1.2896 1.32463 1.36034 1.42126 1.48625 1.54664 1.60115 1.64998 1.69372 1.73304 1.76849 1.80051 1.82959 1.85598 1.88001 1.90189 1.92169 1.93963 1.95574 1.97014 1.98291 1.99411 2.00388 2.01219 2.01914 2.02477 2.02913 2.03224 2.03405 2.03467
+-1.54 0.852943 0.852944 0.852948 0.852981 0.8531 0.853421 0.854133 0.855524 0.858006 0.862161 0.868814 0.879162 0.895036 0.91049 0.945122 0.98517 1.03232 1.08872 1.15646 1.23524 1.30614 1.34456 1.38353 1.44276 1.50452 1.56172 1.6134 1.65978 1.70142 1.73893 1.77281 1.80345 1.83128 1.85653 1.87951 1.90039 1.91925 1.93632 1.95161 1.96526 1.97734 1.98794 1.99716 2.00499 2.01154 2.01684 2.02094 2.02386 2.02556 2.02614
+-1.52 0.867812 0.867812 0.867817 0.867851 0.867976 0.868314 0.869065 0.870529 0.873144 0.877523 0.884537 0.895453 0.912217 0.928551 0.965188 1.00751 1.05708 1.11552 1.18367 1.25953 1.32084 1.36204 1.40364 1.46105 1.51967 1.57378 1.6227 1.6667 1.70628 1.742 1.7743 1.80354 1.8301 1.85419 1.87609 1.89594 1.91385 1.93002 1.94448 1.95737 1.96876 1.97872 1.98739 1.99474 2.00088 2.00585 2.00968 2.01241 2.01401 2.01455
+-1.5 0.882626 0.882626 0.882631 0.882666 0.882798 0.883153 0.88394 0.885476 0.888219 0.892814 0.900176 0.911638 0.929245 0.946403 0.984853 1.0291 1.08042 1.13978 1.2069 1.27892 1.33373 1.37714 1.42075 1.47623 1.53177 1.58289 1.62915 1.67082 1.70838 1.74232 1.77304 1.80087 1.82614 1.84904 1.86983 1.88864 1.90557 1.92082 1.93444 1.94655 1.95724 1.96658 1.97468 1.98154 1.98727 1.9919 1.99547 1.99801 1.99949 2
+-1.48 0.897281 0.897281 0.897287 0.897324 0.897461 0.897831 0.898653 0.900258 0.903122 0.907921 0.915609 0.927578 0.945958 0.963855 1.00386 1.04958 1.10191 1.16118 1.22629 1.29421 1.34487 1.38991 1.43493 1.48838 1.54092 1.58914 1.63282 1.67223 1.70779 1.73997 1.76912 1.79552 1.81949 1.84118 1.86083 1.87858 1.89451 1.90883 1.9216 1.93292 1.94291 1.95171 1.95942 1.96601 1.97156 1.97606 1.97956 1.98206 1.98353 1.98403
+-1.46 0.911669 0.911669 0.911674 0.911713 0.911856 0.912241 0.913094 0.914762 0.917738 0.922722 0.930706 0.943131 0.962189 0.980714 1.02195 1.06864 1.1213 1.17966 1.24221 1.30612 1.35429 1.40042 1.44626 1.49758 1.5472 1.59262 1.63379 1.67099 1.70461 1.73505 1.76262 1.78759 1.81023 1.83069 1.84919 1.86585 1.88078 1.89436 1.90662 1.91764 1.92748 1.93617 1.94378 1.9503 1.95578 1.96023 1.96369 1.96616 1.96761 1.9681
+-1.44 0.925677 0.925677 0.925683 0.925722 0.92587 0.926268 0.92715 0.928873 0.931948 0.937096 0.945339 0.958154 0.977778 0.996802 1.03891 1.08609 1.13845 1.19535 1.2551 1.31526 1.36203 1.40872 1.45483 1.50392 1.55069 1.59341 1.63215 1.6672 1.69891 1.72763 1.75363 1.77716 1.79846 1.81769 1.8353 1.85141 1.86607 1.87944 1.89152 1.9024 1.91211 1.92068 1.9282 1.93464 1.94005 1.94445 1.94787 1.95031 1.95175 1.95223
+-1.42 0.939196 0.939196 0.939202 0.939243 0.939395 0.939803 0.94071 0.94248 0.945639 0.950926 0.959383 0.972516 0.992578 1.01196 1.0546 1.1018 1.15339 1.20846 1.2654 1.32211 1.36812 1.41487 1.46071 1.50749 1.55148 1.59158 1.62798 1.66094 1.69077 1.71779 1.74223 1.7645 1.785 1.80383 1.82112 1.83696 1.8514 1.86457 1.87648 1.88721 1.89678 1.90525 1.91267 1.91903 1.92438 1.92872 1.93211 1.93452 1.93593 1.93642
+-1.4 0.952126 0.952126 0.952132 0.952174 0.952329 0.952746 0.953673 0.955481 0.958707 0.964104 0.972729 0.986099 1.00647 1.02607 1.06889 1.11573 1.16619 1.21927 1.27347 1.32706 1.37261 1.41893 1.46399 1.50837 1.54965 1.58724 1.62137 1.65229 1.68029 1.70596 1.72963 1.75142 1.77152 1.78999 1.80698 1.82256 1.83677 1.84974 1.86148 1.87206 1.88151 1.88987 1.8972 1.90347 1.90876 1.91305 1.91639 1.91878 1.92018 1.92066
+-1.38 0.964377 0.964377 0.964383 0.964426 0.964583 0.965008 0.965949 0.967786 0.971062 0.976539 0.985282 0.99881 1.01935 1.03905 1.08174 1.12792 1.17702 1.22803 1.27965 1.33042 1.37553 1.42095 1.46474 1.50665 1.5453 1.58045 1.61241 1.64176 1.66885 1.69389 1.71702 1.73835 1.75805 1.77619 1.79288 1.80821 1.82219 1.83497 1.84654 1.85697 1.86629 1.87454 1.88178 1.88797 1.89319 1.89744 1.90074 1.9031 1.90448 1.90495
+-1.36 0.975876 0.975877 0.975883 0.975926 0.976085 0.976514 0.977465 0.979322 0.98263 0.988157 0.99697 1.01058 1.03118 1.05084 1.09316 1.13843 1.18604 1.23501 1.2842 1.33242 1.37692 1.42101 1.46305 1.50241 1.5385 1.57169 1.60248 1.63099 1.65737 1.6818 1.70441 1.7253 1.74461 1.76241 1.77882 1.79389 1.80766 1.82024 1.83164 1.84193 1.85112 1.85926 1.86641 1.87253 1.87768 1.88187 1.88514 1.88747 1.88883 1.8893
+-1.34 0.986569 0.986569 0.986575 0.986618 0.986779 0.98721 0.988167 0.990032 0.993357 0.998906 1.00774 1.02136 1.0419 1.06143 1.10316 1.14738 1.19343 1.24042 1.28736 1.33327 1.37682 1.41914 1.45899 1.49598 1.5305 1.56259 1.59243 1.62015 1.64585 1.6697 1.6918 1.71226 1.7312 1.74868 1.7648 1.77962 1.79317 1.80556 1.8168 1.82694 1.83601 1.84404 1.85109 1.85713 1.86223 1.86637 1.86959 1.87189 1.87324 1.8737
+-1.32 0.996416 0.996416 0.996423 0.996466 0.996626 0.997058 0.998015 0.999882 1.00321 1.00875 1.01757 1.03114 1.05153 1.07083 1.11183 1.15489 1.19936 1.24446 1.28932 1.33312 1.37527 1.41547 1.45339 1.48897 1.52227 1.55333 1.58229 1.60924 1.6343 1.65758 1.6792 1.69924 1.71782 1.73497 1.75081 1.76539 1.77873 1.79094 1.80201 1.81201 1.82095 1.82888 1.83584 1.8418 1.84683 1.85092 1.8541 1.85638 1.85771 1.85817
+-1.3 1.0054 1.0054 1.0054 1.00545 1.00561 1.00604 1.00699 1.00885 1.01216 1.01768 1.02645 1.0399 1.06006 1.07907 1.11922 1.16107 1.20399 1.24729 1.29023 1.33211 1.37247 1.41096 1.44739 1.48167 1.51385 1.54393 1.57205 1.59829 1.62272 1.64546 1.66661 1.68624 1.70446 1.72131 1.73687 1.75121 1.76434 1.77636 1.78727 1.79713 1.80595 1.81377 1.82064 1.82652 1.83149 1.83553 1.83867 1.84092 1.84224 1.84269
+-1.28 1.01351 1.01351 1.01352 1.01356 1.01372 1.01415 1.01509 1.01694 1.02023 1.0257 1.03438 1.04768 1.06755 1.08622 1.12544 1.16604 1.20746 1.24906 1.29022 1.33033 1.36903 1.40599 1.44105 1.47412 1.50524 1.53441 1.56174 1.58728 1.61111 1.63334 1.65404 1.67327 1.69114 1.70768 1.72298 1.73708 1.74999 1.76183 1.77259 1.7823 1.791 1.79871 1.80549 1.81131 1.81621 1.8202 1.8233 1.82552 1.82682 1.82727
+-1.26 1.02076 1.02076 1.02077 1.02081 1.02097 1.02139 1.02233 1.02416 1.02741 1.03282 1.04139 1.0545 1.07402 1.09231 1.13056 1.16992 1.20989 1.24989 1.2894 1.3279 1.36505 1.4006 1.4344 1.46634 1.49648 1.52478 1.55135 1.57623 1.59949 1.62121 1.64147 1.66032 1.67785 1.69409 1.70912 1.72299 1.7357 1.74736 1.75796 1.76753 1.77611 1.78372 1.79041 1.79615 1.80099 1.80492 1.80799 1.81018 1.81147 1.81191
+-1.24 1.02717 1.02717 1.02718 1.02722 1.02737 1.02779 1.02872 1.03052 1.03373 1.03906 1.04751 1.06039 1.07954 1.09742 1.13467 1.17282 1.21139 1.2499 1.28787 1.32487 1.36061 1.39486 1.42747 1.45836 1.48756 1.51505 1.5409 1.56515 1.58786 1.60909 1.62892 1.64739 1.66459 1.68054 1.69531 1.70895 1.72146 1.73295 1.74338 1.75282 1.76128 1.76878 1.77539 1.78105 1.78582 1.78971 1.79274 1.7949 1.79617 1.79661
+-1.22 1.03276 1.03276 1.03277 1.03281 1.03296 1.03338 1.03429 1.03607 1.03922 1.04447 1.05277 1.06541 1.08416 1.10162 1.13786 1.17481 1.21206 1.24916 1.28572 1.32132 1.35575 1.38878 1.42029 1.4502 1.47852 1.50522 1.53039 1.55404 1.57621 1.59698 1.61639 1.63449 1.65137 1.66703 1.68155 1.69497 1.70728 1.71858 1.72886 1.73817 1.74651 1.75391 1.76042 1.76601 1.77072 1.77456 1.77755 1.77969 1.78094 1.78137
+-1.2 1.03758 1.03758 1.03758 1.03762 1.03777 1.03818 1.03907 1.04082 1.04392 1.04908 1.05722 1.06961 1.08793 1.10497 1.1402 1.176 1.21199 1.24777 1.28299 1.31731 1.35051 1.38241 1.41289 1.44187 1.46936 1.49532 1.51984 1.5429 1.56456 1.58487 1.60388 1.62163 1.63818 1.65356 1.66784 1.68103 1.69314 1.70427 1.7144 1.72357 1.73179 1.73909 1.74552 1.75103 1.75568 1.75947 1.76242 1.76453 1.76577 1.76619
+-1.18 1.04164 1.04164 1.04165 1.04169 1.04184 1.04223 1.04311 1.04483 1.04787 1.05293 1.0609 1.07302 1.09092 1.10752 1.14177 1.17646 1.21125 1.24579 1.27977 1.31288 1.34494 1.37578 1.40529 1.43339 1.46009 1.48535 1.50924 1.53175 1.5529 1.57278 1.59139 1.60879 1.62504 1.64014 1.65417 1.66714 1.67906 1.69002 1.7 1.70903 1.71714 1.72434 1.73067 1.73611 1.7407 1.74444 1.74736 1.74944 1.75066 1.75108
+-1.16 1.045 1.045 1.04501 1.04505 1.04519 1.04558 1.04645 1.04813 1.05111 1.05606 1.06387 1.07572 1.09318 1.10935 1.14264 1.17626 1.20991 1.24328 1.27609 1.30807 1.33907 1.36891 1.39751 1.42478 1.45073 1.47532 1.4986 1.52057 1.54125 1.56069 1.57893 1.59599 1.61193 1.62676 1.64055 1.65331 1.66504 1.67583 1.68566 1.69456 1.70255 1.70964 1.71589 1.72126 1.72579 1.72948 1.73235 1.73441 1.73562 1.73603
+-1.14 1.0477 1.0477 1.0477 1.04774 1.04788 1.04827 1.04911 1.05076 1.05368 1.05852 1.06616 1.07773 1.09477 1.11051 1.14285 1.17545 1.20802 1.24029 1.27201 1.30293 1.33292 1.36183 1.38956 1.41605 1.44129 1.46523 1.48793 1.50939 1.5296 1.54863 1.56649 1.58322 1.59887 1.61343 1.62698 1.63953 1.65107 1.66169 1.67137 1.68014 1.68802 1.69501 1.70118 1.70647 1.71094 1.71458 1.71742 1.71945 1.72064 1.72104
+-1.12 1.04977 1.04977 1.04977 1.04981 1.04995 1.05032 1.05115 1.05276 1.05562 1.06035 1.06781 1.07911 1.09572 1.11105 1.14248 1.1741 1.20564 1.23687 1.26756 1.29749 1.32653 1.35456 1.38147 1.40721 1.43177 1.45509 1.47724 1.49819 1.51796 1.53658 1.55409 1.57049 1.58584 1.60015 1.61346 1.6258 1.63716 1.64762 1.65715 1.66579 1.67355 1.68045 1.68652 1.69174 1.69615 1.69975 1.70255 1.70455 1.70572 1.70612
+-1.1 1.05125 1.05125 1.05125 1.05129 1.05143 1.05179 1.0526 1.05417 1.05697 1.0616 1.06888 1.07991 1.0961 1.11103 1.14157 1.17225 1.20281 1.23306 1.26278 1.29177 1.31992 1.34711 1.37325 1.39827 1.42218 1.44492 1.46653 1.48699 1.50633 1.52456 1.54171 1.55779 1.57286 1.58691 1.6 1.61213 1.62331 1.6336 1.64298 1.6515 1.65915 1.66594 1.67194 1.67708 1.68143 1.68498 1.68774 1.68972 1.69088 1.69127
+-1.08 1.05218 1.05218 1.05219 1.05222 1.05235 1.05271 1.0535 1.05504 1.05777 1.06229 1.06941 1.08016 1.09594 1.11047 1.14017 1.16994 1.19958 1.22889 1.25769 1.2858 1.31311 1.3395 1.3649 1.38924 1.41253 1.4347 1.45579 1.4758 1.4947 1.51256 1.52936 1.54514 1.55993 1.57373 1.58659 1.59852 1.60951 1.61964 1.62888 1.63727 1.64481 1.65151 1.65742 1.66249 1.66678 1.67028 1.673 1.67495 1.6761 1.67649
+-1.06 1.0526 1.0526 1.0526 1.05264 1.05277 1.05312 1.05389 1.05539 1.05806 1.06248 1.06942 1.07991 1.09529 1.10944 1.13831 1.16722 1.19598 1.22441 1.25234 1.2796 1.30611 1.33175 1.35645 1.38014 1.40283 1.42445 1.44505 1.4646 1.4831 1.50058 1.51705 1.53252 1.54704 1.56059 1.57323 1.58496 1.59578 1.60575 1.61485 1.6231 1.63053 1.63714 1.64296 1.64796 1.6522 1.65564 1.65833 1.66026 1.66138 1.66177
+-1.04 1.05254 1.05254 1.05255 1.05258 1.05271 1.05305 1.0538 1.05527 1.05787 1.06219 1.06896 1.0792 1.09418 1.10796 1.13604 1.16413 1.19204 1.21963 1.24673 1.2732 1.29894 1.32387 1.34789 1.37097 1.39308 1.41418 1.4343 1.45341 1.47151 1.48863 1.50477 1.51995 1.5342 1.54751 1.55993 1.57146 1.5821 1.59191 1.60087 1.60901 1.61632 1.62283 1.62857 1.63351 1.63768 1.64108 1.64373 1.64563 1.64674 1.64712
+-1.02 1.05203 1.05203 1.05204 1.05207 1.0522 1.05253 1.05327 1.0547 1.05724 1.06145 1.06806 1.07805 1.09265 1.10606 1.13338 1.16068 1.1878 1.21458 1.2409 1.26661 1.29163 1.31587 1.33925 1.36173 1.38329 1.40389 1.42354 1.44223 1.45994 1.47671 1.49253 1.50742 1.5214 1.53448 1.54668 1.55802 1.56849 1.57814 1.58696 1.59497 1.60218 1.60859 1.61425 1.61912 1.62323 1.62658 1.6292 1.63107 1.63217 1.63254
+-1 1.05111 1.05111 1.05112 1.05115 1.05127 1.05159 1.05231 1.05371 1.0562 1.06031 1.06676 1.0765 1.09073 1.10379 1.13038 1.15692 1.18327 1.20929 1.23487 1.25985 1.28418 1.30776 1.33054 1.35244 1.37347 1.39358 1.41278 1.43106 1.4484 1.46482 1.48033 1.49493 1.50866 1.5215 1.53349 1.54464 1.55494 1.56444 1.57312 1.58101 1.58811 1.59443 1.6 1.6048 1.60885 1.61216 1.61474 1.61658 1.61766 1.61803
+-0.98 1.0498 1.0498 1.04981 1.04984 1.04996 1.05027 1.05098 1.05234 1.05477 1.05878 1.06508 1.07457 1.08845 1.10117 1.12705 1.15287 1.17849 1.20378 1.22864 1.25294 1.27661 1.29956 1.32175 1.3431 1.36363 1.38326 1.40203 1.4199 1.43687 1.45296 1.46817 1.48249 1.49597 1.50858 1.52036 1.53133 1.54145 1.5508 1.55934 1.56711 1.5741 1.58033 1.58582 1.59055 1.59454 1.5978 1.60035 1.60217 1.60323 1.6036
+-0.96 1.04813 1.04813 1.04814 1.04817 1.04828 1.04859 1.04928 1.05061 1.05298 1.05689 1.06304 1.0723 1.08583 1.09823 1.12343 1.14855 1.17347 1.19807 1.22225 1.24588 1.26892 1.29128 1.3129 1.33372 1.35375 1.37293 1.39128 1.40876 1.42538 1.44114 1.45605 1.4701 1.48333 1.49571 1.50729 1.51807 1.52803 1.53722 1.54563 1.55328 1.56017 1.5663 1.57171 1.57637 1.58031 1.58352 1.58603 1.58782 1.58887 1.58923
+-0.94 1.04612 1.04612 1.04613 1.04616 1.04627 1.04657 1.04724 1.04855 1.05086 1.05468 1.06068 1.06971 1.08291 1.09499 1.11954 1.14399 1.16824 1.19217 1.2157 1.2387 1.26113 1.28291 1.30399 1.32431 1.34386 1.3626 1.38053 1.39764 1.41391 1.42936 1.44397 1.45775 1.47074 1.4829 1.49428 1.50487 1.51467 1.52371 1.53199 1.53952 1.5463 1.55234 1.55767 1.56226 1.56614 1.56931 1.57178 1.57355 1.57459 1.57494
+-0.92 1.04381 1.04381 1.04381 1.04384 1.04395 1.04424 1.0449 1.04617 1.04843 1.05216 1.05801 1.06683 1.07969 1.09148 1.11539 1.1392 1.1628 1.1861 1.209 1.2314 1.25325 1.27448 1.29503 1.31486 1.33395 1.35226 1.3698 1.38655 1.40248 1.41761 1.43194 1.44546 1.4582 1.47015 1.48133 1.49174 1.50137 1.51027 1.51842 1.52583 1.53251 1.53845 1.54371 1.54823 1.55205 1.55518 1.55761 1.55935 1.56038 1.56073
+-0.9 1.04119 1.04119 1.0412 1.04123 1.04134 1.04162 1.04226 1.04351 1.04571 1.04935 1.05506 1.06367 1.07622 1.08771 1.11101 1.13421 1.15719 1.17988 1.20218 1.224 1.24529 1.26599 1.28603 1.30539 1.32404 1.34193 1.35909 1.37547 1.39107 1.4059 1.41995 1.43322 1.44573 1.45746 1.46844 1.47868 1.48815 1.4969 1.50492 1.51221 1.51878 1.52464 1.52982 1.53427 1.53804 1.54111 1.54351 1.54523 1.54624 1.54659
+-0.88 1.03831 1.03831 1.03832 1.03835 1.03845 1.03873 1.03936 1.04057 1.04272 1.04628 1.05186 1.06025 1.0725 1.0837 1.10642 1.12902 1.15141 1.17351 1.19524 1.2165 1.23725 1.25744 1.277 1.29589 1.31411 1.33161 1.34839 1.36443 1.3797 1.39424 1.40801 1.42103 1.4333 1.44482 1.45562 1.46568 1.47499 1.4836 1.49148 1.49866 1.50513 1.5109 1.516 1.52038 1.5241 1.52713 1.52949 1.53119 1.53218 1.53252
+-0.86 1.03518 1.03518 1.03518 1.03521 1.03531 1.03559 1.0362 1.03738 1.03948 1.04296 1.0484 1.0566 1.06855 1.07948 1.10163 1.12366 1.14548 1.16701 1.18818 1.20891 1.22915 1.24884 1.26793 1.28639 1.30419 1.32129 1.33771 1.35341 1.36837 1.38261 1.39612 1.40889 1.42094 1.43225 1.44286 1.45274 1.4619 1.47037 1.47812 1.48519 1.49156 1.49724 1.50225 1.50657 1.51023 1.51322 1.51555 1.51722 1.5182 1.51853
+-0.84 1.03181 1.03181 1.03181 1.03184 1.03194 1.03221 1.03281 1.03396 1.03602 1.03941 1.04473 1.05273 1.06439 1.07505 1.09666 1.11813 1.1394 1.16039 1.18104 1.20125 1.22099 1.2402 1.25884 1.27686 1.29426 1.31099 1.32705 1.34242 1.35708 1.37103 1.38428 1.39681 1.40863 1.41974 1.43016 1.43988 1.44887 1.4572 1.46483 1.47178 1.47805 1.48364 1.48859 1.49284 1.49644 1.49939 1.50168 1.50333 1.50429 1.50462
+-0.82 1.02822 1.02822 1.02823 1.02825 1.02835 1.02861 1.0292 1.03033 1.03233 1.03564 1.04084 1.04865 1.06003 1.07044 1.09152 1.11246 1.1332 1.15367 1.1738 1.19351 1.21277 1.23152 1.24973 1.26733 1.28434 1.3007 1.31641 1.33146 1.34582 1.3595 1.37249 1.38478 1.39639 1.4073 1.41753 1.42708 1.43592 1.44411 1.45162 1.45846 1.46463 1.47013 1.475 1.47919 1.48273 1.48563 1.48789 1.48951 1.49046 1.49079
+-0.8 1.02443 1.02443 1.02444 1.02446 1.02456 1.02481 1.02538 1.02649 1.02845 1.03168 1.03676 1.04439 1.0555 1.06566 1.08622 1.10666 1.12689 1.14685 1.16648 1.18571 1.20451 1.22282 1.2406 1.2578 1.27443 1.29043 1.30581 1.32054 1.33461 1.34802 1.36075 1.37281 1.3842 1.39491 1.40496 1.41435 1.42304 1.43109 1.43848 1.4452 1.45128 1.45669 1.46148 1.46561 1.4691 1.47196 1.47418 1.47578 1.47671 1.47703
+-0.78 1.02045 1.02045 1.02046 1.02048 1.02057 1.02083 1.02138 1.02246 1.02437 1.02754 1.03249 1.03995 1.0508 1.06071 1.08079 1.10072 1.12046 1.13993 1.15909 1.17786 1.19621 1.21409 1.23145 1.24827 1.26452 1.28017 1.29523 1.30966 1.32344 1.33658 1.34907 1.3609 1.37208 1.38259 1.39247 1.40168 1.41023 1.41815 1.42541 1.43203 1.438 1.44333 1.44805 1.45211 1.45555 1.45836 1.46055 1.46212 1.46304 1.46336
+-0.76 1.0163 1.0163 1.0163 1.01632 1.01642 1.01666 1.0172 1.01826 1.02013 1.02322 1.02806 1.03534 1.04594 1.05562 1.07522 1.09468 1.11394 1.13294 1.15164 1.16995 1.18787 1.20533 1.2223 1.23874 1.25463 1.26994 1.28468 1.29881 1.31231 1.32519 1.33744 1.34904 1.36002 1.37034 1.38004 1.38909 1.39749 1.40528 1.41242 1.41893 1.42481 1.43005 1.43469 1.43869 1.44208 1.44484 1.447 1.44855 1.44946 1.44977
+-0.74 1.01198 1.01198 1.01198 1.012 1.01209 1.01233 1.01286 1.0139 1.01572 1.01874 1.02347 1.03059 1.04094 1.0504 1.06953 1.08852 1.10732 1.12587 1.14412 1.16201 1.1795 1.19656 1.21314 1.22921 1.24476 1.25974 1.27416 1.288 1.30123 1.31385 1.32587 1.33725 1.34802 1.35816 1.36768 1.37658 1.38483 1.39248 1.3995 1.40591 1.41169 1.41685 1.42141 1.42535 1.42868 1.43141 1.43353 1.43506 1.43595 1.43626
+-0.72 1.0075 1.0075 1.00751 1.00753 1.00762 1.00785 1.00837 1.00938 1.01117 1.01412 1.01874 1.02569 1.03581 1.04504 1.06373 1.08227 1.10063 1.11874 1.13656 1.15402 1.17111 1.18778 1.20398 1.2197 1.2349 1.24956 1.26368 1.27723 1.2902 1.30257 1.31435 1.32551 1.33609 1.34604 1.35539 1.36413 1.37224 1.37976 1.38667 1.39296 1.39865 1.40373 1.40822 1.41209 1.41537 1.41805 1.42015 1.42165 1.42253 1.42283
+-0.7 1.00289 1.00289 1.00289 1.00292 1.003 1.00323 1.00374 1.00472 1.00647 1.00936 1.01388 1.02067 1.03055 1.03957 1.05783 1.07594 1.09386 1.11154 1.12894 1.146 1.1627 1.17899 1.19483 1.21019 1.22507 1.23941 1.25324 1.26651 1.27921 1.29134 1.30289 1.31384 1.32422 1.33399 1.34317 1.35176 1.35973 1.36712 1.3739 1.3801 1.38569 1.39068 1.3951 1.39891 1.40214 1.40478 1.40684 1.40832 1.40918 1.40948
+-0.68 0.998147 0.998147 0.99815 0.998172 0.998256 0.99848 0.998975 0.999939 1.00165 1.00447 1.00889 1.01553 1.02518 1.034 1.05183 1.06952 1.08702 1.10429 1.12129 1.13796 1.15427 1.17019 1.18568 1.2007 1.21526 1.2293 1.24283 1.25583 1.26828 1.28017 1.29149 1.30224 1.31242 1.32201 1.33102 1.33946 1.34729 1.35455 1.36122 1.36731 1.37281 1.37772 1.38207 1.38582 1.389 1.3916 1.39362 1.39508 1.39593 1.39622
+-0.66 0.99328 0.993281 0.993284 0.993306 0.993387 0.993606 0.994091 0.995034 0.996703 0.999461 1.00378 1.01027 1.01971 1.02833 1.04575 1.06303 1.08013 1.097 1.1136 1.12989 1.14583 1.16139 1.17653 1.19123 1.20547 1.21921 1.23247 1.2452 1.25739 1.26905 1.28015 1.29069 1.30068 1.31009 1.31895 1.32723 1.33492 1.34206 1.34862 1.35461 1.36001 1.36485 1.36912 1.37281 1.37594 1.37849 1.38049 1.38192 1.38276 1.38304
+-0.64 0.988302 0.988302 0.988305 0.988326 0.988406 0.98862 0.989094 0.990016 0.991648 0.994345 0.998569 1.00492 1.01414 1.02256 1.03959 1.05647 1.07318 1.08966 1.10589 1.1218 1.13738 1.15259 1.1674 1.18178 1.19571 1.20916 1.22214 1.23461 1.24656 1.25799 1.26888 1.27921 1.28902 1.29825 1.30695 1.31508 1.32264 1.32965 1.3361 1.34198 1.3473 1.35205 1.35626 1.35988 1.36296 1.36547 1.36744 1.36884 1.36967 1.36995
+-0.62 0.983218 0.983218 0.983222 0.983243 0.98332 0.98353 0.983994 0.984895 0.986492 0.989129 0.993259 0.999464 1.00849 1.01672 1.03336 1.04986 1.06618 1.08229 1.09814 1.1137 1.12893 1.1438 1.15828 1.17235 1.18598 1.19915 1.21186 1.22408 1.23578 1.24698 1.25766 1.2678 1.27742 1.28649 1.29502 1.30301 1.31043 1.31732 1.32366 1.32944 1.33467 1.33934 1.34348 1.34704 1.35007 1.35254 1.35447 1.35586 1.35667 1.35695
+-0.6 0.978039 0.978039 0.978042 0.978062 0.978138 0.978343 0.978797 0.979679 0.98124 0.983819 0.987859 0.993927 1.00275 1.0108 1.02706 1.04319 1.05914 1.07488 1.09038 1.10558 1.12047 1.13502 1.14918 1.16294 1.17629 1.18918 1.20162 1.21359 1.22506 1.23604 1.24651 1.25646 1.26589 1.27479 1.28317 1.29101 1.2983 1.30507 1.3113 1.31698 1.32212 1.32671 1.33078 1.33429 1.33726 1.3397 1.3416 1.34296 1.34376 1.34403
+-0.58 0.97277 0.97277 0.972773 0.972793 0.972868 0.973068 0.973512 0.974374 0.975902 0.978425 0.982376 0.98831 0.996936 1.0048 1.02071 1.03647 1.05206 1.06745 1.0826 1.09746 1.11202 1.12624 1.1401 1.15356 1.16662 1.17924 1.19143 1.20315 1.2144 1.22516 1.23542 1.24518 1.25443 1.26317 1.27139 1.27909 1.28625 1.29291 1.29902 1.3046 1.30965 1.31417 1.31817 1.32162 1.32455 1.32694 1.32881 1.33015 1.33093 1.3312
+-0.56 0.967419 0.967419 0.967422 0.967442 0.967515 0.967711 0.968145 0.968989 0.970483 0.972951 0.976816 0.98262 0.991056 0.99875 1.0143 1.02971 1.04495 1.06 1.07481 1.08934 1.10358 1.11749 1.13104 1.14421 1.157 1.16935 1.18129 1.19277 1.20379 1.21433 1.2244 1.23397 1.24305 1.25162 1.25969 1.26725 1.27428 1.28082 1.28682 1.29231 1.29728 1.30171 1.30565 1.30904 1.31192 1.31427 1.31611 1.31742 1.3182 1.31846
+-0.54 0.961993 0.961993 0.961996 0.962015 0.962086 0.962278 0.962703 0.963529 0.964991 0.967405 0.971186 0.976864 0.985115 0.99264 1.00784 1.02291 1.03782 1.05252 1.067 1.08121 1.09514 1.10874 1.12201 1.1349 1.14741 1.15951 1.17119 1.18244 1.19324 1.20358 1.21344 1.22283 1.23174 1.24014 1.24807 1.25549 1.2624 1.26881 1.27471 1.2801 1.28498 1.28934 1.29321 1.29654 1.29937 1.30169 1.30349 1.30479 1.30555 1.30581
+-0.52 0.956498 0.956498 0.956501 0.956519 0.956589 0.956777 0.957192 0.958 0.959431 0.961793 0.965492 0.971047 0.979118 0.986478 1.00135 1.01608 1.03066 1.04504 1.05919 1.07309 1.08671 1.10002 1.113 1.12561 1.13786 1.1497 1.16115 1.17217 1.18275 1.19288 1.20255 1.21176 1.2205 1.22875 1.23652 1.24381 1.25059 1.25689 1.26269 1.26798 1.27278 1.27706 1.28086 1.28414 1.28692 1.28919 1.29097 1.29224 1.29299 1.29325
+-0.5 0.950939 0.950939 0.950942 0.95096 0.951029 0.951212 0.951619 0.952409 0.953809 0.956121 0.95974 0.965175 0.97307 0.980269 0.994811 1.00922 1.02347 1.03754 1.05138 1.06497 1.0783 1.09132 1.10401 1.11636 1.12835 1.13995 1.15115 1.16195 1.17232 1.18225 1.19173 1.20076 1.20933 1.21742 1.22505 1.23221 1.23886 1.24505 1.25074 1.25595 1.26066 1.26487 1.2686 1.27182 1.27456 1.27679 1.27854 1.27979 1.28053 1.28078
+-0.48 0.945323 0.945323 0.945325 0.945343 0.94541 0.94559 0.945988 0.946762 0.948131 0.950393 0.953935 0.959252 0.966977 0.97402 0.988244 1.00234 1.01628 1.03003 1.04357 1.05687 1.0699 1.08264 1.09506 1.10714 1.11888 1.13024 1.14122 1.15179 1.16195 1.17168 1.18098 1.18983 1.19824 1.20618 1.21367 1.22069 1.22722 1.2333 1.23889 1.244 1.24862 1.25276 1.25643 1.2596 1.26228 1.26448 1.2662 1.26743 1.26815 1.2684
+-0.46 0.939654 0.939654 0.939657 0.939674 0.93974 0.939915 0.940305 0.941062 0.942403 0.944616 0.948082 0.953285 0.960843 0.967734 0.981649 0.995437 1.00907 1.02252 1.03577 1.04877 1.06152 1.07398 1.08614 1.09797 1.10946 1.12058 1.13133 1.14169 1.15164 1.16118 1.1703 1.17898 1.18722 1.19501 1.20236 1.20925 1.21566 1.22163 1.22712 1.23214 1.23668 1.24075 1.24435 1.24746 1.2501 1.25226 1.25395 1.25516 1.25587 1.25611
+-0.44 0.933938 0.933938 0.93394 0.933957 0.934021 0.934194 0.934575 0.935316 0.936628 0.938794 0.942186 0.947278 0.954674 0.961416 0.975029 0.988517 1.00185 1.01501 1.02797 1.04069 1.05316 1.06536 1.07726 1.08883 1.10008 1.11097 1.1215 1.13165 1.1414 1.15075 1.15969 1.16819 1.17628 1.18392 1.19113 1.19789 1.20419 1.21004 1.21543 1.22036 1.22483 1.22882 1.23236 1.23542 1.23801 1.24013 1.24179 1.24298 1.24368 1.24391
+-0.42 0.928179 0.928179 0.928181 0.928198 0.928261 0.928429 0.928802 0.929528 0.930812 0.932932 0.936252 0.941235 0.948473 0.95507 0.968389 0.981584 0.99463 1.0075 1.02018 1.03262 1.04483 1.05676 1.06841 1.07974 1.09075 1.10141 1.11172 1.12167 1.13122 1.14039 1.14915 1.15749 1.16542 1.17291 1.17998 1.18662 1.1928 1.19855 1.20384 1.20868 1.21306 1.21698 1.22046 1.22346 1.22601 1.22809 1.22972 1.23089 1.23158 1.23181
+-0.4 0.922381 0.922381 0.922384 0.9224 0.922462 0.922627 0.922992 0.923702 0.924959 0.927035 0.930284 0.935161 0.942244 0.9487 0.961733 0.974643 0.987405 0.999998 1.0124 1.02458 1.03652 1.0482 1.05959 1.07069 1.08147 1.09191 1.10201 1.11175 1.12111 1.13009 1.13868 1.14685 1.15463 1.16198 1.16892 1.17543 1.18149 1.18714 1.19233 1.19708 1.20138 1.20524 1.20865 1.2116 1.2141 1.21615 1.21775 1.2189 1.21957 1.2198
+-0.38 0.91655 0.91655 0.916552 0.916569 0.916629 0.91679 0.917148 0.917843 0.919073 0.921105 0.924286 0.92906 0.935992 0.942309 0.955063 0.967695 0.980182 0.992503 1.00464 1.01655 1.02824 1.03967 1.05082 1.06168 1.07223 1.08246 1.09235 1.10189 1.11106 1.11986 1.12828 1.1363 1.14392 1.15113 1.15794 1.16433 1.17027 1.17581 1.18091 1.18557 1.1898 1.19358 1.19694 1.19983 1.20229 1.2043 1.20587 1.207 1.20766 1.20789
+-0.36 0.910689 0.910689 0.910691 0.910707 0.910766 0.910924 0.911274 0.911954 0.913159 0.915148 0.918261 0.922934 0.929719 0.935902 0.948383 0.960744 0.972962 0.985017 0.99689 1.00855 1.01998 1.03117 1.04209 1.05271 1.06305 1.07306 1.08275 1.0921 1.10108 1.10971 1.11796 1.12582 1.13329 1.14036 1.14704 1.1533 1.15914 1.16458 1.16958 1.17416 1.17831 1.18202 1.18531 1.18816 1.19057 1.19255 1.19409 1.1952 1.19585 1.19607
+-0.34 0.904801 0.904801 0.904804 0.904819 0.904877 0.905031 0.905374 0.90604 0.90722 0.909167 0.912215 0.916789 0.92343 0.929482 0.941697 0.953793 0.965749 0.977545 0.989163 1.00057 1.01176 1.02271 1.0334 1.0438 1.05392 1.06372 1.07321 1.08237 1.09117 1.09962 1.10771 1.11541 1.12274 1.12968 1.13622 1.14237 1.14809 1.15343 1.15834 1.16283 1.1669 1.17055 1.17378 1.17657 1.17895 1.18089 1.1824 1.18349 1.18413 1.18435
+-0.32 0.898891 0.898891 0.898894 0.898909 0.898965 0.899117 0.899452 0.900105 0.901259 0.903166 0.90615 0.910628 0.917129 0.923052 0.935007 0.946844 0.958544 0.970088 0.981457 0.99262 1.00357 1.01429 1.02475 1.03493 1.04484 1.05444 1.06373 1.0727 1.08133 1.08961 1.09753 1.10508 1.11227 1.11907 1.12549 1.13152 1.13714 1.14237 1.14719 1.1516 1.15559 1.15917 1.16235 1.16509 1.16742 1.16932 1.17081 1.17188 1.1725 1.17272
+-0.3 0.892962 0.892962 0.892965 0.89298 0.893035 0.893183 0.893512 0.89415 0.895281 0.897147 0.900069 0.904453 0.910817 0.916615 0.928316 0.939901 0.951352 0.962648 0.973774 0.984699 0.995417 1.0059 1.01614 1.02612 1.03582 1.04521 1.05432 1.0631 1.07155 1.07967 1.08743 1.09483 1.10188 1.10854 1.11484 1.12075 1.12626 1.1314 1.13612 1.14045 1.14437 1.14789 1.151 1.15369 1.15598 1.15785 1.15931 1.16036 1.16098 1.16119
+-0.28 0.887018 0.887018 0.88702 0.887034 0.887088 0.887234 0.887555 0.888181 0.889288 0.891115 0.893976 0.898268 0.904498 0.910174 0.921627 0.932966 0.944172 0.955228 0.966116 0.976808 0.987298 0.997563 1.00759 1.01735 1.02685 1.03605 1.04496 1.05357 1.06185 1.0698 1.07741 1.08466 1.09157 1.0981 1.10428 1.11008 1.11548 1.12052 1.12515 1.1294 1.13325 1.1367 1.13975 1.1424 1.14464 1.14648 1.14791 1.14894 1.14955 1.14975
+-0.26 0.88106 0.88106 0.881063 0.881077 0.88113 0.881272 0.881587 0.882199 0.883283 0.885073 0.887873 0.892076 0.898175 0.903732 0.914943 0.926042 0.937009 0.947829 0.958486 0.96895 0.979217 0.989265 0.999077 1.00863 1.01793 1.02694 1.03567 1.0441 1.05221 1.06 1.06746 1.07457 1.08134 1.08775 1.0938 1.09948 1.10479 1.10972 1.11427 1.11844 1.12222 1.1256 1.1286 1.13119 1.1334 1.1352 1.13661 1.13762 1.13821 1.13841
+-0.24 0.875093 0.875093 0.875096 0.87511 0.875161 0.875301 0.875609 0.876209 0.87727 0.879022 0.881765 0.885879 0.891851 0.897291 0.908266 0.919129 0.929864 0.940454 0.950884 0.961126 0.971175 0.98101 0.990615 0.999971 1.00907 1.0179 1.02645 1.0347 1.04265 1.05028 1.05759 1.06455 1.07119 1.07747 1.08341 1.08898 1.09418 1.09902 1.10349 1.10757 1.11128 1.1146 1.11754 1.12009 1.12225 1.12402 1.1254 1.12639 1.12698 1.12717
+-0.22 0.86912 0.86912 0.869122 0.869135 0.869186 0.869323 0.869625 0.870212 0.871251 0.872967 0.875652 0.879681 0.885528 0.890854 0.901598 0.912232 0.922739 0.933104 0.943312 0.953337 0.963173 0.9728 0.982203 0.991362 1.00028 1.00892 1.01729 1.02538 1.03316 1.04063 1.04779 1.05462 1.06112 1.06728 1.0731 1.07857 1.08366 1.08841 1.09279 1.0968 1.10043 1.10369 1.10658 1.10908 1.1112 1.11293 1.11429 1.11526 1.11584 1.11603
+-0.2 0.863142 0.863142 0.863144 0.863157 0.863207 0.863341 0.863636 0.864211 0.865229 0.86691 0.869539 0.873484 0.879209 0.884424 0.894941 0.905351 0.915636 0.925781 0.935773 0.945585 0.955213 0.964637 0.973841 0.982808 0.991535 0.999997 1.0082 1.01612 1.02374 1.03106 1.03808 1.04477 1.05114 1.05718 1.06288 1.06824 1.07324 1.07789 1.08219 1.08612 1.08968 1.09288 1.09571 1.09816 1.10024 1.10195 1.10328 1.10423 1.1048 1.10499
+</tableData></table></function></fcs_function>
+<fcs_function name="aero/rotor/vrs/dnu"><description>the vortex ring's increment of v / vh</description><function><table><independentVar lookup="row">aero/rotor/vrs/z</independentVar><independentVar lookup="column">aero/rotor/vrs/s</independentVar><tableData>
+        0 0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6 0.63407 0.68577 0.72438 0.75532 0.78115 0.8033 0.82263 0.83975 0.85506 0.86886 0.88137 0.89278 0.90321 0.91279 0.9216 0.92971 0.93719 0.94409 0.95045 0.95632 0.96172 0.96669 0.97125 0.97541 0.97921 0.98265 0.98575 0.98852 0.99097 0.99312 0.99496 0.99651 0.99777 0.99875 0.99945 0.99986 1
+-2.3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-2.28 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-2.26 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-2.24 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-2.22 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-2.2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-2.18 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-2.16 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-2.14 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-2.12 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-2.1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-2.08 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-2.06 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-2.04 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-2.02 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-1.98 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.00172607 0.0229703 0.0400816 0.0532912 0.062673 0.0681471 0.0700128
+-1.96 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0197451 0.0480861 0.0720299 0.0919733 0.10803 0.120422 0.12922 0.134353 0.136102
+-1.94 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.023289 0.0586162 0.0893567 0.115931 0.138369 0.157048 0.172081 0.183677 0.191908 0.19671 0.198346
+-1.92 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0127133 0.0553903 0.0931147 0.126212 0.154988 0.179847 0.200822 0.218273 0.23231 0.243134 0.250814 0.255293 0.256819
+-1.9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0385857 0.0836669 0.123628 0.158918 0.189849 0.21672 0.239912 0.259467 0.275726 0.288796 0.298869 0.306015 0.310181 0.3116
+-1.88 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0082277 0.0611639 0.108369 0.150525 0.187852 0.220778 0.249609 0.27463 0.296206 0.314382 0.329483 0.341615 0.350961 0.357587 0.361449 0.362765
+-1.86 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0252114 0.0804659 0.129966 0.174051 0.213371 0.248143 0.278778 0.305572 0.328798 0.348806 0.365646 0.379624 0.390846 0.399485 0.405608 0.409175 0.41039
+-1.84 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0393957 0.0968718 0.148484 0.194655 0.235716 0.272287 0.304583 0.332998 0.357817 0.379304 0.397793 0.413336 0.426226 0.436565 0.44452 0.450154 0.453436 0.454554
+-1.82 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0508712 0.110651 0.164283 0.212368 0.255315 0.293448 0.327357 0.357254 0.383519 0.406425 0.426227 0.443243 0.457531 0.469367 0.478851 0.486142 0.491303 0.494308 0.495331
+-1.8 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0599791 0.121892 0.177622 0.227535 0.272205 0.312032 0.347331 0.378663 0.406239 0.430422 0.451475 0.469647 0.485237 0.498309 0.509124 0.51778 0.524429 0.529132 0.531868 0.5328
+-1.78 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0667981 0.130915 0.188586 0.2404 0.286714 0.328083 0.364891 0.397449 0.426289 0.451619 0.473787 0.493049 0.509642 0.523853 0.535748 0.545575 0.55343 0.559457 0.563716 0.566194 0.567037
+-1.76 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0715735 0.137792 0.197475 0.251046 0.299074 0.341911 0.380088 0.413979 0.443886 0.470316 0.493476 0.513696 0.531225 0.546293 0.55917 0.569927 0.578798 0.585879 0.591304 0.595135 0.597361 0.598118
+-1.74 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0745286 0.142747 0.204353 0.259752 0.309364 0.353735 0.393212 0.428306 0.459379 0.486727 0.510829 0.531891 0.55023 0.566085 0.579678 0.591266 0.600924 0.608872 0.615203 0.620047 0.623463 0.625447 0.626122
+-1.72 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0758109 0.14598 0.209425 0.266578 0.317843 0.363631 0.404472 0.440708 0.472826 0.501179 0.526055 0.54791 0.566947 0.583469 0.597708 0.609878 0.620221 0.628817 0.635872 0.641481 0.645763 0.648779 0.650529 0.651123
+-1.7 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0756941 0.147617 0.212869 0.271707 0.324564 0.37184 0.413941 0.451377 0.484486 0.513734 0.539463 0.561955 0.581643 0.598726 0.613495 0.626175 0.63697 0.646112 0.653684 0.659879 0.664789 0.66853 0.671159 0.672683 0.6732
+-1.68 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0745105 0.147895 0.214789 0.275297 0.329693 0.378408 0.421838 0.460385 0.49454 0.524634 0.551116 0.574316 0.594511 0.612109 0.627309 0.640389 0.651565 0.661036 0.669019 0.675603 0.680968 0.685206 0.688424 0.69068 0.691986 0.692429
+-1.66 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0724145 0.147101 0.215387 0.277431 0.333366 0.383482 0.428206 0.467932 0.503056 0.534051 0.561242 0.58506 0.605824 0.623807 0.639392 0.652778 0.664231 0.673959 0.682154 0.689021 0.694653 0.699219 0.702807 0.705522 0.70742 0.708515 0.708886
+-1.64 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0698666 0.145347 0.214906 0.278277 0.335647 0.387178 0.433172 0.474054 0.510216 0.542045 0.569999 0.594398 0.615652 0.634073 0.649927 0.663575 0.675216 0.685102 0.693436 0.700403 0.706197 0.710912 0.714708 0.717672 0.719902 0.721454 0.722347 0.72265
+-1.62 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0671584 0.143026 0.213421 0.278038 0.336673 0.389542 0.436834 0.478863 0.51605 0.548784 0.577446 0.602477 0.62419 0.64298 0.659148 0.672955 0.684741 0.694703 0.703083 0.710077 0.715863 0.720624 0.724458 0.727513 0.729878 0.731642 0.732861 0.733559 0.733795
+-1.6 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0647715 0.140364 0.211259 0.276752 0.336605 0.390681 0.43922 0.482436 0.520653 0.55429 0.583731 0.60935 0.631573 0.650707 0.66713 0.681135 0.692975 0.702973 0.711323 0.718256 0.723962 0.728614 0.732382 0.73537 0.737714 0.739501 0.740817 0.741717 0.742228 0.7424
+-1.58 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0631946 0.137754 0.208584 0.274683 0.33545 0.39072 0.440409 0.484786 0.524086 0.558642 0.58887 0.61515 0.63785 0.657378 0.674038 0.68819 0.700118 0.710072 0.718353 0.725156 0.730701 0.735172 0.738734 0.74155 0.743725 0.745386 0.746619 0.747505 0.748098 0.74843 0.748541
+-1.56 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0629858 0.135586 0.205706 0.271938 0.333414 0.389631 0.44049 0.485964 0.526344 0.561885 0.592929 0.619888 0.643137 0.663037 0.679982 0.69427 0.706246 0.716184 0.724329 0.730966 0.736286 0.740499 0.743785 0.746303 0.748206 0.749602 0.750608 0.75131 0.751784 0.752083 0.752242 0.752294
+-1.54 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0645677 0.134299 0.20292 0.268749 0.330546 0.387567 0.439407 0.486028 0.527455 0.563998 0.595935 0.623613 0.647439 0.667785 0.685004 0.699476 0.711493 0.721385 0.729417 0.735831 0.740892 0.744792 0.747732 0.749883 0.751401 0.752429 0.753079 0.753458 0.753651 0.75373 0.753747 0.753742 0.753738
+-1.52 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.00629001 0.0684551 0.134181 0.200552 0.26532 0.327004 0.384525 0.437259 0.484892 0.527443 0.564987 0.597854 0.626337 0.650792 0.671621 0.689189 0.703844 0.71595 0.725795 0.733693 0.739904 0.744662 0.748217 0.750759 0.752479 0.753545 0.754107 0.754298 0.754234 0.754013 0.75372 0.753421 0.753168 0.753005 0.752947
+-1.5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0200503 0.0748687 0.135572 0.198762 0.261869 0.322909 0.380593 0.433996 0.482606 0.526198 0.564845 0.598668 0.628014 0.653194 0.674567 0.69253 0.707443 0.719648 0.729494 0.737265 0.743259 0.747729 0.750905 0.753022 0.754266 0.754822 0.754852 0.7545 0.753892 0.753145 0.752352 0.751594 0.750933 0.750423 0.75011 0.75
+-1.48 0 0 0 0 0 0 0 0 0 0 0 0.00243585 0.0182666 0.0368585 0.0836035 0.138475 0.197725 0.258437 0.318377 0.375812 0.429639 0.479076 0.523725 0.563439 0.598345 0.628606 0.654585 0.676607 0.695035 0.710262 0.722642 0.732509 0.740199 0.74599 0.750169 0.752978 0.754646 0.75539 0.755397 0.754842 0.753883 0.75266 0.751289 0.749892 0.74861 0.747531 0.74667 0.746044 0.745672 0.745545
+-1.46 0 0.0201103 0.0203339 0.0208106 0.0215995 0.0227578 0.0243616 0.026547 0.0295914 0.0340664 0.0410955 0.052749 0.0725576 0.0934454 0.142373 0.197236 0.25504 0.313333 0.370201 0.424153 0.474261 0.519886 0.560731 0.596729 0.628053 0.654908 0.67767 0.696678 0.712297 0.724915 0.734879 0.742518 0.748154 0.75206 0.754509 0.755737 0.755968 0.755405 0.754233 0.75262 0.750719 0.748707 0.746825 0.745141 0.743671 0.742444 0.741469 0.740761 0.740343 0.7402
+-1.44 0 0.0443758 0.0448836 0.0459656 0.0477521 0.0503567 0.0538978 0.0585366 0.0645502 0.0724681 0.0833063 0.0989243 0.12249 0.145537 0.196484 0.251278 0.307647 0.363578 0.417468 0.468055 0.514583 0.556544 0.593741 0.62618 0.654079 0.677681 0.697374 0.713507 0.726451 0.736584 0.74425 0.749769 0.753451 0.755563 0.756367 0.756091 0.754955 0.753149 0.750856 0.748294 0.745813 0.743493 0.741364 0.739475 0.737836 0.736474 0.735396 0.734616 0.734156 0.733998
+-1.42 0 0.0658123 0.0665886 0.0682426 0.0709721 0.0749438 0.0803166 0.0872757 0.0960978 0.107273 0.121713 0.141077 0.168184 0.193255 0.246064 0.300731 0.355672 0.409299 0.460302 0.507642 0.550725 0.589169 0.622871 0.651905 0.676534 0.697033 0.713801 0.727199 0.737596 0.745368 0.750848 0.754353 0.756178 0.756588 0.755829 0.754126 0.751692 0.748721 0.74567 0.742722 0.739935 0.737353 0.735002 0.732928 0.731138 0.729655 0.728485 0.72764 0.727142 0.726971
+-1.4 0 0.0845105 0.08554 0.0877334 0.0913522 0.0966135 0.103715 0.112864 0.124337 0.138586 0.156426 0.179322 0.209759 0.236721 0.291236 0.34572 0.399243 0.450623 0.498831 0.54304 0.582809 0.61788 0.648237 0.674019 0.695527 0.71307 0.727056 0.737852 0.745832 0.751361 0.754769 0.756363 0.756428 0.755223 0.752983 0.749926 0.746411 0.74289 0.739467 0.736199 0.733137 0.730323 0.727774 0.725535 0.723611 0.722021 0.720769 0.719866 0.719335 0.719153
+-1.38 0 0.100561 0.101829 0.10453 0.108985 0.11546 0.124189 0.1354 0.14937 0.166515 0.187557 0.213774 0.247333 0.276059 0.332128 0.386373 0.438488 0.487677 0.533179 0.574371 0.610958 0.642796 0.669955 0.692634 0.71117 0.725901 0.737243 0.74557 0.751257 0.75466 0.756105 0.75589 0.754289 0.751556 0.747921 0.743947 0.739974 0.736069 0.732315 0.728763 0.725458 0.722437 0.719713 0.71733 0.715287 0.713603 0.71228 0.711327 0.710766 0.710574
+-1.36 0 0.114055 0.115546 0.118723 0.123964 0.131579 0.141835 0.154983 0.1713 0.191166 0.215214 0.244547 0.281026 0.31139 0.368865 0.422818 0.473536 0.520588 0.563473 0.601759 0.635292 0.664037 0.688141 0.707863 0.723572 0.735632 0.744466 0.750455 0.75397 0.755364 0.754952 0.753028 0.749853 0.745735 0.741343 0.73691 0.732544 0.728298 0.724253 0.720451 0.716934 0.713732 0.710856 0.708348 0.706202 0.704436 0.703051 0.702054 0.701468 0.701267
+-1.34 0 0.125082 0.126783 0.130406 0.136382 0.145064 0.156751 0.171714 0.190229 0.212646 0.23951 0.271758 0.310957 0.342835 0.401572 0.455182 0.504512 0.549484 0.589838 0.625328 0.655933 0.681721 0.702912 0.71982 0.732843 0.74237 0.74883 0.752607 0.754071 0.753567 0.751403 0.747868 0.743348 0.738571 0.733708 0.728872 0.724161 0.719619 0.71532 0.711302 0.7076 0.704244 0.701237 0.698621 0.696388 0.694553 0.693115 0.692081 0.691474 0.691266
+-1.32 0 0.133734 0.13563 0.139669 0.146332 0.156009 0.169033 0.185691 0.20626 0.23106 0.260555 0.295521 0.337247 0.370519 0.430375 0.483592 0.531546 0.574491 0.612401 0.645203 0.673003 0.695967 0.714385 0.728618 0.739094 0.746224 0.750439 0.752128 0.751659 0.749366 0.745554 0.740727 0.735594 0.730337 0.725064 0.719878 0.714868 0.71007 0.705555 0.701352 0.697495 0.694007 0.690891 0.688185 0.685879 0.683987 0.682504 0.68144 0.680815 0.680601
+-1.3 0 0.140102 0.142179 0.146605 0.153905 0.16451 0.178777 0.197013 0.219496 0.246515 0.278459 0.31595 0.360013 0.394561 0.455401 0.508176 0.554765 0.595737 0.631286 0.661507 0.686624 0.706894 0.722674 0.73437 0.742435 0.7473 0.749398 0.74912 0.746832 0.742859 0.737802 0.732378 0.726755 0.721082 0.715456 0.70997 0.704706 0.699693 0.694996 0.690639 0.686653 0.683058 0.679853 0.677074 0.674708 0.67277 0.671253 0.670164 0.669525 0.669306
+-1.28 0 0.144276 0.146521 0.151305 0.159197 0.17066 0.18608 0.205781 0.230039 0.259117 0.293332 0.333161 0.379376 0.415086 0.476774 0.52906 0.574297 0.613349 0.646621 0.674365 0.696917 0.714622 0.727896 0.737189 0.742977 0.745706 0.745812 0.743686 0.739689 0.734505 0.728848 0.722924 0.71688 0.710854 0.70493 0.699192 0.693718 0.688528 0.683682 0.679202 0.675113 0.671433 0.668157 0.665321 0.66291 0.660936 0.659392 0.658285 0.657635 0.657413
+-1.26 0 0.146346 0.148746 0.153861 0.162298 0.174555 0.19104 0.212093 0.237991 0.268973 0.305286 0.347269 0.395455 0.432214 0.49462 0.546373 0.590269 0.627454 0.65853 0.683899 0.704003 0.719268 0.730168 0.737189 0.740829 0.741549 0.739784 0.735925 0.730731 0.724932 0.718765 0.712418 0.706021 0.6997 0.693531 0.687589 0.681946 0.676615 0.671653 0.667078 0.66291 0.659166 0.655839 0.652961 0.650518 0.648518 0.646956 0.645836 0.645178 0.644954
+-1.24 0 0.146404 0.148946 0.154364 0.163303 0.176288 0.193752 0.216049 0.243457 0.276189 0.31443 0.358389 0.408369 0.446068 0.509066 0.560242 0.602809 0.638179 0.66714 0.690235 0.708005 0.720953 0.729605 0.734483 0.736102 0.734936 0.731419 0.726355 0.720527 0.714208 0.707613 0.700914 0.694227 0.687668 0.681304 0.675203 0.66943 0.663994 0.658948 0.654304 0.650082 0.646294 0.642933 0.640029 0.637565 0.63555 0.633976 0.632849 0.632187 0.631961
+-1.22 0 0.14454 0.147212 0.152907 0.162304 0.175954 0.194313 0.217748 0.246537 0.280872 0.320875 0.366635 0.418237 0.45677 0.520236 0.570794 0.612045 0.645651 0.672577 0.693495 0.709044 0.719796 0.726324 0.729185 0.728906 0.725975 0.721227 0.715503 0.709142 0.702391 0.695446 0.688465 0.681549 0.674808 0.668297 0.662079 0.656214 0.650707 0.645604 0.640918 0.636664 0.632853 0.629474 0.626557 0.624085 0.622064 0.620487 0.619357 0.618694 0.618467
+-1.2 0 0.140845 0.143636 0.149582 0.159394 0.173648 0.19282 0.217289 0.247335 0.283128 0.324733 0.372122 0.425179 0.464442 0.528257 0.578156 0.618105 0.649998 0.674965 0.693805 0.707242 0.715915 0.720441 0.721406 0.719352 0.715152 0.709713 0.70344 0.696641 0.689542 0.682323 0.675124 0.668039 0.661165 0.654554 0.64826 0.64234 0.636792 0.631662 0.626957 0.622693 0.618877 0.615496 0.612581 0.610111 0.608094 0.606519 0.605392 0.604731 0.604505
+-1.18 0 0.13541 0.138307 0.144479 0.154665 0.169464 0.189369 0.214773 0.245953 0.283063 0.326113 0.374966 0.429314 0.469207 0.533254 0.582456 0.621116 0.651346 0.674432 0.691288 0.70272 0.709429 0.712072 0.711261 0.707889 0.70296 0.696951 0.690232 0.683088 0.675722 0.668298 0.660945 0.653746 0.64679 0.640121 0.63379 0.627848 0.62229 0.61716 0.612461 0.608206 0.604403 0.601036 0.598135 0.595678 0.593672 0.592107 0.590987 0.59033 0.590106
+-1.16 0 0.128326 0.131317 0.137691 0.148211 0.163497 0.184058 0.210297 0.242495 0.280783 0.325125 0.375281 0.430762 0.471186 0.535353 0.583822 0.621207 0.649824 0.671103 0.686068 0.695601 0.700457 0.701334 0.699156 0.695007 0.689481 0.683015 0.675951 0.668547 0.660991 0.65343 0.645982 0.63872 0.631728 0.625044 0.618712 0.612781 0.607242 0.602136 0.597465 0.59324 0.589466 0.586127 0.583252 0.580818 0.578832 0.577283 0.576175 0.575525 0.575303
+-1.14 0 0.119682 0.122757 0.12931 0.140125 0.155841 0.176983 0.203963 0.237062 0.276396 0.321881 0.373183 0.429641 0.470502 0.534679 0.58238 0.618504 0.645557 0.665103 0.678268 0.686004 0.689119 0.688584 0.685573 0.680793 0.674795 0.66798 0.660664 0.653084 0.645408 0.637774 0.630287 0.623013 0.61603 0.609368 0.603071 0.597181 0.591689 0.586631 0.582008 0.577831 0.574102 0.570805 0.567968 0.565566 0.563608 0.56208 0.560988 0.560347 0.560128
+-1.12 0 0.109571 0.112718 0.119426 0.130499 0.146591 0.16824 0.195868 0.229757 0.270007 0.316491 0.368785 0.426072 0.467277 0.531359 0.578258 0.613136 0.638673 0.656559 0.668014 0.674054 0.675727 0.674292 0.670608 0.665334 0.658981 0.65192 0.644441 0.636761 0.629035 0.621387 0.613914 0.606675 0.599741 0.59314 0.586909 0.58109 0.575669 0.570682 0.566128 0.562015 0.558346 0.555104 0.552315 0.549955 0.548031 0.546531 0.545458 0.544829 0.544614
+-1.1 0 0.0980824 0.101292 0.108133 0.119426 0.135841 0.157926 0.186113 0.220683 0.261723 0.309065 0.362204 0.420173 0.461633 0.525518 0.571583 0.60523 0.6293 0.645597 0.655428 0.660016 0.660719 0.658563 0.654357 0.648717 0.642121 0.63491 0.62735 0.619644 0.611932 0.604326 0.596917 0.589757 0.582911 0.576405 0.570271 0.564549 0.559224 0.554329 0.549862 0.54583 0.542235 0.53906 0.536328 0.534019 0.532136 0.530668 0.529618 0.529003 0.528792
+-1.08 0 0.0853071 0.0885686 0.0955214 0.107 0.123685 0.146139 0.174797 0.209942 0.25165 0.299715 0.353554 0.412064 0.453692 0.517281 0.562483 0.594914 0.617564 0.632342 0.640739 0.644287 0.644215 0.641503 0.636916 0.631031 0.624295 0.617022 0.609462 0.601797 0.594158 0.586647 0.579348 0.572308 0.565588 0.559208 0.553201 0.547601 0.542394 0.53761 0.533248 0.529312 0.525803 0.522706 0.520042 0.51779 0.515955 0.514524 0.513501 0.512901 0.512697
+-1.06 0 0.0713359 0.0746398 0.0816832 0.0933124 0.110219 0.132973 0.162019 0.197638 0.239894 0.288549 0.34295 0.401864 0.443576 0.506775 0.551084 0.582317 0.603592 0.616984 0.624282 0.627 0.626331 0.623215 0.618378 0.612361 0.605582 0.598333 0.590843 0.583284 0.575774 0.568407 0.561262 0.55438 0.547819 0.541596 0.535741 0.530288 0.525219 0.520565 0.516323 0.512497 0.509087 0.506078 0.503491 0.501304 0.499522 0.498133 0.49714 0.496557 0.496358
+-1.04 0 0.0562597 0.0595963 0.0667102 0.0784568 0.0955365 0.118527 0.147878 0.183872 0.226563 0.27568 0.330507 0.389692 0.431408 0.494125 0.537516 0.567564 0.587534 0.599786 0.606203 0.608282 0.607183 0.603806 0.59884 0.592796 0.586064 0.578916 0.571565 0.56417 0.55684 0.549663 0.542712 0.536023 0.529652 0.523614 0.517936 0.51265 0.50774 0.503233 0.499125 0.495422 0.492122 0.489211 0.486708 0.484593 0.482869 0.481526 0.480566 0.480003 0.47981
+-1.02 0 0.040169 0.0435293 0.0506941 0.062526 0.0797322 0.102897 0.132475 0.168748 0.211761 0.261218 0.316339 0.375668 0.417309 0.479457 0.521903 0.550757 0.569579 0.580908 0.586644 0.588261 0.586884 0.583378 0.578397 0.572422 0.565821 0.558845 0.551695 0.544519 0.537416 0.530471 0.52375 0.517288 0.511136 0.505308 0.49983 0.494731 0.489996 0.485651 0.481692 0.478123 0.474944 0.472139 0.469728 0.467691 0.46603 0.464737 0.463812 0.46327 0.463084
+-1 0 0.0231547 0.0265298 0.0337267 0.0456128 0.0629006 0.0861796 0.115907 0.152368 0.195597 0.245272 0.300563 0.359912 0.401402 0.462888 0.504287 0.532028 0.549903 0.56051 0.565747 0.567063 0.56555 0.562036 0.557144 0.551327 0.544932 0.538195 0.531303 0.524395 0.517564 0.510888 0.504431 0.498225 0.492318 0.486723 0.481465 0.476573 0.472029 0.46786 0.464062 0.460638 0.457589 0.454898 0.452585 0.450631 0.449039 0.447798 0.446911 0.446391 0.446213
+-0.98 0 0.0053075 0.00868892 0.0158997 0.0278102 0.0451362 0.0684711 0.0982758 0.134834 0.178175 0.227954 0.283293 0.342557 0.383817 0.444446 0.484795 0.511573 0.528683 0.538747 0.543653 0.544818 0.543297 0.539885 0.535176 0.529598 0.523478 0.517039 0.510457 0.503862 0.497342 0.490971 0.484808 0.478884 0.473246 0.467906 0.462887 0.458216 0.453878 0.449898 0.446272 0.443003 0.440091 0.437522 0.435314 0.433448 0.431927 0.430743 0.429896 0.429399 0.429229
+-0.96 0 0.00107928 -0.00101017 0.00325366 0.0134345 0.0296227 0.0521564 0.0813789 0.117513 0.160544 0.210076 0.265147 0.323968 0.364744 0.424301 0.463637 0.489586 0.506093 0.515779 0.520505 0.521652 0.520239 0.51703 0.512588 0.507322 0.50154 0.495453 0.489227 0.482985 0.476811 0.470775 0.464934 0.459317 0.453969 0.448901 0.444138 0.439703 0.435584 0.431804 0.428359 0.425254 0.422487 0.420046 0.417948 0.416174 0.414729 0.413603 0.412798 0.412326 0.412165
+-0.94 0 -0.00763177 0.00451899 0.00439932 0.00984852 0.0222713 0.0418505 0.0687216 0.102959 0.144445 0.192694 0.246644 0.304387 0.344391 0.402673 0.441024 0.466259 0.482309 0.491763 0.496443 0.497692 0.496492 0.493574 0.489476 0.484586 0.479198 0.473511 0.467682 0.461829 0.456032 0.450358 0.444862 0.439573 0.434533 0.429755 0.425262 0.421076 0.417187 0.413617 0.410363 0.407428 0.404813 0.402505 0.400521 0.398844 0.397478 0.396413 0.395651 0.395205 0.395052
+-0.92 0 -0.023841 -0.00190698 0.00841434 0.0117026 0.0201954 0.0359346 0.0594003 0.0906967 0.129666 0.175769 0.227873 0.283986 0.322962 0.379782 0.417167 0.441789 0.457507 0.466857 0.47161 0.473067 0.472171 0.469622 0.465935 0.461478 0.456532 0.451286 0.44589 0.440457 0.435065 0.429777 0.424647 0.419704 0.414989 0.410514 0.406302 0.402377 0.398728 0.395376 0.392319 0.389561 0.387104 0.384934 0.383068 0.381491 0.380205 0.379204 0.378487 0.378067 0.377923
+-0.9 0 -0.0382408 -0.0182791 0.00359272 0.0131165 0.0201334 0.032524 0.052331 0.0801385 0.115943 0.15925 0.208923 0.26294 0.300662 0.355849 0.392277 0.416368 0.431862 0.441218 0.446148 0.447903 0.44739 0.445279 0.44206 0.438085 0.433623 0.428853 0.423921 0.418935 0.413969 0.409087 0.404341 0.399759 0.395382 0.391223 0.387304 0.383648 0.380246 0.377119 0.374266 0.371691 0.369395 0.367367 0.365623 0.364148 0.362946 0.362009 0.361339 0.360946 0.360811
+-0.88 0 -0.050908 -0.0327981 -0.0125764 0.00820994 0.0188237 0.0297341 0.0464294 0.0706983 0.103014 0.143088 0.189884 0.241422 0.277696 0.331093 0.366566 0.390192 0.405551 0.415004 0.420197 0.422328 0.422266 0.420649 0.417946 0.414495 0.41055 0.406286 0.401843 0.397325 0.392806 0.388346 0.383998 0.37979 0.375762 0.371928 0.368309 0.36493 0.361782 0.358886 0.356242 0.353853 0.351723 0.34984 0.34822 0.34685 0.345733 0.344861 0.344238 0.343873 0.343748
+-0.86 0 -0.0619197 -0.0455445 -0.0272637 -0.00663337 0.0130047 0.0256801 0.0406113 0.0617899 0.0906147 0.127235 0.170846 0.219606 0.25427 0.305736 0.340243 0.363453 0.378747 0.388374 0.3939 0.396471 0.396913 0.395836 0.393689 0.390793 0.387394 0.38366 0.379726 0.375694 0.371635 0.367611 0.363671 0.359847 0.356176 0.352674 0.349363 0.346266 0.343377 0.340716 0.338284 0.336085 0.334122 0.332387 0.330893 0.329629 0.328598 0.327794 0.327219 0.326881 0.326766
+-0.84 0 -0.0713527 -0.0565992 -0.0401324 -0.021539 -0.000362562 0.0184774 0.0337924 0.0528268 0.0784825 0.111641 0.151898 0.197665 0.230588 0.279997 0.313522 0.336346 0.351628 0.361485 0.367399 0.370457 0.371446 0.370946 0.369383 0.367069 0.364236 0.361049 0.357639 0.354104 0.350516 0.346936 0.343414 0.33998 0.336672 0.333507 0.330508 0.327697 0.32507 0.322647 0.320429 0.318423 0.31663 0.315043 0.313677 0.31252 0.311576 0.310839 0.310312 0.310003 0.309898
+-0.82 0 -0.0792839 -0.0660428 -0.0512675 -0.034574 -0.0155368 0.00624119 0.0248885 0.0432227 0.0663543 0.0962562 0.133131 0.175773 0.206855 0.254098 0.286611 0.309065 0.324368 0.334494 0.340834 0.344415 0.345981 0.346081 0.345124 0.343408 0.341155 0.338527 0.33565 0.332621 0.329511 0.326381 0.323279 0.320239 0.317298 0.314474 0.311788 0.309265 0.306902 0.304718 0.302716 0.300903 0.29928 0.297844 0.296605 0.295556 0.294699 0.29403 0.293552 0.293271 0.293175
+-0.8 0 -0.0857903 -0.073956 -0.0607539 -0.045828 -0.0287825 -0.00917923 0.0128154 0.0323911 0.0539668 0.0810314 0.114634 0.154103 0.183277 0.228258 0.259723 0.281805 0.297144 0.30756 0.314349 0.318473 0.320632 0.321348 0.321008 0.319898 0.318232 0.316168 0.313828 0.311308 0.308679 0.306 0.303322 0.300677 0.298102 0.295619 0.293248 0.291012 0.288913 0.286969 0.285183 0.283562 0.28211 0.280823 0.279712 0.27877 0.278 0.2774 0.276969 0.276717 0.276631
+-0.78 0 -0.0909489 -0.0804194 -0.0686765 -0.0553908 -0.0401946 -0.0226794 -0.00239892 0.0197458 0.0410571 0.0659172 0.0964972 0.132829 0.160059 0.202697 0.233068 0.254758 0.27013 0.280841 0.288084 0.292757 0.295515 0.29685 0.297129 0.296627 0.295548 0.294047 0.292243 0.290231 0.28808 0.285851 0.283594 0.281342 0.279133 0.276988 0.27493 0.272981 0.271144 0.269437 0.267866 0.266437 0.265154 0.264016 0.263032 0.262196 0.261514 0.26098 0.260598 0.260373 0.260297
+-0.76 0 -0.0948364 -0.0855139 -0.0751204 -0.0633518 -0.049868 -0.0342885 -0.0161952 0.00485773 0.0273619 0.0508643 0.0788096 0.112125 0.137405 0.177637 0.206858 0.228121 0.243503 0.254494 0.262182 0.267395 0.270745 0.272691 0.273583 0.273681 0.273183 0.272238 0.270964 0.269452 0.267775 0.26599 0.264149 0.262286 0.260438 0.258628 0.256878 0.255212 0.253635 0.252163 0.250804 0.249564 0.248449 0.247457 0.246598 0.245869 0.245271 0.244805 0.24447 0.244273 0.244206
+-0.74 0 -0.09753 -0.0893201 -0.0801704 -0.0698009 -0.0578975 -0.044107 -0.0280388 -0.0092722 0.0126181 0.0358233 0.0616612 0.0921631 0.115521 0.153297 0.181303 0.202086 0.217437 0.228677 0.236784 0.242516 0.246436 0.248977 0.250464 0.251148 0.251216 0.250815 0.250059 0.249038 0.247823 0.246474 0.24504 0.243558 0.242064 0.240583 0.239137 0.237749 0.236426 0.235185 0.234034 0.23298 0.23203 0.231182 0.230446 0.22982 0.229307 0.228906 0.228618 0.228448 0.228391
+-0.72 0 -0.0991064 -0.0919188 -0.0839114 -0.0748277 -0.064378 -0.0522355 -0.0380363 -0.0213847 -0.00186903 0.0207449 0.0451418 0.073118 0.0946126 0.129898 0.156614 0.176847 0.192109 0.203548 0.212031 0.218245 0.222706 0.225811 0.227869 0.229115 0.229729 0.229853 0.229598 0.229052 0.228286 0.22736 0.226322 0.225211 0.224061 0.2229 0.221749 0.220632 0.219557 0.218542 0.217594 0.216722 0.215932 0.215224 0.21461 0.214085 0.213654 0.213316 0.213074 0.212931 0.212883
+-0.7 0 -0.0996427 -0.0933905 -0.0864285 -0.0785217 -0.0694043 -0.0587747 -0.0462946 -0.0315934 -0.0142799 0.00603198 0.0293411 0.0551629 0.0748837 0.10766 0.133003 0.152599 0.167694 0.179265 0.188066 0.194712 0.199667 0.203299 0.205891 0.207669 0.208801 0.209425 0.209649 0.209558 0.209223 0.208703 0.208047 0.207293 0.206476 0.205624 0.204759 0.203904 0.20307 0.202272 0.201521 0.200825 0.200191 0.19962 0.199122 0.198696 0.198345 0.19807 0.197871 0.197755 0.197715
+-0.68 0 -0.0992156 -0.0938161 -0.0878065 -0.0809727 -0.0730715 -0.0638252 -0.0529207 -0.0400116 -0.0247282 -0.00669831 0.0144149 0.0384714 0.0565398 0.0868037 0.110681 0.129536 0.144368 0.155985 0.16503 0.172042 0.177436 0.181544 0.184628 0.186898 0.188513 0.189607 0.190281 0.190621 0.190695 0.190562 0.190269 0.189856 0.189357 0.188801 0.18821 0.187606 0.187003 0.186415 0.185854 0.185327 0.184843 0.184404 0.184019 0.183687 0.183414 0.183198 0.183042 0.182951 0.182919
+-0.66 0 -0.0979023 -0.0932762 -0.0881304 -0.0822704 -0.0754743 -0.0674876 -0.0580212 -0.0467528 -0.0333344 -0.017409 0.00135715 0.0232169 0.039786 0.0675491 0.0898578 0.107852 0.122306 0.133866 0.143065 0.150365 0.156127 0.160651 0.164173 0.166888 0.168945 0.170472 0.171564 0.172305 0.172762 0.172991 0.173041 0.17295 0.172753 0.172477 0.172146 0.171781 0.171398 0.17101 0.170629 0.170265 0.169924 0.169611 0.169333 0.169092 0.168892 0.168734 0.16862 0.168552 0.168529
+-0.64 0 -0.0957795 -0.0918515 -0.0874851 -0.0825043 -0.0767076 -0.0698624 -0.061703 -0.0519307 -0.040219 -0.0262276 -0.00962915 0.00984265 0.0248289 0.0501167 0.0707455 0.0877411 0.101684 0.113067 0.122313 0.129806 0.135856 0.140724 0.144622 0.147728 0.150178 0.152094 0.153567 0.154675 0.155484 0.156049 0.156416 0.156626 0.15671 0.156697 0.15661 0.156471 0.156294 0.156095 0.155885 0.155674 0.155469 0.155275 0.155099 0.154945 0.154815 0.154711 0.154635 0.154591 0.154575
+-0.62 0 -0.0929243 -0.0896227 -0.0859556 -0.0817642 -0.0768663 -0.0710504 -0.0640731 -0.0556586 -0.0455025 -0.0332821 -0.0186787 -0.00141836 0.0119543 0.0347268 0.0535547 0.0693971 0.0826768 0.0937445 0.102915 0.110495 0.116739 0.121869 0.12607 0.129503 0.132292 0.134548 0.136358 0.137794 0.138921 0.139791 0.140449 0.140934 0.141277 0.141507 0.141647 0.141717 0.141733 0.14171 0.14166 0.141591 0.141513 0.141432 0.141352 0.141278 0.141214 0.141161 0.141122 0.141099 0.141091
+-0.6 0 -0.0894136 -0.0866705 -0.0836267 -0.0801398 -0.0760453 -0.071152 -0.065238 -0.0580501 -0.0493053 -0.0386999 -0.0259263 -0.0107074 0.00116608 0.0215437 0.0384965 0.0530144 0.0654608 0.0760569 0.0850129 0.0925575 0.0988887 0.104188 0.108613 0.112303 0.115367 0.117909 0.120006 0.121727 0.123134 0.124274 0.125192 0.125924 0.126502 0.126953 0.127299 0.12756 0.127754 0.127893 0.12799 0.128054 0.128094 0.128115 0.128125 0.128126 0.128123 0.128118 0.128113 0.12811 0.128109
+-0.58 0 -0.0853242 -0.0830757 -0.0805835 -0.0777205 -0.0743395 -0.070268 -0.0653048 -0.0592185 -0.051748 -0.0426088 -0.0315067 -0.0181658 -0.00768097 0.0104612 0.0256925 0.038787 0.0502114 0.0601619 0.0687488 0.0761222 0.082422 0.0877877 0.0923449 0.0962125 0.0994835 0.102249 0.104581 0.10654 0.108182 0.109555 0.110698 0.111648 0.112433 0.11308 0.113611 0.114044 0.114398 0.114683 0.114914 0.115098 0.115245 0.115361 0.115452 0.115522 0.115575 0.115614 0.11564 0.115655 0.11566
+-0.56 0 -0.0807331 -0.0789189 -0.0769109 -0.0745962 -0.0718437 -0.0684988 -0.0643803 -0.0592776 -0.0529511 -0.0451364 -0.0355547 -0.0239349 -0.014732 0.00132757 0.0149422 0.0267491 0.0370958 0.0462172 0.0542641 0.0613161 0.0674536 0.0727714 0.077362 0.0813203 0.0847217 0.087645 0.0901509 0.0922945 0.0941271 0.0956909 0.0970222 0.0981561 0.0991181 0.099935 0.100627 0.10121 0.101704 0.10212 0.102469 0.10276 0.103003 0.103204 0.103368 0.1035 0.103604 0.103682 0.103736 0.103768 0.103778
+-0.54 0 -0.0757172 -0.0742809 -0.0726938 -0.0708565 -0.0686528 -0.0659452 -0.0625712 -0.0583406 -0.0530351 -0.0464106 -0.038205 -0.0281559 -0.0201321 -0.00600641 0.00608798 0.0166686 0.0260183 0.0343207 0.0416986 0.0482669 0.0540987 0.0592437 0.0637591 0.0677133 0.071162 0.0741694 0.0767854 0.0790567 0.0810282 0.0827373 0.0842166 0.0854981 0.0866051 0.0875626 0.0883893 0.0891004 0.0897143 0.0902411 0.0906925 0.0910774 0.0914037 0.0916793 0.0919072 0.0920937 0.0922416 0.0923544 0.0924337 0.0924798 0.0924954
+-0.52 0 -0.0703535 -0.0692423 -0.0680171 -0.066591 -0.0648618 -0.0627078 -0.0599844 -0.0565211 -0.0521205 -0.0465588 -0.0395923 -0.0309703 -0.0240265 -0.0116901 -0.00102059 0.00839543 0.0167845 0.0242939 0.0310216 0.0370581 0.0424677 0.0473092 0.0516315 0.0554787 0.0588847 0.0618972 0.0645534 0.0668904 0.0689459 0.0707514 0.0723348 0.0737251 0.0749421 0.0760089 0.0769424 0.0777562 0.0784679 0.0790864 0.0796229 0.0800858 0.0804824 0.0808207 0.0811031 0.0813359 0.0815218 0.0816644 0.0817651 0.0818237 0.0818436
+-0.5 0 -0.0647189 -0.0638838 -0.0629658 -0.0618894 -0.0605654 -0.0588871 -0.0567267 -0.0539327 -0.0503277 -0.0457089 -0.0398515 -0.0325192 -0.0265602 -0.0158727 -0.00653379 0.00178031 0.00924748 0.0159839 0.0220659 0.0275662 0.0325356 0.0370211 0.0410625 0.0447026 0.0479701 0.0509024 0.0535237 0.05586 0.0579405 0.0597898 0.0614305 0.0628873 0.0641769 0.0653195 0.0663299 0.0672196 0.0680054 0.0686945 0.0692976 0.0698221 0.0702749 0.0706637 0.0709902 0.0712607 0.0714777 0.0716447 0.071763 0.0718319 0.0718554
+-0.48 0 -0.0588903 -0.0582861 -0.0576249 -0.0568414 -0.0558586 -0.0545837 -0.052905 -0.0506887 -0.0477773 -0.0439884 -0.0391174 -0.0329441 -0.0278786 -0.0187035 -0.0106019 -0.00332606 0.00326055 0.00924744 0.0146927 0.0196538 0.0241698 0.0282779 0.0320093 0.0353985 0.0384681 0.0412493 0.0437628 0.0460295 0.0480721 0.049909 0.0515568 0.0530356 0.0543576 0.0555403 0.0565955 0.0575327 0.0583671 0.0591044 0.0597542 0.060323 0.0608168 0.061243 0.0616025 0.0619017 0.0621424 0.0623281 0.0624599 0.0625368 0.062563
+-0.46 0 -0.0529446 -0.05253 -0.0520791 -0.0515365 -0.0508362 -0.0498984 -0.0486261 -0.0469028 -0.0445898 -0.0415251 -0.0375246 -0.0323862 -0.0281266 -0.0203319 -0.0133753 -0.00707296 -0.00132309 0.00394144 0.00876356 0.0131875 0.0172428 0.020958 0.0243571 0.0274678 0.030307 0.0329002 0.0352636 0.0374137 0.039369 0.0411441 0.0427522 0.0442095 0.0455248 0.0467121 0.0477804 0.0487364 0.0495933 0.050355 0.0510304 0.0516249 0.0521437 0.0525935 0.0529744 0.0532924 0.053549 0.0537474 0.0538884 0.0539708 0.0539989
+-0.44 0 -0.0469588 -0.0466962 -0.0464136 -0.0460646 -0.0455932 -0.0449316 -0.0439968 -0.0426883 -0.0408856 -0.0384467 -0.0352079 -0.0309869 -0.0274495 -0.020907 -0.0150043 -0.0096097 -0.00465025 -7.72635e-05 0.00413968 0.00803381 0.0116268 0.0149399 0.017991 0.020802 0.0233851 0.0257611 0.027942 0.0299407 0.031772 0.0334476 0.0349775 0.0363751 0.0376469 0.0388043 0.0398545 0.0408019 0.0416581 0.0424251 0.0431097 0.0437158 0.0442475 0.0447106 0.0451043 0.045434 0.0457007 0.0459074 0.0460545 0.0461406 0.0461699
+-0.42 0 -0.0410098 -0.0408652 -0.0407132 -0.0405151 -0.0402244 -0.0397839 -0.0391239 -0.0381587 -0.0367853 -0.0348808 -0.0323021 -0.0288874 -0.0259925 -0.0205783 -0.0156391 -0.0110856 -0.0068677 -0.00295182 0.000682456 0.00405936 0.00719399 0.0101018 0.0127957 0.0152925 0.0176009 0.0197371 0.0217101 0.0235297 0.0252074 0.0267523 0.0281721 0.0294774 0.030673 0.0317681 0.032768 0.0336758 0.0345011 0.0352449 0.0359124 0.0365066 0.0370304 0.0374887 0.0378799 0.0382087 0.0384755 0.0386827 0.0388306 0.0389171 0.0389467
+-0.4 0 -0.0351745 -0.0351179 -0.0350629 -0.0349779 -0.0348246 -0.0345561 -0.0341142 -0.0334277 -0.0324094 -0.0309551 -0.028942 -0.0262291 -0.0239006 -0.0194949 -0.0154301 -0.0116498 -0.00812223 -0.00482539 -0.00174675 0.00113064 0.00381674 0.00632228 0.00865624 0.0108311 0.0128528 0.0147337 0.0164804 0.0180999 0.0196013 0.0209912 0.0222755 0.0234625 0.0245555 0.0255618 0.0264853 0.0273278 0.0280974 0.0287941 0.0294221 0.0299833 0.0304798 0.0309157 0.0312889 0.0316035 0.0318592 0.0320582 0.0322004 0.0322837 0.0323122
+-0.38 0 -0.0295299 -0.029535 -0.0295476 -0.0295425 -0.0294888 -0.0293486 -0.0290747 -0.0286085 -0.0278783 -0.0267974 -0.0252623 -0.0231533 -0.0213191 -0.0178063 -0.0145276 -0.0114518 -0.00856062 -0.00584112 -0.00328658 -0.000885778 0.00136731 0.00347974 0.00545737 0.00730927 0.00903903 0.0106561 0.012165 0.0135705 0.0148797 0.0160972 0.0172273 0.0182765 0.0192467 0.0201439 0.0209705 0.0217277 0.022422 0.0230528 0.0236232 0.0241346 0.0245884 0.0249878 0.0253305 0.0256199 0.0258556 0.0260393 0.0261707 0.0262477 0.026274
+-0.36 0 -0.0241528 -0.0241971 -0.0242523 -0.0242985 -0.0243118 -0.0242622 -0.0241121 -0.0238148 -0.0233127 -0.0225351 -0.0213978 -0.0198013 -0.018393 -0.0156615 -0.013082 -0.0106408 -0.00832967 -0.00614216 -0.00407569 -0.00212336 -0.000282024 0.00145259 0.00308399 0.00461853 0.00605814 0.00740977 0.0086762 0.00986084 0.0109687 0.0120032 0.0129671 0.0138653 0.0146991 0.0154727 0.016188 0.0168454 0.01745 0.0180009 0.0185004 0.0189494 0.0193486 0.0197008 0.0200035 0.0202595 0.0204684 0.0206313 0.0207479 0.0208163 0.0208396
+-0.34 0 -0.0191202 -0.019185 -0.0192618 -0.0193358 -0.0193886 -0.0193974 -0.0193333 -0.0191601 -0.0188328 -0.0182962 -0.0174833 -0.0163145 -0.0152675 -0.01321 -0.0112434 -0.0093661 -0.00757616 -0.00587167 -0.00425273 -0.00271555 -0.00125899 0.000119248 0.00142099 0.00265047 0.00380847 0.0048999 0.00592639 0.0068901 0.00779458 0.00864207 0.00943436 0.0101751 0.0108649 0.0115068 0.0121021 0.0126506 0.0131563 0.0136183 0.0140381 0.0144163 0.0147531 0.0150508 0.015307 0.015524 0.0157012 0.0158395 0.0159385 0.0159967 0.0160165
+-0.32 0 -0.0145091 -0.0145793 -0.0146612 -0.0147438 -0.014814 -0.0148548 -0.014845 -0.0147577 -0.0145593 -0.0142082 -0.0136534 -0.012834 -0.0120879 -0.010601 -0.00916238 -0.00777697 -0.00644688 -0.00517279 -0.00395633 -0.00279581 -0.0016913 -0.00064186 0.000353241 0.00129664 0.00218841 0.00303186 0.0038278 0.0045775 0.00528336 0.00594675 0.00656876 0.00715199 0.00769647 0.00820457 0.00867686 0.00911305 0.00951615 0.00988509 0.010221 0.0105241 0.0107945 0.0110337 0.0112399 0.0114147 0.0115576 0.0116692 0.0117492 0.0117962 0.0118122
+-0.3 0 -0.0103963 -0.0104608 -0.0105353 -0.0106123 -0.0106828 -0.010735 -0.0107542 -0.0107213 -0.0106127 -0.0103988 -0.0100431 -0.00950132 -0.00899917 -0.00798384 -0.00698907 -0.00602273 -0.00508861 -0.00418868 -0.00332514 -0.00249759 -0.00170669 -0.000952313 -0.000234382 0.000448609 0.00109637 0.00171097 0.00229272 0.00284229 0.00336117 0.00385015 0.00430983 0.00474192 0.00514625 0.00552441 0.00587666 0.00620265 0.00650446 0.00678117 0.00703352 0.0072615 0.00746521 0.00764564 0.00780132 0.00793342 0.00804145 0.0081259 0.00818644 0.00822199 0.00823415
+-0.28 0 -0.00685875 -0.0069101 -0.00696907 -0.00703098 -0.00709001 -0.00713871 -0.00716753 -0.00716428 -0.00711348 -0.00699572 -0.00678692 -0.00645768 -0.00614654 -0.00550775 -0.00487384 -0.00425266 -0.00364814 -0.0030625 -0.00249781 -0.00195433 -0.00143288 -0.000933689 -0.000457005 -2.06408e-06 0.000430721 0.000842543 0.00123344 0.00160368 0.00195414 0.0022852 0.00259713 0.00289099 0.00316655 0.00342477 0.00366575 0.00388914 0.00409631 0.00428653 0.00446023 0.00461737 0.00475793 0.00488254 0.00499017 0.00508155 0.00515634 0.00521482 0.00525677 0.00528141 0.00528983
+-0.26 0 -0.00397344 -0.00400798 -0.00404751 -0.00408941 -0.00413045 -0.00416644 -0.00419198 -0.00420014 -0.00418208 -0.00412661 -0.00401979 -0.00384442 -0.00367516 -0.00332204 -0.00296701 -0.00261606 -0.00227226 -0.00193738 -0.00161299 -0.00129949 -0.000997576 -0.000707568 -0.000429753 -0.000163821 8.98694e-05 0.000331914 0.000562237 0.000780917 0.000988382 0.00118479 0.00137024 0.00154527 0.00170971 0.00186408 0.00200837 0.00214233 0.00226674 0.00238112 0.0024857 0.0025804 0.00266519 0.00274043 0.00280546 0.00286072 0.00290596 0.00294136 0.00296675 0.00298167 0.00298677
+-0.24 0 -0.00181726 -0.00183513 -0.00185552 -0.00187729 -0.00189901 -0.00191882 -0.00193432 -0.00194239 -0.00193903 -0.00191917 -0.00187641 -0.00180284 -0.00173017 -0.00157599 -0.00141888 -0.00126222 -0.00110775 -0.000956494 -0.000809314 -0.000666517 -0.000528515 -0.000395527 -0.000267752 -0.000145103 -2.77964e-05 8.43986e-05 0.000191407 0.000293229 0.000390028 0.00048185 0.000568705 0.000650829 0.000728109 0.000800766 0.00086878 0.000932011 0.000990804 0.00104492 0.00109445 0.00113935 0.00117958 0.0012153 0.0012462 0.00127247 0.00129399 0.00131083 0.00132292 0.00133002 0.00133245
+-0.22 0 -0.000467135 -0.000472232 -0.000478036 -0.000484265 -0.000490565 -0.000496474 -0.000501385 -0.000504513 -0.000504842 -0.000501073 -0.000491564 -0.000474262 -0.000456735 -0.000418877 -0.000379772 -0.000340438 -0.000301402 -0.000262982 -0.000225436 -0.000188871 -0.000153416 -0.000119145 -8.61255e-05 -5.43491e-05 -2.38837e-05 5.31998e-06 3.32328e-05 5.98458e-05 8.51938e-05 0.000109281 0.000132104 0.000153718 0.000174086 0.000193263 0.000211238 0.000227968 0.000243542 0.000257891 0.000271036 0.000282962 0.000293656 0.00030316 0.000311384 0.000318378 0.000324111 0.000328599 0.00033182 0.000333713 0.000334361
+-0.2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+</tableData></table></function></fcs_function>
+<fcs_function name="aero/rotor/vrs/nu"><description>Johnson's v / vh with the lagged vortex ring</description><function><sum><property>aero/rotor/vrs/nu-base</property><quotient><property>rotor/vrs-dv</property><property>aero/rotor/vrs/vh-fps</property></quotient></sum></function></fcs_function>
+<fcs_function name="aero/rotor/ph/VTu"><description>the uniform state's mass flow parameter</description><function><ifthen><property>aero/rotor/vrs/in</property><ifthen><gt><sum><property>aero/rotor/vrs/z</property><property>aero/rotor/vrs/nu</property></sum><value>0</value></gt><quotient><sum><property>aero/rotor/Vprime-fps</property><product><property>aero/rotor/vrs/vh-fps</property><difference><quotient><value>1</value><property>aero/rotor/vrs/nu</property></quotient><sqrt><sum><pow><property>aero/rotor/vrs/x</property><value>2</value></pow><pow><sum><property>aero/rotor/vrs/z</property><property>aero/rotor/vrs/nu</property></sum><value>2</value></pow></sum></sqrt></difference></product></sum><property>aero/rotor/ph/omega-r-fps</property></quotient><quotient><property>aero/rotor/vrs/vh-fps</property><product><property>aero/rotor/ph/omega-r-fps</property><property>aero/rotor/vrs/nu</property></product></quotient></ifthen><property>aero/rotor/ph/VT</property></ifthen></function></fcs_function>
+<fcs_function name="rotor/vrs-dv-next"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><product><property>aero/rotor/vrs/in</property><property>aero/rotor/vrs/vh-fps</property><property>aero/rotor/vrs/dnu</property></product><quotient><sum><property>rotor/vrs-dv</property><product><product><property>simulation/dt</property><sqrt><quotient><max><property>aero/rotor/thrust-lbs</property><value>1</value></max><product><value>2053.3036</value><property>atmosphere/rho-slugs_ft3</property></product></quotient></sqrt><value>0.012577243</value></product><product><property>aero/rotor/vrs/in</property><property>aero/rotor/vrs/vh-fps</property><property>aero/rotor/vrs/dnu</property></product></product></sum><sum><value>1</value><product><property>simulation/dt</property><sqrt><quotient><max><property>aero/rotor/thrust-lbs</property><value>1</value></max><product><value>2053.3036</value><property>atmosphere/rho-slugs_ft3</property></product></quotient></sqrt><value>0.012577243</value></product></sum></quotient></ifthen></function><output>rotor/vrs-dv</output></fcs_function>
+<fcs_function name="rotor/ph/cd2"><function><difference><pow><property>aero/rotor/ph/cd</property><value>2</value></pow><pow><property>aero/rotor/ph/sd</property><value>2</value></pow></difference></function></fcs_function>
+<fcs_function name="rotor/ph/sd2"><function><product><value>2</value><property>aero/rotor/ph/cd</property><property>aero/rotor/ph/sd</property></product></function></fcs_function>
+<fcs_function name="rotor/ph/wc0"><function><property>rotor/ph/c0</property></function></fcs_function>
+<fcs_function name="rotor/ph/wc1"><function><property>rotor/ph/c1</property></function></fcs_function>
+<fcs_function name="rotor/ph/wc2"><function><property>rotor/ph/c2</property></function></fcs_function>
+<fcs_function name="rotor/ph/wc3"><function><sum><product><property>rotor/ph/c3</property><property>aero/rotor/ph/cd</property></product><product><property>rotor/ph/s0</property><property>aero/rotor/ph/sd</property></product></sum></function></fcs_function>
+<fcs_function name="rotor/ph/nc3"><function><quotient><sum><property>rotor/ph/wc3</property><product><quotient><product><max><property>rotor/omega-rad_sec</property><value>1</value></max><property>simulation/dt</property></product><value>0.42441318</value></quotient><difference><product><value>0.5</value><sum><product><property>aero/rotor/ph/tau-c3</property><property>aero/rotor/ph/cd</property></product><product><property>aero/rotor/ph/tau-s0</property><property>aero/rotor/ph/sd</property></product></sum></product><sum><product><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 0
+0.05 -0.0776984
+0.1 -0.154466
+0.15 -0.22941
+0.2 -0.301707
+0.25 -0.370633
+0.3 -0.435581
+0.35 -0.49608
+0.4 -0.551791
+0.45 -0.602509
+0.5 -0.648151
+0.55 -0.688742
+0.6 -0.724397
+0.65 -0.755309
+0.7 -0.781721
+0.75 -0.803919
+0.8 -0.822214
+0.85 -0.836928
+0.9 -0.848384
+0.95 -0.856901
+1 -0.862786
+</tableData></table><property>aero/rotor/ph/VTu</property></product><property>rotor/ph/wc0</property></product><product><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 0
+0.05 -0.105499
+0.1 -0.209735
+0.15 -0.311493
+0.2 -0.409658
+0.25 -0.503245
+0.3 -0.591432
+0.35 -0.673578
+0.4 -0.749222
+0.45 -0.818087
+0.5 -0.88006
+0.55 -0.935173
+0.6 -0.983587
+0.65 -1.02556
+0.7 -1.06142
+0.75 -1.09156
+0.8 -1.1164
+0.85 -1.13638
+0.9 -1.15194
+0.95 -1.1635
+1 -1.17149
+</tableData></table><property>aero/rotor/ph/V</property></product><property>rotor/ph/wc1</property></product><product><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 0
+0.05 0.0300568
+0.1 0.0597537
+0.15 0.0887449
+0.2 0.116712
+0.25 0.143375
+0.3 0.1685
+0.35 0.191903
+0.4 0.213454
+0.45 0.233074
+0.5 0.25073
+0.55 0.266432
+0.6 0.280225
+0.65 0.292183
+0.7 0.3024
+0.75 0.310988
+0.8 0.318065
+0.85 0.323756
+0.9 0.328188
+0.95 0.331483
+1 0.33376
+</tableData></table><property>aero/rotor/ph/V</property></product><property>rotor/ph/wc2</property></product></sum></difference></product></sum><sum><value>1</value><product><quotient><product><max><property>rotor/omega-rad_sec</property><value>1</value></max><property>simulation/dt</property></product><value>0.42441318</value></quotient><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 1.6
+0.05 1.59679
+0.1 1.58723
+0.15 1.57155
+0.2 1.5501
+0.25 1.52338
+0.3 1.49195
+0.35 1.45643
+0.4 1.41749
+0.45 1.3758
+0.5 1.33202
+0.55 1.28676
+0.6 1.2406
+0.65 1.19403
+0.7 1.14752
+0.75 1.10143
+0.8 1.05609
+0.85 1.01175
+0.9 0.968623
+0.95 0.926856
+1 0.88656
+</tableData></table><property>aero/rotor/ph/V</property></product></product></sum></quotient></function></fcs_function>
+<fcs_function name="rotor/ph/ns0"><function><quotient><sum><difference><product><property>rotor/ph/s0</property><property>aero/rotor/ph/cd</property></product><product><property>rotor/ph/c3</property><property>aero/rotor/ph/sd</property></product></difference><product><quotient><product><max><property>rotor/omega-rad_sec</property><value>1</value></max><property>simulation/dt</property></product><value>0.42441318</value></quotient><difference><product><value>0.5</value><difference><product><property>aero/rotor/ph/tau-s0</property><property>aero/rotor/ph/cd</property></product><product><property>aero/rotor/ph/tau-c3</property><property>aero/rotor/ph/sd</property></product></difference></product><value>0</value></difference></product></sum><sum><value>1</value><product><quotient><product><max><property>rotor/omega-rad_sec</property><value>1</value></max><property>simulation/dt</property></product><value>0.42441318</value></quotient><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 1.6
+0.05 1.59601
+0.1 1.58416
+0.15 1.56479
+0.2 1.53846
+0.25 1.50588
+0.3 1.46789
+0.35 1.42539
+0.4 1.37931
+0.45 1.33056
+0.5 1.28
+0.55 1.22841
+0.6 1.17647
+0.65 1.12478
+0.7 1.07383
+0.75 1.024
+0.8 0.97561
+0.85 0.928882
+0.9 0.883978
+0.95 0.840999
+1 0.8
+</tableData></table><property>aero/rotor/ph/V</property></product></product></sum></quotient></function></fcs_function>
+<fcs_function name="rotor/ph/c0-next"><function><quotient><sum><property>rotor/ph/wc0</property><product><quotient><product><max><property>rotor/omega-rad_sec</property><value>1</value></max><property>simulation/dt</property></product><value>0.63661977</value></quotient><difference><product><value>0.5</value><property>aero/rotor/ph/tau-c0</property></product><sum><product><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 -0.498784
+0.05 -0.50135
+0.1 -0.508989
+0.15 -0.521519
+0.2 -0.538651
+0.25 -0.560002
+0.3 -0.58512
+0.35 -0.613499
+0.4 -0.64461
+0.45 -0.677917
+0.5 -0.712899
+0.55 -0.74906
+0.6 -0.785947
+0.65 -0.823152
+0.7 -0.860319
+0.75 -0.897143
+0.8 -0.93337
+0.85 -0.968794
+0.9 -1.00325
+0.95 -1.03663
+1 -1.06882
+</tableData></table><property>aero/rotor/ph/V</property></product><property>rotor/ph/wc1</property></product><product><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 0.227367
+0.05 0.228098
+0.1 0.230274
+0.15 0.233844
+0.2 0.238725
+0.25 0.244808
+0.3 0.251964
+0.35 0.260049
+0.4 0.268913
+0.45 0.278402
+0.5 0.288368
+0.55 0.298671
+0.6 0.30918
+0.65 0.31978
+0.7 0.330369
+0.75 0.34086
+0.8 0.351181
+0.85 0.361273
+0.9 0.371091
+0.95 0.380599
+1 0.389772
+</tableData></table><property>aero/rotor/ph/V</property></product><property>rotor/ph/wc2</property></product><product><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 0
+0.05 0.0388492
+0.1 0.0772332
+0.15 0.114705
+0.2 0.150854
+0.25 0.185316
+0.3 0.217791
+0.35 0.24804
+0.4 0.275896
+0.45 0.301255
+0.5 0.324076
+0.55 0.344371
+0.6 0.362199
+0.65 0.377654
+0.7 0.39086
+0.75 0.40196
+0.8 0.411107
+0.85 0.418464
+0.9 0.424192
+0.95 0.428451
+1 0.431393
+</tableData></table><property>aero/rotor/ph/V</property></product><property>rotor/ph/wc3</property></product></sum></difference></product></sum><sum><value>1</value><product><quotient><product><max><property>rotor/omega-rad_sec</property><value>1</value></max><property>simulation/dt</property></product><value>0.63661977</value></quotient><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 1.46939
+0.05 1.4675
+0.1 1.46187
+0.15 1.45264
+0.2 1.44003
+0.25 1.4243
+0.3 1.4058
+0.35 1.3849
+0.4 1.36199
+0.45 1.33746
+0.5 1.3117
+0.55 1.28506
+0.6 1.2579
+0.65 1.2305
+0.7 1.20312
+0.75 1.176
+0.8 1.14932
+0.85 1.12323
+0.9 1.09785
+0.95 1.07327
+1 1.04956
+</tableData></table><property>aero/rotor/ph/VTu</property></product></product></sum></quotient></function><output>rotor/ph/c0</output></fcs_function>
+<fcs_function name="rotor/ph/c1-next"><function><quotient><sum><property>rotor/ph/wc1</property><product><quotient><product><max><property>rotor/omega-rad_sec</property><value>1</value></max><property>simulation/dt</property></product><value>0.28294212</value></quotient><difference><product><value>0.5</value><property>aero/rotor/ph/tau-c1</property></product><sum><product><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 -0.498784
+0.05 -0.50135
+0.1 -0.508989
+0.15 -0.521519
+0.2 -0.538651
+0.25 -0.560002
+0.3 -0.58512
+0.35 -0.613499
+0.4 -0.64461
+0.45 -0.677917
+0.5 -0.712899
+0.55 -0.74906
+0.6 -0.785947
+0.65 -0.823152
+0.7 -0.860319
+0.75 -0.897143
+0.8 -0.93337
+0.85 -0.968794
+0.9 -1.00325
+0.95 -1.03663
+1 -1.06882
+</tableData></table><property>aero/rotor/ph/VTu</property></product><property>rotor/ph/wc0</property></product><product><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 -0.617437
+0.05 -0.616444
+0.1 -0.613489
+0.15 -0.608642
+0.2 -0.602015
+0.25 -0.593755
+0.3 -0.584039
+0.35 -0.573061
+0.4 -0.561026
+0.45 -0.548141
+0.5 -0.534609
+0.55 -0.52062
+0.6 -0.506351
+0.65 -0.491959
+0.7 -0.477581
+0.75 -0.463336
+0.8 -0.449322
+0.85 -0.435619
+0.9 -0.422288
+0.95 -0.409379
+1 -0.396924
+</tableData></table><property>aero/rotor/ph/V</property></product><property>rotor/ph/wc2</property></product><product><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 0
+0.05 0.0527495
+0.1 0.104867
+0.15 0.155747
+0.2 0.204829
+0.25 0.251622
+0.3 0.295716
+0.35 0.336789
+0.4 0.374611
+0.45 0.409044
+0.5 0.44003
+0.55 0.467587
+0.6 0.491793
+0.65 0.512779
+0.7 0.53071
+0.75 0.545781
+0.8 0.558201
+0.85 0.56819
+0.9 0.575968
+0.95 0.58175
+1 0.585746
+</tableData></table><property>aero/rotor/ph/V</property></product><property>rotor/ph/wc3</property></product></sum></difference></product></sum><sum><value>1</value><product><quotient><product><max><property>rotor/omega-rad_sec</property><value>1</value></max><property>simulation/dt</property></product><value>0.28294212</value></quotient><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 1.86243
+0.05 1.85895
+0.1 1.84858
+0.15 1.83156
+0.2 1.8083
+0.25 1.77931
+0.3 1.74521
+0.35 1.70667
+0.4 1.66443
+0.45 1.61921
+0.5 1.57171
+0.55 1.52261
+0.6 1.47252
+0.65 1.42201
+0.7 1.37154
+0.75 1.32154
+0.8 1.27235
+0.85 1.22425
+0.9 1.17746
+0.95 1.13215
+1 1.08844
+</tableData></table><property>aero/rotor/ph/V</property></product></product></sum></quotient></function><output>rotor/ph/c1</output></fcs_function>
+<fcs_function name="rotor/ph/c2-next"><function><quotient><sum><property>rotor/ph/wc2</property><product><quotient><product><max><property>rotor/omega-rad_sec</property><value>1</value></max><property>simulation/dt</property></product><value>0.18108296</value></quotient><difference><product><value>0.5</value><property>aero/rotor/ph/tau-c2</property></product><sum><product><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 0.227367
+0.05 0.228098
+0.1 0.230274
+0.15 0.233844
+0.2 0.238725
+0.25 0.244808
+0.3 0.251964
+0.35 0.260049
+0.4 0.268913
+0.45 0.278402
+0.5 0.288368
+0.55 0.298671
+0.6 0.30918
+0.65 0.31978
+0.7 0.330369
+0.75 0.34086
+0.8 0.351181
+0.85 0.361273
+0.9 0.371091
+0.95 0.380599
+1 0.389772
+</tableData></table><property>aero/rotor/ph/VTu</property></product><property>rotor/ph/wc0</property></product><product><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 -0.617437
+0.05 -0.616444
+0.1 -0.613489
+0.15 -0.608642
+0.2 -0.602015
+0.25 -0.593755
+0.3 -0.584039
+0.35 -0.573061
+0.4 -0.561026
+0.45 -0.548141
+0.5 -0.534609
+0.55 -0.52062
+0.6 -0.506351
+0.65 -0.491959
+0.7 -0.477581
+0.75 -0.463336
+0.8 -0.449322
+0.85 -0.435619
+0.9 -0.422288
+0.95 -0.409379
+1 -0.396924
+</tableData></table><property>aero/rotor/ph/V</property></product><property>rotor/ph/wc1</property></product><product><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 0
+0.05 -0.0150284
+0.1 -0.0298768
+0.15 -0.0443725
+0.2 -0.0583561
+0.25 -0.0716876
+0.3 -0.08425
+0.35 -0.0959516
+0.4 -0.106727
+0.45 -0.116537
+0.5 -0.125365
+0.55 -0.133216
+0.6 -0.140113
+0.65 -0.146091
+0.7 -0.1512
+0.75 -0.155494
+0.8 -0.159032
+0.85 -0.161878
+0.9 -0.164094
+0.95 -0.165741
+1 -0.16688
+</tableData></table><property>aero/rotor/ph/V</property></product><property>rotor/ph/wc3</property></product></sum></difference></product></sum><sum><value>1</value><product><quotient><product><max><property>rotor/omega-rad_sec</property><value>1</value></max><property>simulation/dt</property></product><value>0.18108296</value></quotient><product><table><independentVar lookup="row">aero/rotor/ph/X</independentVar><tableData>
+0 1.75909
+0.05 1.7588
+0.1 1.75796
+0.15 1.75658
+0.2 1.75469
+0.25 1.75234
+0.3 1.74957
+0.35 1.74644
+0.4 1.74302
+0.45 1.73934
+0.5 1.73549
+0.55 1.7315
+0.6 1.72744
+0.65 1.72334
+0.7 1.71924
+0.75 1.71518
+0.8 1.71119
+0.85 1.70729
+0.9 1.70349
+0.95 1.69981
+1 1.69626
+</tableData></table><property>aero/rotor/ph/V</property></product></product></sum></quotient></function><output>rotor/ph/c2</output></fcs_function>
+<fcs_function name="rotor/ph/c3-next"><function><difference><product><property>rotor/ph/nc3</property><property>aero/rotor/ph/cd</property></product><product><property>rotor/ph/ns0</property><property>aero/rotor/ph/sd</property></product></difference></function><output>rotor/ph/c3</output></fcs_function>
+<fcs_function name="rotor/ph/s0-next"><function><sum><product><property>rotor/ph/nc3</property><property>aero/rotor/ph/sd</property></product><product><property>rotor/ph/ns0</property><property>aero/rotor/ph/cd</property></product></sum></function><output>rotor/ph/s0</output></fcs_function>
+<fcs_function name="rotor/v0-out"><description>mean inflow, sqrt(3) x the first state, ft/s</description><function><max><value>0</value><product><value>31.311024</value><property>rotor/ph/c0</property><property>rotor/omega-rad_sec</property></product></max></function><output>rotor/v0-fps</output></fcs_function>
+</channel>
+<channel name="tail rotor flapping">
+<fcs_function name="rotor/tr/wa"><function><sum><product><value>-0.9961947</value><property>mir/velocities-p-rad_sec</property></product><product><value>0.087155743</value><property>velocities/q-rad_sec</property></product></sum></function></fcs_function>
+<fcs_function name="rotor/tr/wb"><function><product><value>1</value><property>mir/velocities-r-rad_sec</property></product></function></fcs_function>
+<fcs_function name="rotor/tr/wad"><function><sum><product><value>-0.9961947</value><property>mir/accelerations-pdot-rad_sec2</property></product><product><value>0.087155743</value><property>accelerations/qdot-rad_sec2</property></product></sum></function></fcs_function>
+<fcs_function name="rotor/tr/wbd"><function><product><value>1</value><property>mir/accelerations-rdot-rad_sec2</property></product></function></fcs_function>
+<fcs_function name="rotor/tr/b0/betaddot"><description>flap acceleration: aerodynamic moment, gyroscopic, centrifugal stiffness, hub angular acceleration</description><function><sum><quotient><sum><property>aero/rotor/tr/b0/Mflap</property><product><value>-1</value><product><value>0.60450572</value><product><value>5.487</value><property>rotor/omega-rad_sec</property></product><sum><product><cos><sum><property>rotor/tr/psi-rad</property><value>0</value></sum></cos><property>rotor/tr/wa</property></product><product><sin><sum><property>rotor/tr/psi-rad</property><value>0</value></sum></sin><property>rotor/tr/wb</property></product></sum></product></product></sum><value>0.30225286</value></quotient><product><value>-1</value><product><value>1.1000786</value><pow><product><value>5.487</value><property>rotor/omega-rad_sec</property></product><value>2</value></pow><cos><property>rotor/tr/b0/beta-rad</property></cos><sin><property>rotor/tr/b0/beta-rad</property></sin></product></product><sum><product><value>-1</value><product><sin><sum><property>rotor/tr/psi-rad</property><value>0</value></sum></sin><property>rotor/tr/wad</property></product></product><product><cos><sum><property>rotor/tr/psi-rad</property><value>0</value></sum></cos><property>rotor/tr/wbd</property></product></sum></sum></function></fcs_function>
+<fcs_function name="rotor/tr/b0/betadot-next"><function><ifthen><lt><sum><property>rotor/tr/b0/beta-rad</property><product><sum><property>rotor/tr/b0/betadot-rad_sec</property><product><property>rotor/tr/b0/betaddot</property><property>simulation/dt</property></product></sum><property>simulation/dt</property></product></sum><value>-0.20943951</value></lt><max><sum><property>rotor/tr/b0/betadot-rad_sec</property><product><property>rotor/tr/b0/betaddot</property><property>simulation/dt</property></product></sum><value>0</value></max><ifthen><gt><sum><property>rotor/tr/b0/beta-rad</property><product><sum><property>rotor/tr/b0/betadot-rad_sec</property><product><property>rotor/tr/b0/betaddot</property><property>simulation/dt</property></product></sum><property>simulation/dt</property></product></sum><value>0.20943951</value></gt><min><sum><property>rotor/tr/b0/betadot-rad_sec</property><product><property>rotor/tr/b0/betaddot</property><property>simulation/dt</property></product></sum><value>0</value></min><sum><property>rotor/tr/b0/betadot-rad_sec</property><product><property>rotor/tr/b0/betaddot</property><property>simulation/dt</property></product></sum></ifthen></ifthen></function><output>rotor/tr/b0/betadot-rad_sec</output></fcs_function>
+<fcs_function name="rotor/tr/b0/beta-next"><function><ifthen><product><gt><property>ctl/init-fast</property><value>0.5</value></gt><lt><product><value>5.487</value><property>rotor/omega-rad_sec</property></product><value>20</value></lt></product><value>0</value><max><value>-0.20943951</value><min><value>0.20943951</value><sum><property>rotor/tr/b0/beta-rad</property><product><property>rotor/tr/b0/betadot-rad_sec</property><property>simulation/dt</property></product></sum></min></max></ifthen></function><output>rotor/tr/b0/beta-rad</output></fcs_function>
+<fcs_function name="rotor/tr/b1/betaddot"><description>flap acceleration: aerodynamic moment, gyroscopic, centrifugal stiffness, hub angular acceleration</description><function><sum><quotient><sum><property>aero/rotor/tr/b1/Mflap</property><product><value>-1</value><product><value>0.60450572</value><product><value>5.487</value><property>rotor/omega-rad_sec</property></product><sum><product><cos><sum><property>rotor/tr/psi-rad</property><value>2.0943951</value></sum></cos><property>rotor/tr/wa</property></product><product><sin><sum><property>rotor/tr/psi-rad</property><value>2.0943951</value></sum></sin><property>rotor/tr/wb</property></product></sum></product></product></sum><value>0.30225286</value></quotient><product><value>-1</value><product><value>1.1000786</value><pow><product><value>5.487</value><property>rotor/omega-rad_sec</property></product><value>2</value></pow><cos><property>rotor/tr/b1/beta-rad</property></cos><sin><property>rotor/tr/b1/beta-rad</property></sin></product></product><sum><product><value>-1</value><product><sin><sum><property>rotor/tr/psi-rad</property><value>2.0943951</value></sum></sin><property>rotor/tr/wad</property></product></product><product><cos><sum><property>rotor/tr/psi-rad</property><value>2.0943951</value></sum></cos><property>rotor/tr/wbd</property></product></sum></sum></function></fcs_function>
+<fcs_function name="rotor/tr/b1/betadot-next"><function><ifthen><lt><sum><property>rotor/tr/b1/beta-rad</property><product><sum><property>rotor/tr/b1/betadot-rad_sec</property><product><property>rotor/tr/b1/betaddot</property><property>simulation/dt</property></product></sum><property>simulation/dt</property></product></sum><value>-0.20943951</value></lt><max><sum><property>rotor/tr/b1/betadot-rad_sec</property><product><property>rotor/tr/b1/betaddot</property><property>simulation/dt</property></product></sum><value>0</value></max><ifthen><gt><sum><property>rotor/tr/b1/beta-rad</property><product><sum><property>rotor/tr/b1/betadot-rad_sec</property><product><property>rotor/tr/b1/betaddot</property><property>simulation/dt</property></product></sum><property>simulation/dt</property></product></sum><value>0.20943951</value></gt><min><sum><property>rotor/tr/b1/betadot-rad_sec</property><product><property>rotor/tr/b1/betaddot</property><property>simulation/dt</property></product></sum><value>0</value></min><sum><property>rotor/tr/b1/betadot-rad_sec</property><product><property>rotor/tr/b1/betaddot</property><property>simulation/dt</property></product></sum></ifthen></ifthen></function><output>rotor/tr/b1/betadot-rad_sec</output></fcs_function>
+<fcs_function name="rotor/tr/b1/beta-next"><function><ifthen><product><gt><property>ctl/init-fast</property><value>0.5</value></gt><lt><product><value>5.487</value><property>rotor/omega-rad_sec</property></product><value>20</value></lt></product><value>0</value><max><value>-0.20943951</value><min><value>0.20943951</value><sum><property>rotor/tr/b1/beta-rad</property><product><property>rotor/tr/b1/betadot-rad_sec</property><property>simulation/dt</property></product></sum></min></max></ifthen></function><output>rotor/tr/b1/beta-rad</output></fcs_function>
+<fcs_function name="rotor/tr/b2/betaddot"><description>flap acceleration: aerodynamic moment, gyroscopic, centrifugal stiffness, hub angular acceleration</description><function><sum><quotient><sum><property>aero/rotor/tr/b2/Mflap</property><product><value>-1</value><product><value>0.60450572</value><product><value>5.487</value><property>rotor/omega-rad_sec</property></product><sum><product><cos><sum><property>rotor/tr/psi-rad</property><value>4.1887902</value></sum></cos><property>rotor/tr/wa</property></product><product><sin><sum><property>rotor/tr/psi-rad</property><value>4.1887902</value></sum></sin><property>rotor/tr/wb</property></product></sum></product></product></sum><value>0.30225286</value></quotient><product><value>-1</value><product><value>1.1000786</value><pow><product><value>5.487</value><property>rotor/omega-rad_sec</property></product><value>2</value></pow><cos><property>rotor/tr/b2/beta-rad</property></cos><sin><property>rotor/tr/b2/beta-rad</property></sin></product></product><sum><product><value>-1</value><product><sin><sum><property>rotor/tr/psi-rad</property><value>4.1887902</value></sum></sin><property>rotor/tr/wad</property></product></product><product><cos><sum><property>rotor/tr/psi-rad</property><value>4.1887902</value></sum></cos><property>rotor/tr/wbd</property></product></sum></sum></function></fcs_function>
+<fcs_function name="rotor/tr/b2/betadot-next"><function><ifthen><lt><sum><property>rotor/tr/b2/beta-rad</property><product><sum><property>rotor/tr/b2/betadot-rad_sec</property><product><property>rotor/tr/b2/betaddot</property><property>simulation/dt</property></product></sum><property>simulation/dt</property></product></sum><value>-0.20943951</value></lt><max><sum><property>rotor/tr/b2/betadot-rad_sec</property><product><property>rotor/tr/b2/betaddot</property><property>simulation/dt</property></product></sum><value>0</value></max><ifthen><gt><sum><property>rotor/tr/b2/beta-rad</property><product><sum><property>rotor/tr/b2/betadot-rad_sec</property><product><property>rotor/tr/b2/betaddot</property><property>simulation/dt</property></product></sum><property>simulation/dt</property></product></sum><value>0.20943951</value></gt><min><sum><property>rotor/tr/b2/betadot-rad_sec</property><product><property>rotor/tr/b2/betaddot</property><property>simulation/dt</property></product></sum><value>0</value></min><sum><property>rotor/tr/b2/betadot-rad_sec</property><product><property>rotor/tr/b2/betaddot</property><property>simulation/dt</property></product></sum></ifthen></ifthen></function><output>rotor/tr/b2/betadot-rad_sec</output></fcs_function>
+<fcs_function name="rotor/tr/b2/beta-next"><function><ifthen><product><gt><property>ctl/init-fast</property><value>0.5</value></gt><lt><product><value>5.487</value><property>rotor/omega-rad_sec</property></product><value>20</value></lt></product><value>0</value><max><value>-0.20943951</value><min><value>0.20943951</value><sum><property>rotor/tr/b2/beta-rad</property><product><property>rotor/tr/b2/betadot-rad_sec</property><property>simulation/dt</property></product></sum></min></max></ifthen></function><output>rotor/tr/b2/beta-rad</output></fcs_function>
+</channel>
+<channel name="tail rotor inflow">
+<fcs_function name="rotor/tr/v0-next"><function><sum><property>rotor/tr/v0-fps</property><product><property>simulation/dt</property><quotient><difference><quotient><property>aero/rotor/tr/thrust-lbs</property><product><property>atmosphere/rho-slugs_ft3</property><value>27.308099</value></product></quotient><product><value>2</value><sqrt><sum><pow><property>aero/rotor/tr/Vinplane-fps</property><value>2</value></pow><pow><sum><property>aero/rotor/tr/Vaxial-fps</property><property>rotor/tr/v0-fps</property></sum><value>2</value></pow><value>25</value></sum></sqrt><property>rotor/tr/v0-fps</property></product></difference><value>2.6623295</value></quotient></product></sum></function><output>rotor/tr/v0-fps</output></fcs_function>
+</channel>
+<channel name="rotor azimuth">
+<fcs_function name="rotor/psi-next"><function><ifthen><gt><sum><property>rotor/psi-rad</property><product><property>rotor/omega-rad_sec</property><property>simulation/dt</property></product></sum><value>6.2831853</value></gt><difference><sum><property>rotor/psi-rad</property><product><property>rotor/omega-rad_sec</property><property>simulation/dt</property></product></sum><value>6.2831853</value></difference><sum><property>rotor/psi-rad</property><product><property>rotor/omega-rad_sec</property><property>simulation/dt</property></product></sum></ifthen></function><output>rotor/psi-rad</output></fcs_function>
+<fcs_function name="rotor/tr/psi-next"><function><ifthen><gt><sum><property>rotor/tr/psi-rad</property><product><value>5.487</value><property>rotor/omega-rad_sec</property><property>simulation/dt</property></product></sum><value>6.2831853</value></gt><difference><sum><property>rotor/tr/psi-rad</property><product><value>5.487</value><property>rotor/omega-rad_sec</property><property>simulation/dt</property></product></sum><value>6.2831853</value></difference><sum><property>rotor/tr/psi-rad</property><product><value>5.487</value><property>rotor/omega-rad_sec</property><property>simulation/dt</property></product></sum></ifthen></function><output>rotor/tr/psi-rad</output></fcs_function>
+</channel>
+</system>
