@@ -287,6 +287,9 @@
         <file>Aircraft/Alouette-3/Nasal/effect_manager.nas</file>
         <file>Aircraft/Alouette-3/Nasal/airstart.nas</file>
     </al3>
+    <al3sound>
+        <file>Aircraft/Alouette-3/Nasal/al3listener.nas</file>
+    </al3sound>
     <terrain>
         <file>Aircraft/Alouette-3/Nasal/terrain.nas</file>
     </terrain>
