@@ -15,7 +15,8 @@ column on its engine, and a flight simulator add-on's manual written after
 its flight manual.
 
 No flight-test time histories of the Alouette III are public, so the model
-can't be checked the way the Bo 105 and UH-60 models were. Its test programme
+can't be checked the way the [Bo 105](https://github.com/MrChillStorm/Bo105)
+and [UH-60](https://github.com/MrChillStorm/UH-60) models were. Its test programme
 checks what can be checked: the published performance, the flight manual's
 start, the rotor's physics against theory, and a whole flight flown by a test
 autopilot from lift-off to touchdown. How it was built, and the comparisons,
@@ -40,7 +41,8 @@ are in the report:
   UH-60's and Bo 105's, whose rotor equations this model shares, worked out in
   the aircraft's mirror image. It hovers right side down, as the real one does.
 - **Inflow.** A dynamic wake (Peters–He) with ground effect, and the vortex
-  ring state of the MV-22B model (Johnson's model): in a steep, slow descent
+  ring state of the [MV-22B](https://github.com/MrChillStorm/MV-22) model
+  (Johnson's model): in a steep, slow descent
   the rotor loses thrust at a fixed collective, and the descent runs away until
   you lower the nose or the collective. A ring-vortex wake carries the
   rotor's downwash to the tail rotor, stabiliser, end plates, fuselage and
@@ -241,7 +243,8 @@ Josh, Thorsten Renk and Colin Geniet (3-D model, systems, Nasal). Changed in
   rotor's blades fade out and its disc in. The old blend animations, which the
   HDR renderer ignores, are gone.
 - **HDR renderer:** the exterior lights are spot lights aimed out through
-  their lenses, with the X-57 model's halos (`Models/Lights/HDR/`): the
+  their lenses, with the [X-57](https://github.com/MrChillStorm/X-57) model's
+  halos (`Models/Lights/HDR/`): the
   alternating position lights, the anticollision beacons, the tail light and
   the searchlight, which swings out with its lamp; the ALS-only lights and heat
   blur are hidden there. The glass, both its outer and its inner (cabin-side)
