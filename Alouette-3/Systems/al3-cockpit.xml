@@ -1,0 +1,232 @@
+<?xml version="1.0"?>
+<system name="Alouette III cockpit">
+<property value="0">animation/master-switch-cmd</property>
+<property value="0">fcs/nominal-flow-cmd</property>
+<property value="1">animation/rotor_brake-switch-cmd</property>
+<property value="1">propulsion/engine[0]/cutoff</property>
+<property value="1">animation/rotor_brake-switch-lock-cmd</property>
+<property value="1">cockpit/starting</property>
+<property value="1">propulsion/engine[0]/cutoff</property>
+<property value="0">fcs/nominal-flow-cmd</property>
+<property value="1">animation/rotor_brake-switch-cmd</property>
+<property value="0">electrical/switch/battery</property>
+<property value="0">electrical/switch/alternator</property>
+<property value="0">animation/electrical-master-switch</property>
+<property value="1">fcs/brake-parking-cmd-norm</property>
+<property value="1">animation/cockpit-left-door-pos-cmd</property>
+<property value="1">animation/cockpit-right-door-pos-cmd</property>
+<property value="1">/sim/presets/onground</property>
+<property value="-1">cockpit/integrator-rate-rotational</property>
+<property value="-1">cockpit/integrator-rate-translational</property>
+<property value="-1">cockpit/integrator-position-rotational</property>
+<property value="-1">cockpit/integrator-position-translational</property>
+<property value="0">cockpit/start-wdot</property>
+<property value="0">cockpit/start-pdot</property>
+<property value="0">cockpit/start-qdot</property>
+<property value="0">cockpit/start-rdot</property>
+<property value="0">/controls/gear/brake-left</property>
+<property value="0">/controls/gear/brake-right</property>
+<property value="0">/controls/gear/brake-parking</property>
+<property value="0">gear/unit[0]/spin-kt</property>
+<property value="0">gear/unit[0]/touchdown-sink-fps</property>
+<property value="0">gear/unit[0]/touchdown-slip-kt</property>
+<property value="0">gear/unit[1]/spin-kt</property>
+<property value="0">gear/unit[1]/touchdown-sink-fps</property>
+<property value="0">gear/unit[1]/touchdown-slip-kt</property>
+<property value="0">gear/unit[2]/spin-kt</property>
+<property value="0">gear/unit[2]/touchdown-sink-fps</property>
+<property value="0">gear/unit[2]/touchdown-slip-kt</property>
+<channel name="start gate">
+<fcs_function name="cockpit/starting-next"><function><lt><property>simulation/sim-time-sec</property><value>5</value></lt></function><output>cockpit/starting</output></fcs_function>
+</channel>
+<channel name="start state" execute="cockpit/starting">
+<fcs_function name="cockpit/init-propulsion-engine0-cutoff"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><ifthen><property>eng/running-at-start</property><value>0</value><value>1</value></ifthen><property>propulsion/engine[0]/cutoff</property></ifthen></function><output>propulsion/engine[0]/cutoff</output></fcs_function>
+<fcs_function name="cockpit/init-fcs-nominal-flow-cmd"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><ifthen><property>eng/running-at-start</property><value>1</value><value>0</value></ifthen><property>fcs/nominal-flow-cmd</property></ifthen></function><output>fcs/nominal-flow-cmd</output></fcs_function>
+<fcs_function name="cockpit/init-animation-rotor_brake-switch-cmd"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><ifthen><property>eng/running-at-start</property><value>0</value><value>1</value></ifthen><property>animation/rotor_brake-switch-cmd</property></ifthen></function><output>animation/rotor_brake-switch-cmd</output></fcs_function>
+<fcs_function name="cockpit/init-electrical-switch-battery"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><ifthen><property>eng/running-at-start</property><value>1</value><property>electrical/switch/battery</property></ifthen><property>electrical/switch/battery</property></ifthen></function><output>electrical/switch/battery</output></fcs_function>
+<fcs_function name="cockpit/init-electrical-switch-alternator"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><ifthen><property>eng/running-at-start</property><value>1</value><property>electrical/switch/alternator</property></ifthen><property>electrical/switch/alternator</property></ifthen></function><output>electrical/switch/alternator</output></fcs_function>
+<fcs_function name="cockpit/init-animation-electrical-master-switch"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><ifthen><property>eng/running-at-start</property><value>1</value><property>animation/electrical-master-switch</property></ifthen><property>animation/electrical-master-switch</property></ifthen></function><output>animation/electrical-master-switch</output></fcs_function>
+<fcs_function name="cockpit/init-fcs-brake-parking-cmd-norm"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><ifthen><property>eng/running-at-start</property><value>0</value><value>1</value></ifthen><property>fcs/brake-parking-cmd-norm</property></ifthen></function><output>fcs/brake-parking-cmd-norm</output></fcs_function>
+<fcs_function name="cockpit/init-left-door"><function><ifthen><product><gt><property>ctl/init-fast</property><value>0.5</value></gt><property>eng/running-at-start</property></product><value>0</value><property>animation/cockpit-left-door-pos-cmd</property></ifthen></function><output>animation/cockpit-left-door-pos-cmd</output></fcs_function>
+<fcs_function name="cockpit/init-right-door"><function><ifthen><product><gt><property>ctl/init-fast</property><value>0.5</value></gt><property>eng/running-at-start</property></product><value>0</value><property>animation/cockpit-right-door-pos-cmd</property></ifthen></function><output>animation/cockpit-right-door-pos-cmd</output></fcs_function>
+<fcs_function name="cockpit/init-collective"><function><ifthen><product><gt><property>ctl/init-fast</property><value>0.5</value></gt><property>eng/running-at-start</property></product><table><independentVar lookup="row">velocities/vc-kts</independentVar><tableData>
+0 0.62
+20 0.57
+40 0.5
+60 0.49
+80 0.53
+100 0.62
+120 0.77
+</tableData></table><property>/controls/al3/collective</property></ifthen></function><output>/controls/al3/collective</output></fcs_function>
+<fcs_function name="cockpit/init-elevator-trim"><function><ifthen><product><gt><property>ctl/init-fast</property><value>0.5</value></gt><property>eng/running-at-start</property></product><value>0</value><property>/controls/flight/elevator-trim</property></ifthen></function><output>/controls/flight/elevator-trim</output></fcs_function>
+<fcs_function name="cockpit/init-aileron-trim"><function><ifthen><product><gt><property>ctl/init-fast</property><value>0.5</value></gt><property>eng/running-at-start</property></product><value>0</value><property>/controls/flight/aileron-trim</property></ifthen></function><output>/controls/flight/aileron-trim</output></fcs_function>
+<fcs_function name="cockpit/init-rudder-trim"><function><ifthen><product><gt><property>ctl/init-fast</property><value>0.5</value></gt><property>eng/running-at-start</property></product><value>0</value><property>/controls/flight/rudder-trim</property></ifthen></function><output>/controls/flight/rudder-trim</output></fcs_function>
+<fcs_function name="cockpit/start-hold"><description>1: starting in the air, held</description><function><product><property>eng/running-at-start</property><lt><property>/sim/presets/onground</property><value>0.5</value></lt><lt><property>simulation/sim-time-sec</property><value>4</value></lt></product></function></fcs_function>
+<fcs_function name="cockpit/integrator-rate-rotational-next"><function><ifthen><lt><property>cockpit/integrator-rate-rotational</property><value>-0.5</value></lt><property>simulation/integrator/rate/rotational</property><property>cockpit/integrator-rate-rotational</property></ifthen></function><output>cockpit/integrator-rate-rotational</output></fcs_function>
+<fcs_function name="cockpit/integrator-rate-rotational-set"><function><ifthen><gt><property>cockpit/start-hold</property><value>0.5</value></gt><value>0</value><ifthen><lt><property>cockpit/integrator-rate-rotational</property><value>-0.5</value></lt><property>simulation/integrator/rate/rotational</property><property>cockpit/integrator-rate-rotational</property></ifthen></ifthen></function><output>simulation/integrator/rate/rotational</output></fcs_function>
+<fcs_function name="cockpit/integrator-rate-translational-next"><function><ifthen><lt><property>cockpit/integrator-rate-translational</property><value>-0.5</value></lt><property>simulation/integrator/rate/translational</property><property>cockpit/integrator-rate-translational</property></ifthen></function><output>cockpit/integrator-rate-translational</output></fcs_function>
+<fcs_function name="cockpit/integrator-rate-translational-set"><function><ifthen><gt><property>cockpit/start-hold</property><value>0.5</value></gt><value>0</value><ifthen><lt><property>cockpit/integrator-rate-translational</property><value>-0.5</value></lt><property>simulation/integrator/rate/translational</property><property>cockpit/integrator-rate-translational</property></ifthen></ifthen></function><output>simulation/integrator/rate/translational</output></fcs_function>
+<fcs_function name="cockpit/integrator-position-rotational-next"><function><ifthen><lt><property>cockpit/integrator-position-rotational</property><value>-0.5</value></lt><property>simulation/integrator/position/rotational</property><property>cockpit/integrator-position-rotational</property></ifthen></function><output>cockpit/integrator-position-rotational</output></fcs_function>
+<fcs_function name="cockpit/integrator-position-rotational-set"><function><ifthen><gt><property>cockpit/start-hold</property><value>0.5</value></gt><value>0</value><ifthen><lt><property>cockpit/integrator-position-rotational</property><value>-0.5</value></lt><property>simulation/integrator/position/rotational</property><property>cockpit/integrator-position-rotational</property></ifthen></ifthen></function><output>simulation/integrator/position/rotational</output></fcs_function>
+<fcs_function name="cockpit/integrator-position-translational-next"><function><ifthen><lt><property>cockpit/integrator-position-translational</property><value>-0.5</value></lt><property>simulation/integrator/position/translational</property><property>cockpit/integrator-position-translational</property></ifthen></function><output>cockpit/integrator-position-translational</output></fcs_function>
+<fcs_function name="cockpit/integrator-position-translational-set"><function><ifthen><gt><property>cockpit/start-hold</property><value>0.5</value></gt><value>0</value><ifthen><lt><property>cockpit/integrator-position-translational</property><value>-0.5</value></lt><property>simulation/integrator/position/translational</property><property>cockpit/integrator-position-translational</property></ifthen></ifthen></function><output>simulation/integrator/position/translational</output></fcs_function>
+<fcs_function name="cockpit/start-wdot-next"><function><sum><property>cockpit/start-wdot</property><product><difference><property>accelerations/wdot-ft_sec2</property><property>cockpit/start-wdot</property></difference><min><value>1</value><quotient><property>simulation/channel-dt</property><value>0.05</value></quotient></min></product></sum></function><output>cockpit/start-wdot</output></fcs_function>
+<fcs_function name="cockpit/start-pdot-next"><function><sum><property>cockpit/start-pdot</property><product><difference><property>accelerations/pdot-rad_sec2</property><property>cockpit/start-pdot</property></difference><min><value>1</value><quotient><property>simulation/channel-dt</property><value>0.05</value></quotient></min></product></sum></function><output>cockpit/start-pdot</output></fcs_function>
+<fcs_function name="cockpit/start-qdot-next"><function><sum><property>cockpit/start-qdot</property><product><difference><property>accelerations/qdot-rad_sec2</property><property>cockpit/start-qdot</property></difference><min><value>1</value><quotient><property>simulation/channel-dt</property><value>0.05</value></quotient></min></product></sum></function><output>cockpit/start-qdot</output></fcs_function>
+<fcs_function name="cockpit/start-rdot-next"><function><sum><property>cockpit/start-rdot</property><product><difference><property>accelerations/rdot-rad_sec2</property><property>cockpit/start-rdot</property></difference><min><value>1</value><quotient><property>simulation/channel-dt</property><value>0.05</value></quotient></min></product></sum></function><output>cockpit/start-rdot</output></fcs_function>
+<fcs_function name="cockpit/start-kt"><function><product><value>0.59248375</value><property>velocities/vt-fps</property></product></function></fcs_function>
+<fcs_function name="cockpit/start-trim-0"><function><ifthen><gt><product><property>cockpit/start-hold</property><gt><property>simulation/sim-time-sec</property><value>0.5</value></gt></product><value>0.5</value></gt><max><value>0</value><min><value>1</value><difference><property>/controls/al3/collective</property><product><value>2.5</value><property>simulation/channel-dt</property><sum><product><table><independentVar lookup="row">cockpit/start-kt</independentVar><tableData>
+0 -0.01221
+30 -0.01253
+60 -0.01216
+90 -0.01135
+105 -0.01162
+</tableData></table><property>cockpit/start-wdot</property></product><product><table><independentVar lookup="row">cockpit/start-kt</independentVar><tableData>
+0 -4e-05
+30 -0.00106
+60 -0.00186
+90 -0.00272
+105 -0.00325
+</tableData></table><property>cockpit/start-pdot</property></product><product><table><independentVar lookup="row">cockpit/start-kt</independentVar><tableData>
+0 -0.00242
+30 -0.0313
+60 -0.05877
+90 -0.09513
+105 -0.11448
+</tableData></table><property>cockpit/start-qdot</property></product><product><table><independentVar lookup="row">cockpit/start-kt</independentVar><tableData>
+0 -9e-05
+30 0.00024
+60 -0.00074
+90 -0.00192
+105 -0.00271
+</tableData></table><property>cockpit/start-rdot</property></product></sum></product></difference></min></max><property>/controls/al3/collective</property></ifthen></function><output>/controls/al3/collective</output></fcs_function>
+<fcs_function name="cockpit/start-trim-1"><function><ifthen><gt><product><property>cockpit/start-hold</property><gt><property>simulation/sim-time-sec</property><value>0.5</value></gt></product><value>0.5</value></gt><max><value>-0.6</value><min><value>0.6</value><difference><property>/controls/flight/elevator-trim</property><product><value>2.5</value><property>simulation/channel-dt</property><sum><product><table><independentVar lookup="row">cockpit/start-kt</independentVar><tableData>
+0 0.00445
+30 -0.00187
+60 -0.00877
+90 -0.00853
+105 -0.00992
+</tableData></table><property>cockpit/start-wdot</property></product><product><table><independentVar lookup="row">cockpit/start-kt</independentVar><tableData>
+0 -0.00746
+30 -0.0121
+60 -0.01211
+90 -0.01203
+105 -0.01228
+</tableData></table><property>cockpit/start-pdot</property></product><product><table><independentVar lookup="row">cockpit/start-kt</independentVar><tableData>
+0 -0.36469
+30 -0.39022
+60 -0.36974
+90 -0.40309
+105 -0.41977
+</tableData></table><property>cockpit/start-qdot</property></product><product><table><independentVar lookup="row">cockpit/start-kt</independentVar><tableData>
+0 -0.00772
+30 0.0007
+60 -0.00457
+90 -0.00772
+105 -0.00946
+</tableData></table><property>cockpit/start-rdot</property></product></sum></product></difference></min></max><property>/controls/flight/elevator-trim</property></ifthen></function><output>/controls/flight/elevator-trim</output></fcs_function>
+<fcs_function name="cockpit/start-trim-2"><function><ifthen><gt><product><property>cockpit/start-hold</property><gt><property>simulation/sim-time-sec</property><value>0.5</value></gt></product><value>0.5</value></gt><max><value>-0.6</value><min><value>0.6</value><difference><property>/controls/flight/aileron-trim</property><product><value>2.5</value><property>simulation/channel-dt</property><sum><product><table><independentVar lookup="row">cockpit/start-kt</independentVar><tableData>
+0 0.00104
+30 0.00099
+60 -0.00101
+90 -0.00203
+105 -0.00251
+</tableData></table><property>cockpit/start-wdot</property></product><product><table><independentVar lookup="row">cockpit/start-kt</independentVar><tableData>
+0 0.1428
+30 0.14339
+60 0.14286
+90 0.14299
+105 0.14278
+</tableData></table><property>cockpit/start-pdot</property></product><product><table><independentVar lookup="row">cockpit/start-kt</independentVar><tableData>
+0 -0.01031
+30 -0.01577
+60 0.00188
+90 0.00568
+105 0.00626
+</tableData></table><property>cockpit/start-qdot</property></product><product><table><independentVar lookup="row">cockpit/start-kt</independentVar><tableData>
+0 0.02638
+30 0.02672
+60 0.02754
+90 0.02813
+105 0.02818
+</tableData></table><property>cockpit/start-rdot</property></product></sum></product></difference></min></max><property>/controls/flight/aileron-trim</property></ifthen></function><output>/controls/flight/aileron-trim</output></fcs_function>
+<fcs_function name="cockpit/start-trim-3"><function><ifthen><gt><product><property>cockpit/start-hold</property><gt><property>simulation/sim-time-sec</property><value>0.5</value></gt></product><value>0.5</value></gt><max><value>-0.6</value><min><value>0.6</value><difference><property>/controls/flight/rudder-trim</property><product><value>2.5</value><property>simulation/channel-dt</property><sum><product><table><independentVar lookup="row">cockpit/start-kt</independentVar><tableData>
+0 -0.01987
+30 -0.01525
+60 -0.01081
+90 -0.00763
+105 -0.00698
+</tableData></table><property>cockpit/start-wdot</property></product><product><table><independentVar lookup="row">cockpit/start-kt</independentVar><tableData>
+0 0.01528
+30 0.01417
+60 0.01065
+90 0.00905
+105 0.00822
+</tableData></table><property>cockpit/start-pdot</property></product><product><table><independentVar lookup="row">cockpit/start-kt</independentVar><tableData>
+0 0.00221
+30 -0.03045
+60 -0.07286
+90 -0.09511
+105 -0.10384
+</tableData></table><property>cockpit/start-qdot</property></product><product><table><independentVar lookup="row">cockpit/start-kt</independentVar><tableData>
+0 0.21928
+30 0.22235
+60 0.19006
+90 0.16253
+105 0.15001
+</tableData></table><property>cockpit/start-rdot</property></product></sum></product></difference></min></max><property>/controls/flight/rudder-trim</property></ifthen></function><output>/controls/flight/rudder-trim</output></fcs_function>
+</channel>
+<channel name="controls">
+<fcs_function name="cockpit/fuel-valve"><function><lt><property>propulsion/engine[0]/cutoff</property><value>0.5</value></lt></function><output>eng/fuel-valve</output><output>propulsion/engine[0]/fuel-pump</output><output>systems/engine/fuel-pump</output><output>systems/engine/start-state</output></fcs_function>
+<fcs_function name="cockpit/parking-brake"><function><property>fcs/brake-parking-cmd-norm</property></function><output>fcs/brake-parking-pos-norm</output></fcs_function>
+<fcs_function name="cockpit/starter"><function><gt><property>animation/master-switch-cmd</property><value>0.5</value></gt></function><output>eng/starter-cmd</output></fcs_function>
+<fcs_function name="cockpit/flow-lever"><function><max><value>0</value><min><value>1</value><property>fcs/nominal-flow-cmd</property></min></max></function><output>eng/flow-lever</output><output>fcs/fuel-flow-control</output></fcs_function>
+<fcs_function name="cockpit/rotor-brake"><function><gt><property>animation/rotor_brake-switch-cmd</property><value>0.5</value></gt></function><output>/controls/rotor/brake</output></fcs_function>
+<fcs_function name="cockpit/gear-contact"><function><lt><property>systems/crash-detect/crashed-sw</property><value>0.5</value></lt></function><output>gear/gear-cp-cmd-norm</output></fcs_function>
+<fcs_function name="cockpit/nose-steer"><function><product><difference><value>1</value><property>gear/unit[2]/castered</property></difference><property>fcs/steer-pos-deg[2]</property></product></function><output>fcs/steer-pos-deg</output></fcs_function>
+</channel>
+<channel name="gauges" execrate="2">
+<fcs_function name="cockpit/engine-rpm"><function><property>eng/rpm</property></function><output>propulsion/engine/engine-rpm</output><output>propulsion/engine[0]/engine-rpm</output></fcs_function>
+<fcs_function name="cockpit/rotor-rpm"><function><product><value>9.5492966</value><property>rotor/omega-rad_sec</property></product></function><output>propulsion/engine/rotor-rpm</output><output>propulsion/engine[0]/rotor-rpm</output><output>animation/rotor0-rotation</output></fcs_function>
+<fcs_function name="cockpit/tail-rpm"><function><product><value>52.39699</value><property>rotor/omega-rad_sec</property></product></function><output>propulsion/engine[1]/rotor-rpm</output><output>animation/rotor/tail/rpm</output></fcs_function>
+<fcs_function name="cockpit/n1"><function><property>eng/n-pct</property></function><output>propulsion/engine/n1</output><output>propulsion/engine[0]/n1</output></fcs_function>
+<fcs_function name="cockpit/t4"><function><property>eng/t4-degc</property></function><output>propulsion/engine[0]/itt-c</output></fcs_function>
+<fcs_function name="cockpit/torque"><function><property>drive/mr-torque-ftlb</property></function><output>propulsion/engine/torque-lbsft</output><output>propulsion/engine[0]/torque-lbsft</output><output>systems/rotor/main/torque</output></fcs_function>
+<fcs_function name="cockpit/thrust"><function><property>aero/rotor/thrust-lbs</property></function><output>propulsion/engine[0]/thrust-lbs</output></fcs_function>
+<fcs_function name="cockpit/brake"><function><property>/controls/rotor/brake</property></function><output>propulsion/engine[0]/brake-ctrl-norm</output></fcs_function>
+<fcs_function name="cockpit/freewheel"><function><property>eng/engaged</property></function><output>propulsion/engine[0]/free-wheel-transmission</output></fcs_function>
+<fcs_function name="cockpit/clutch"><function><min><value>1</value><quotient><property>drive/clutch-cap-ftlb</property><value>12762.307</value></quotient></min></function><output>propulsion/engine/clutch-ctrl-norm</output><output>propulsion/engine[0]/clutch-ctrl-norm</output></fcs_function>
+<fcs_function name="cockpit/fuel"><function><property>/consumables/fuel/tank[0]/level-lbs</property></function><output>propulsion/tank/contents-lbs</output></fcs_function>
+<fcs_function name="cockpit/lon-rad"><function><product><value>0.017453293</value><property>ctl/B1s-deg</property></product></function><output>propulsion/engine/longitudinal-ctrl-rad</output><output>fcs/x-lon</output></fcs_function>
+<fcs_function name="cockpit/lat-rad"><function><product><value>0.017453293</value><property>ctl/A1s-deg</property></product></function><output>propulsion/engine/lateral-ctrl-rad</output><output>fcs/x-lat</output></fcs_function>
+<fcs_function name="cockpit/ped-rad"><function><product><value>0.017453293</value><property>ctl/thetaTR-deg</property></product></function><output>propulsion/engine[1]/antitorque-ctrl-rad</output><output>fcs/x-ped</output></fcs_function>
+<fcs_function name="cockpit/x-col"><function><product><value>0.017453293</value><sum><property>ctl/theta0-deg</property><value>-4.55</value></sum></product></function><output>fcs/x-col</output></fcs_function>
+<fcs_function name="cockpit/agl-offset"><function><quotient><difference><property>inertia/cg-z-in</property><value>-47.24412</value></difference><value>12</value></quotient></function><output>instruments/agl-offset-ref</output></fcs_function>
+<fcs_function name="cockpit/terrain"><function><value>1</value></function><output>simulation/terrain_sw</output></fcs_function>
+</channel>
+<channel name="rotor model" execrate="2">
+<fcs_function name="cockpit/pale0pos"><function><ifthen><gt><sum><product><value>57.29578</value><property>rotor/psi-rad</property></product><value>180</value></sum><value>360</value></gt><difference><sum><product><value>57.29578</value><property>rotor/psi-rad</property></product><value>180</value></sum><value>360</value></difference><sum><product><value>57.29578</value><property>rotor/psi-rad</property></product><value>180</value></sum></ifthen></function><output>systems/rotor/pale0pos-deg</output></fcs_function>
+<fcs_function name="cockpit/pale0flap"><function><product><value>57.29578</value><property>rotor/b0/beta-rad</property></product></function><output>systems/rotor/pale0flap-deg</output></fcs_function>
+<fcs_function name="cockpit/pale1pos"><function><ifthen><gt><sum><product><value>57.29578</value><property>rotor/psi-rad</property></product><value>300</value></sum><value>360</value></gt><difference><sum><product><value>57.29578</value><property>rotor/psi-rad</property></product><value>300</value></sum><value>360</value></difference><sum><product><value>57.29578</value><property>rotor/psi-rad</property></product><value>300</value></sum></ifthen></function><output>systems/rotor/pale1pos-deg</output></fcs_function>
+<fcs_function name="cockpit/pale1flap"><function><product><value>57.29578</value><property>rotor/b1/beta-rad</property></product></function><output>systems/rotor/pale1flap-deg</output></fcs_function>
+<fcs_function name="cockpit/pale2pos"><function><ifthen><gt><sum><product><value>57.29578</value><property>rotor/psi-rad</property></product><value>420</value></sum><value>360</value></gt><difference><sum><product><value>57.29578</value><property>rotor/psi-rad</property></product><value>420</value></sum><value>360</value></difference><sum><product><value>57.29578</value><property>rotor/psi-rad</property></product><value>420</value></sum></ifthen></function><output>systems/rotor/pale2pos-deg</output></fcs_function>
+<fcs_function name="cockpit/pale2flap"><function><product><value>57.29578</value><property>rotor/b2/beta-rad</property></product></function><output>systems/rotor/pale2flap-deg</output></fcs_function>
+</channel>
+<channel name="touchdown" execrate="2">
+<fcs_function name="gear/unit[0]/sink-now-fps"><description>the wheel's own speed downwards</description><function><sum><property>velocities/v-down-fps</property><product><property>velocities/p-rad_sec</property><quotient><difference><value>-46.653569</value><property>inertia/cg-y-in</property></difference><value>12</value></quotient></product><product><value>-1</value><product><property>velocities/q-rad_sec</property><quotient><difference><property>inertia/cg-x-in</property><value>157.98821</value></difference><value>12</value></quotient></product></product></sum></function></fcs_function>
+<fcs_function name="gear/unit[0]/slip-now-kt"><description>the ground speed less the rim's</description><function><max><value>0</value><difference><product><property>velocities/vg-fps</property><value>0.592484</value></product><property>gear/unit[0]/spin-kt</property></difference></max></function></fcs_function>
+<fcs_function name="gear/unit[0]/spin-next"><description>the rim's speed: spun up by the ground, rolling, spinning down in the air</description><function><ifthen><gt><property>gear/unit[0]/WOW</property><value>0.5</value></gt><min><product><property>velocities/vg-fps</property><value>0.592484</value></product><sum><property>gear/unit[0]/spin-kt</property><product><value>1.3544558</value><max><value>0</value><sum><product><value>5584.8116</value><property>gear/unit[0]/compression-ft</property></product><product><value>428.01544</value><property>gear/unit[0]/compression-velocity-fps</property></product></sum></max><property>simulation/channel-dt</property></product></sum></min><max><value>0</value><difference><property>gear/unit[0]/spin-kt</property><product><value>3.4406077</value><sum><value>0.3</value><product><max><property>/controls/gear/brake-left</property><property>/controls/gear/brake-parking</property></max><value>200</value></product></sum><property>simulation/channel-dt</property></product></difference></max></ifthen></function><output>gear/unit[0]/spin-kt</output></fcs_function>
+<fcs_function name="gear/unit[0]/touchdown-sink-next"><description>as the weight came on, held</description><function><ifthen><gt><property>gear/unit[0]/WOW</property><value>0.5</value></gt><property>gear/unit[0]/touchdown-sink-fps</property><property>gear/unit[0]/sink-now-fps</property></ifthen></function><output>gear/unit[0]/touchdown-sink-fps</output></fcs_function>
+<fcs_function name="gear/unit[0]/touchdown-slip-next"><description>likewise</description><function><ifthen><gt><property>gear/unit[0]/WOW</property><value>0.5</value></gt><property>gear/unit[0]/touchdown-slip-kt</property><property>gear/unit[0]/slip-now-kt</property></ifthen></function><output>gear/unit[0]/touchdown-slip-kt</output></fcs_function>
+<fcs_function name="gear/unit[1]/sink-now-fps"><description>the wheel's own speed downwards</description><function><sum><property>velocities/v-down-fps</property><product><property>velocities/p-rad_sec</property><quotient><difference><value>46.653569</value><property>inertia/cg-y-in</property></difference><value>12</value></quotient></product><product><value>-1</value><product><property>velocities/q-rad_sec</property><quotient><difference><property>inertia/cg-x-in</property><value>157.98821</value></difference><value>12</value></quotient></product></product></sum></function></fcs_function>
+<fcs_function name="gear/unit[1]/slip-now-kt"><description>the ground speed less the rim's</description><function><max><value>0</value><difference><product><property>velocities/vg-fps</property><value>0.592484</value></product><property>gear/unit[1]/spin-kt</property></difference></max></function></fcs_function>
+<fcs_function name="gear/unit[1]/spin-next"><description>the rim's speed: spun up by the ground, rolling, spinning down in the air</description><function><ifthen><gt><property>gear/unit[1]/WOW</property><value>0.5</value></gt><min><product><property>velocities/vg-fps</property><value>0.592484</value></product><sum><property>gear/unit[1]/spin-kt</property><product><value>1.3544558</value><max><value>0</value><sum><product><value>5584.8116</value><property>gear/unit[1]/compression-ft</property></product><product><value>428.01544</value><property>gear/unit[1]/compression-velocity-fps</property></product></sum></max><property>simulation/channel-dt</property></product></sum></min><max><value>0</value><difference><property>gear/unit[1]/spin-kt</property><product><value>3.4406077</value><sum><value>0.3</value><product><max><property>/controls/gear/brake-right</property><property>/controls/gear/brake-parking</property></max><value>200</value></product></sum><property>simulation/channel-dt</property></product></difference></max></ifthen></function><output>gear/unit[1]/spin-kt</output></fcs_function>
+<fcs_function name="gear/unit[1]/touchdown-sink-next"><description>as the weight came on, held</description><function><ifthen><gt><property>gear/unit[1]/WOW</property><value>0.5</value></gt><property>gear/unit[1]/touchdown-sink-fps</property><property>gear/unit[1]/sink-now-fps</property></ifthen></function><output>gear/unit[1]/touchdown-sink-fps</output></fcs_function>
+<fcs_function name="gear/unit[1]/touchdown-slip-next"><description>likewise</description><function><ifthen><gt><property>gear/unit[1]/WOW</property><value>0.5</value></gt><property>gear/unit[1]/touchdown-slip-kt</property><property>gear/unit[1]/slip-now-kt</property></ifthen></function><output>gear/unit[1]/touchdown-slip-kt</output></fcs_function>
+<fcs_function name="gear/unit[2]/sink-now-fps"><description>the wheel's own speed downwards</description><function><sum><property>velocities/v-down-fps</property><product><property>velocities/p-rad_sec</property><quotient><difference><value>-0</value><property>inertia/cg-y-in</property></difference><value>12</value></quotient></product><product><value>-1</value><product><property>velocities/q-rad_sec</property><quotient><difference><property>inertia/cg-x-in</property><value>39.877911</value></difference><value>12</value></quotient></product></product></sum></function></fcs_function>
+<fcs_function name="gear/unit[2]/slip-now-kt"><description>the ground speed less the rim's</description><function><max><value>0</value><difference><product><property>velocities/vg-fps</property><value>0.592484</value></product><property>gear/unit[2]/spin-kt</property></difference></max></function></fcs_function>
+<fcs_function name="gear/unit[2]/spin-next"><description>the rim's speed: spun up by the ground, rolling, spinning down in the air</description><function><ifthen><gt><property>gear/unit[2]/WOW</property><value>0.5</value></gt><min><product><property>velocities/vg-fps</property><value>0.592484</value></product><sum><property>gear/unit[2]/spin-kt</property><product><value>1.3544558</value><max><value>0</value><sum><product><value>5256.2933</value><property>gear/unit[2]/compression-ft</property></product><product><value>402.83806</value><property>gear/unit[2]/compression-velocity-fps</property></product></sum></max><property>simulation/channel-dt</property></product></sum></min><max><value>0</value><difference><property>gear/unit[2]/spin-kt</property><product><value>3.4406077</value><value>0.3</value><property>simulation/channel-dt</property></product></difference></max></ifthen></function><output>gear/unit[2]/spin-kt</output></fcs_function>
+<fcs_function name="gear/unit[2]/touchdown-sink-next"><description>as the weight came on, held</description><function><ifthen><gt><property>gear/unit[2]/WOW</property><value>0.5</value></gt><property>gear/unit[2]/touchdown-sink-fps</property><property>gear/unit[2]/sink-now-fps</property></ifthen></function><output>gear/unit[2]/touchdown-sink-fps</output></fcs_function>
+<fcs_function name="gear/unit[2]/touchdown-slip-next"><description>likewise</description><function><ifthen><gt><property>gear/unit[2]/WOW</property><value>0.5</value></gt><property>gear/unit[2]/touchdown-slip-kt</property><property>gear/unit[2]/slip-now-kt</property></ifthen></function><output>gear/unit[2]/touchdown-slip-kt</output></fcs_function>
+</channel>
+</system>

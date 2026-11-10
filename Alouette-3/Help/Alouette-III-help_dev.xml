@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<!--
+    Usable with FlightGear
+    Property of Gerard Robin
+    Copyright 
+
+    Re-written by Thorsten Renk 2017
+-->
+<PropertyList>
+
+        <title>Helicoptere Alouette III</title>
+            
+
+	<key>
+		<name>Ctrl+a</name>
+            	<desc>AP master switch</desc>
+	</key>
+	<key>
+		<name>Ctrl+b</name>
+            	<desc>AP lock heading bug</desc>
+	</key>
+	<key>
+		<name>Ctrl+h</name>
+            	<desc>AP lock current heading</desc>
+	</key>
+	<key>
+		<name>Ctrl+l</name>
+            	<desc>AP lock altitude</desc>
+	</key>
+	<key>
+		<name>Ctrl+t</name>
+            	<desc>Toggle Amelia takeover</desc>
+	</key>
+	<key>
+		<name>Ctrl+w</name>
+            	<desc>Toggle winch deployment</desc>
+	</key>
+	<key>
+		<name>Shift+w</name>
+            	<desc>Winch down</desc>
+	</key>
+	<key>
+		<name>l</name>
+            	<desc>Toggle landing light</desc>
+	</key>
+	<key>
+		<name>w</name>
+            	<desc>Winch up</desc>
+	</key>
+
+        <text>
+            
+The Helicopter is loaded with:
+ * Electric power OFF
+ * Engines and Rotor Gear OFF
+ * Rotor Brake ENGAGED
+ * Parking Brake ENGAGED
+ * Nose Wheel Steering LOCKED
+    
+====== Engine startup ======
+
+Please refer to the in-sim checklist (Help -> Aircraft checklists) for the engine start procedure.
+
+======   Autopilot    ======
+
+The Alouette III has a simple autopilot for cruise flight. Do not use it in hover flight, it won't work! The AP is designed to help you fly the helicopter, not to fly it for you - it expects a well-trimmed craft, do not engage the AP during dynamical maneuvers.
+
+To engage the AP, make sure you're flying straight and level and use the pedals to null drift. First flick the AP master switch (Ctrl+a) - this makes the AP take over pedal controls. Next engage heading-hold mode (Ctrl+h) and be prepared to deal with transient altitude changes. Then trim the helicopter well in the pitch axis such that you can let go of the controls for at least 10 seconds without loss of control. Once that is the case, engage altitude hold mode to lock current altitude (Ctrl+l).
+
+Once the Alouette is in stable flight, you can control it via the heading bug on the heading indicator by engaging the heading bug acquire mode (Ctrl+b). You have very limited control over airspeed using the collective.
+
+Do not change trim while the AP is on, and do not move your controls around, or you will have to fight nasty transients when you disengage the AP again.
+
+======    Amelia      ======
+
+The helicopter has the option to select a working co-pilot as assistant or flight instructor - Amelia (inspired by aviation pioneer Amelia Earhart). If she is selected as crew option, she can be asked to take over controls for hover flight. As she is simulating a human pilot rather than an AP, she is not dependent on working instruments to do this but will fly by sight. She is (intentionally) not perfect in achieving a static hover state immediately.
+
+When asked to take off or take over controls, she'll attempt to stabilize the helicopter in static hover and from then on follow instructions to hover into a certain direction or change altitude. She is a fairly capable pilot able to stabilize even a moderately bad situation, but don't expect miracles.
+
+While Amelia is flying, there should be no control input given (otherwise the result will be a fight for control). When Amelia takes over, she will always say 'I'm taking controls' and visibly reach for the stick, when she lets go of controls she will lean back and say 'Your controls.'
+
+Amelia will not work if not selected as crew, nor will she take over during cruise flight (you can use the AP for that purpose).
+
+
+====== Auto rotation  ======
+
+Auto rotation uses the residual energy stored in the angular momentum of the rotor to land the helicopter in case of a turbine failure. You can cause an engine failure in the air by switching the fuel pump off.
+
+Move collective into full (down) position. Stabilize airspeed using pitch at 40 kt. The helicopter will drop, the potential energy released helps to drive the rotor to about 200 rpm. Close to the ground, pull up to control sinkrate, then quickly use collective for a soft touchdown.
+
+====== Rescue ops     ======
+
+Rescue operations using the helicopter's winch can be tried. To prepare for such an operation:
+
+* check 'Rescue mission' in the configuration dialog
+* open the left rear cabin door
+
+This puts the winch operator in place as soon as the winch is deployed.
+
+When close to the emergency site, deploy the winch (overhead panel switch or Ctrl+w), then the winch rope can be extended and pulled in by w and Shift+w. There's a model of a man hanging from the rope, he'll vanish as soon as the winch rope is hauled fully in.
+
+
+    
+        </text>
+
+</PropertyList>

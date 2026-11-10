@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- Main rotor blade 2, written by fdm/rotorvis.py (see there): the blade on the flight model's
+     azimuth, lag, flap and pitch of its blade 2 -->
+
+<PropertyList>
+
+  <model>
+    <name>Rotor</name>
+    <path>Aircraft/Alouette-3/Models/Rotors/AL3-Rotor-Base_rb.xml</path>
+  </model>
+
+  <!-- the azimuth (systems/rotor/pale2pos-deg, through the multiplayer property), clockwise from above -->
+  <animation>
+    <type>rotate</type>
+    <object-name>Rotor-Pale</object-name>
+    <object-name>tRotor-Pale-S0</object-name>
+    <object-name>tRotor-Pale-S1</object-name>
+    <object-name>tRotor-Pale-S2</object-name>
+    <object-name>tRotor-Pale-S3</object-name>
+    <object-name>tRotor-Pale-S4</object-name>
+    <object-name>tRotor-Pale-S5</object-name>
+    <object-name>tRotor-Pale-S6</object-name>
+    <object-name>tRotor-Pale-S7</object-name>
+    <object-name>mr_blur0</object-name>
+    <object-name>mr_blur1</object-name>
+    <object-name>mr_blur2</object-name>
+    <object-name>mr_blur3</object-name>
+    <object-name>mr_blur4</object-name>
+    <object-name>mr_blur5</object-name>
+    <object-name>mr_blur6</object-name>
+    <object-name>mr_blur7</object-name>
+    <object-name>mr_blur8</object-name>
+    <object-name>mr_blur9</object-name>
+    <object-name>mr_blur10</object-name>
+    <object-name>mr_blur11</object-name>
+    <object-name>mr_blur12</object-name>
+    <object-name>mr_blur13</object-name>
+    <object-name>mr_blur14</object-name>
+    <object-name>mr_blur15</object-name>
+    <object-name>mr_blur16</object-name>
+    <object-name>mr_blur17</object-name>
+    <object-name>mr_blur18</object-name>
+    <object-name>mr_blur19</object-name>
+    <object-name>mr_blur20</object-name>
+    <object-name>mr_blur21</object-name>
+    <object-name>mr_blur22</object-name>
+    <object-name>mr_blur23</object-name>
+    <object-name>Rotor-Pale-Base</object-name>
+    <object-name>Rotor-Pale-Fix</object-name>
+    <object-name>Rotor-Pale-Rot</object-name>
+    <object-name>Rotor-Pale-Cable</object-name>
+    <property>sim/multiplay/generic/float[7]</property>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <!-- lag about the hinge, lead + -->
+  <animation>
+    <type>rotate</type>
+    <object-name>Rotor-Pale</object-name>
+    <object-name>tRotor-Pale-S0</object-name>
+    <object-name>tRotor-Pale-S1</object-name>
+    <object-name>tRotor-Pale-S2</object-name>
+    <object-name>tRotor-Pale-S3</object-name>
+    <object-name>tRotor-Pale-S4</object-name>
+    <object-name>tRotor-Pale-S5</object-name>
+    <object-name>tRotor-Pale-S6</object-name>
+    <object-name>tRotor-Pale-S7</object-name>
+    <object-name>mr_blur0</object-name>
+    <object-name>mr_blur1</object-name>
+    <object-name>mr_blur2</object-name>
+    <object-name>mr_blur3</object-name>
+    <object-name>mr_blur4</object-name>
+    <object-name>mr_blur5</object-name>
+    <object-name>mr_blur6</object-name>
+    <object-name>mr_blur7</object-name>
+    <object-name>mr_blur8</object-name>
+    <object-name>mr_blur9</object-name>
+    <object-name>mr_blur10</object-name>
+    <object-name>mr_blur11</object-name>
+    <object-name>mr_blur12</object-name>
+    <object-name>mr_blur13</object-name>
+    <object-name>mr_blur14</object-name>
+    <object-name>mr_blur15</object-name>
+    <object-name>mr_blur16</object-name>
+    <object-name>mr_blur17</object-name>
+    <object-name>mr_blur18</object-name>
+    <object-name>mr_blur19</object-name>
+    <object-name>mr_blur20</object-name>
+    <object-name>mr_blur21</object-name>
+    <object-name>mr_blur22</object-name>
+    <object-name>mr_blur23</object-name>
+    <object-name>Rotor-Pale-Base</object-name>
+    <object-name>Rotor-Pale-Fix</object-name>
+    <object-name>Rotor-Pale-Cable</object-name>
+    <property>/rotors/main/blade[2]/lag-deg</property>
+    <center>
+      <x-m> -0.11900 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> -1 </z>
+    </axis>
+  </animation>
+
+  <!-- flap about the hinge, up +: a rigid blade -->
+  <animation>
+    <type>rotate</type>
+    <object-name>Rotor-Pale</object-name>
+    <object-name>tRotor-Pale-S0</object-name>
+    <object-name>tRotor-Pale-S1</object-name>
+    <object-name>tRotor-Pale-S2</object-name>
+    <object-name>tRotor-Pale-S3</object-name>
+    <object-name>tRotor-Pale-S4</object-name>
+    <object-name>tRotor-Pale-S5</object-name>
+    <object-name>tRotor-Pale-S6</object-name>
+    <object-name>tRotor-Pale-S7</object-name>
+    <object-name>mr_blur0</object-name>
+    <object-name>mr_blur1</object-name>
+    <object-name>mr_blur2</object-name>
+    <object-name>mr_blur3</object-name>
+    <object-name>mr_blur4</object-name>
+    <object-name>mr_blur5</object-name>
+    <object-name>mr_blur6</object-name>
+    <object-name>mr_blur7</object-name>
+    <object-name>mr_blur8</object-name>
+    <object-name>mr_blur9</object-name>
+    <object-name>mr_blur10</object-name>
+    <object-name>mr_blur11</object-name>
+    <object-name>mr_blur12</object-name>
+    <object-name>mr_blur13</object-name>
+    <object-name>mr_blur14</object-name>
+    <object-name>mr_blur15</object-name>
+    <object-name>mr_blur16</object-name>
+    <object-name>mr_blur17</object-name>
+    <object-name>mr_blur18</object-name>
+    <object-name>mr_blur19</object-name>
+    <object-name>mr_blur20</object-name>
+    <object-name>mr_blur21</object-name>
+    <object-name>mr_blur22</object-name>
+    <object-name>mr_blur23</object-name>
+    <object-name>Rotor-Pale-Base</object-name>
+    <object-name>Rotor-Pale-Fix</object-name>
+    <object-name>Rotor-Pale-Rot</object-name>
+    <object-name>Rotor-Pale-Cable</object-name>
+    <property>fdm/jsbsim/systems/rotor/pale2flap-deg</property>
+    <center>
+      <x-m> -0.11900 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 1 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <!-- the damper cable stays on its far end -->
+  <animation>
+    <type>rotate</type>
+    <object-name>Rotor-Pale-Cable</object-name>
+    <property>fdm/jsbsim/systems/rotor/pale2flap-deg</property>
+    <center>
+      <x-m> -0.76771 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.06164 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> -1 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <!-- pitch about the feathering axis: collective and cyclic, leading edge up + -->
+  <animation>
+    <type>rotate</type>
+    <object-name>Rotor-Pale</object-name>
+    <object-name>tRotor-Pale-S0</object-name>
+    <object-name>tRotor-Pale-S1</object-name>
+    <object-name>tRotor-Pale-S2</object-name>
+    <object-name>tRotor-Pale-S3</object-name>
+    <object-name>tRotor-Pale-S4</object-name>
+    <object-name>tRotor-Pale-S5</object-name>
+    <object-name>tRotor-Pale-S6</object-name>
+    <object-name>tRotor-Pale-S7</object-name>
+    <object-name>Rotor-Pale-Base</object-name>
+    <property>/rotors/main/blade[2]/incidence-deg</property>
+    <center>
+      <x-m> 0.00000 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00000 </z-m>
+    </center>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <!-- the tips break off in a crash (as the original) -->
+  <animation>
+    <type>select</type>
+    <object-name>Rotor-Pale-S4</object-name>
+    <object-name>Rotor-Pale-S5</object-name>
+    <object-name>Rotor-Pale-S6</object-name>
+    <object-name>Rotor-Pale-S7</object-name>
+    <object-name>tRotor-Pale-S4</object-name>
+    <object-name>tRotor-Pale-S5</object-name>
+    <object-name>tRotor-Pale-S6</object-name>
+    <object-name>tRotor-Pale-S7</object-name>
+    <condition>
+      <property>fdm/jsbsim/systems/crash-detect/aero-on</property>
+    </condition>
+  </animation>
+
+</PropertyList>

@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<system name="Alouette III controls">
+<property value="0">/controls/engines/engine[0]/throttle</property>
+<property value="0">/controls/al3/invert-collective</property>
+<property value="0">/controls/al3/collective</property>
+<property value="-1">ctl/throttle-prev</property>
+<property value="0">ctl/init</property>
+<property value="0">systems/amelia/pitch-cmd</property>
+<property value="0">systems/amelia/roll-cmd</property>
+<property value="0">systems/amelia/yaw-cmd</property>
+<property value="0">autopilot/ap-pitch-cmd</property>
+<property value="0">autopilot/ap-roll-cmd</property>
+<property value="0">autopilot/ap-yaw-cmd</property>
+<property value="0">gear/NWS/engaged</property>
+<channel name="mirror">
+<fcs_function name="mir/velocities-v-aero-fps"><description>mirror image</description><function><product><value>-1</value><property>velocities/v-aero-fps</property></product></function></fcs_function>
+<fcs_function name="mir/velocities-p-aero-rad_sec"><description>mirror image</description><function><product><value>-1</value><property>velocities/p-aero-rad_sec</property></product></function></fcs_function>
+<fcs_function name="mir/velocities-r-aero-rad_sec"><description>mirror image</description><function><product><value>-1</value><property>velocities/r-aero-rad_sec</property></product></function></fcs_function>
+<fcs_function name="mir/velocities-p-rad_sec"><description>mirror image</description><function><product><value>-1</value><property>velocities/p-rad_sec</property></product></function></fcs_function>
+<fcs_function name="mir/velocities-r-rad_sec"><description>mirror image</description><function><product><value>-1</value><property>velocities/r-rad_sec</property></product></function></fcs_function>
+<fcs_function name="mir/accelerations-pdot-rad_sec2"><description>mirror image</description><function><product><value>-1</value><property>accelerations/pdot-rad_sec2</property></product></function></fcs_function>
+<fcs_function name="mir/accelerations-rdot-rad_sec2"><description>mirror image</description><function><product><value>-1</value><property>accelerations/rdot-rad_sec2</property></product></function></fcs_function>
+<fcs_function name="mir/accelerations-Ny"><description>mirror image</description><function><product><value>-1</value><property>accelerations/Ny</property></product></function></fcs_function>
+<fcs_function name="mir/attitude-phi-rad"><description>mirror image</description><function><product><value>-1</value><property>attitude/phi-rad</property></product></function></fcs_function>
+<fcs_function name="mir/inertia-cg-y-in"><description>mirror image</description><function><product><value>-1</value><property>inertia/cg-y-in</property></product></function></fcs_function>
+</channel>
+<channel name="pilot">
+<fcs_function name="ctl/init-fast"><function><ifthen><lt><property>simulation/sim-time-sec</property><value>1</value></lt><value>1</value><min><value>1</value><max><value>0</value><property>ctl/init</property></max></min></ifthen></function></fcs_function>
+<fcs_function name="ctl/collective-next"><function><max><value>0</value><min><value>1</value><ifthen><min><gt><abs><difference><property>/controls/engines/engine[0]/throttle</property><property>ctl/throttle-prev</property></difference></abs><value>1e-06</value></gt><gt><property>ctl/throttle-prev</property><value>-0.5</value></gt></min><sum><property>/controls/engines/engine[0]/throttle</property><product><property>/controls/al3/invert-collective</property><difference><value>1</value><product><value>2</value><property>/controls/engines/engine[0]/throttle</property></product></difference></product></sum><property>/controls/al3/collective</property></ifthen></min></max></function><output>/controls/al3/collective</output></fcs_function>
+<fcs_function name="ctl/throttle-sync"><description>the throttle in step with the collective</description><function><sum><property>/controls/al3/collective</property><product><property>/controls/al3/invert-collective</property><difference><value>1</value><product><value>2</value><property>/controls/al3/collective</property></product></difference></product></sum></function><output>/controls/engines/engine[0]/throttle</output><output>ctl/throttle-prev</output></fcs_function>
+<fcs_function name="ctl/coll-norm"><description>collective lever, 0 down .. 1 up (FlightGear: the throttle axis, inverted by option)</description><function><property>/controls/al3/collective</property></function><clipto><min>0</min><max>1</max></clipto></fcs_function>
+<fcs_function name="ctl/lon-norm"><description>+ forward</description><function><sum><property>fcs/elevator-cmd-norm</property><property>fcs/pitch-trim-cmd-norm</property><property>systems/amelia/pitch-cmd</property><product><value>5.8823529</value><property>autopilot/ap-pitch-cmd</property></product></sum></function><clipto><min>-1</min><max>1</max></clipto></fcs_function>
+<fcs_function name="ctl/lat-norm"><description>+ right</description><function><sum><property>fcs/aileron-cmd-norm</property><property>fcs/roll-trim-cmd-norm</property><property>systems/amelia/roll-cmd</property><product><value>14.705882</value><property>autopilot/ap-roll-cmd</property></product></sum></function><clipto><min>-1</min><max>1</max></clipto></fcs_function>
+<fcs_function name="ctl/ped-norm"><description>+ right</description><function><product><value>-1</value><sum><property>fcs/rudder-cmd-norm</property><property>fcs/yaw-trim-cmd-norm</property><property>systems/amelia/yaw-cmd</property><product><value>5.5555556</value><property>autopilot/ap-yaw-cmd</property></product></sum></product></function><clipto><min>-1</min><max>1</max></clipto></fcs_function>
+<fcs_function name="ctl/gear-down"><function><value>1</value></function><output>gear/gear-pos-norm</output></fcs_function>
+<fcs_function name="ctl/nose-castered"><function><lt><property>gear/NWS/engaged</property><value>0.5</value></lt></function><output>gear/unit[2]/castered</output></fcs_function>
+</channel>
+<channel name="rigging">
+<fcs_function name="ctl/theta0-cmd-deg"><description>blade pitch at the shaft, deg</description><function><sum><value>3.38</value><product><value>16</value><property>ctl/coll-norm</property></product></sum></function></fcs_function>
+<fcs_function name="ctl/B1s-cmd-deg"><description>longitudinal cyclic, + forward</description><function><sum><value>2</value><product><value>12</value><property>ctl/lon-norm</property></product></sum></function></fcs_function>
+<fcs_function name="ctl/A1s-cmd-deg"><description>lateral cyclic, + right (the real aircraft)</description><function><sum><value>0</value><product><value>7</value><property>ctl/lat-norm</property></product></sum></function></fcs_function>
+<fcs_function name="ctl/thetaTR-cmd-deg"><description>tail rotor blade pitch, + thrust to the left (anti-torque); right pedal +</description><function><sum><value>7</value><product><value>15</value><property>ctl/ped-norm</property></product></sum></function></fcs_function>
+</channel>
+<channel name="servos">
+<second_order_filter name="ctl/B1s-deg"><input>ctl/B1s-cmd-deg</input><c1>0</c1><c2>0</c2><c3>1</c3><c4>0.0002081</c4><c5>0.02</c5><c6>1</c6></second_order_filter>
+<second_order_filter name="ctl/A1s-deg"><input>ctl/A1s-cmd-deg</input><c1>0</c1><c2>0</c2><c3>1</c3><c4>0.0002081</c4><c5>0.02</c5><c6>1</c6></second_order_filter>
+<second_order_filter name="ctl/theta0-deg"><input>ctl/theta0-cmd-deg</input><c1>0</c1><c2>0</c2><c3>1</c3><c4>0.0002081</c4><c5>0.02</c5><c6>1</c6></second_order_filter>
+<second_order_filter name="ctl/thetaTR-deg"><input>ctl/thetaTR-cmd-deg</input><c1>0</c1><c2>0</c2><c3>1</c3><c4>0.0002081</c4><c5>0.02</c5><c6>1</c6></second_order_filter>
+</channel>
+<channel name="sensors">
+<fcs_function name="sens/coll-pct"><function><product><value>100</value><property>ctl/coll-norm</property></product></function></fcs_function>
+</channel>
+</system>
