@@ -217,7 +217,7 @@
 
  <controls>
 	<engines>
-                <!-- the collective: the throttle axis, inverted by default (full throttle the lever at the bottom); the
+                <!-- the collective: the throttle axis, not inverted by default (full throttle the lever at the top; invert-collective below flips it); the
                      flight model keeps the throttle in step with the collective (/controls/al3/collective) -->
                 <engine n="0">
                         <throttle>1</throttle>
@@ -225,7 +225,7 @@
 	</engines>
 	<al3>
 		<!-- 1: the collective is 1 - throttle (Configuration dialog: Invert collective axis) -->
-		<invert-collective type="bool">true</invert-collective>
+		<invert-collective type="bool">false</invert-collective>
 		<collective type="double">0</collective>
 	</al3>
         <gear>

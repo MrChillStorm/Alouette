@@ -25,8 +25,8 @@ helper.add("fdm/jsbsim/propulsion/engine[0]/b1-rad");
 # model's own state (lit, at idle, the clutch engaged), so the start goes at the model's pace; the waits between them are
 # the recording's. Running it again starts over.
 # The collective lever is held at the bottom for the whole start, as in the cockpit. A throttle axis on a joystick or a
-# throttle quadrant sets the collective whenever it sends a value (inverted, so a lever resting at its back end is
-# collective nearly up); with the collective up the rotor's load balances the slipping clutch's torque at about 10 rad/s
+# throttle quadrant sets the collective whenever it sends a value (with Invert collective axis on, a lever resting at its
+# back end is collective nearly up); with the collective up the rotor's load balances the slipping clutch's torque at about 10 rad/s
 # and the rotor never catches up with the spool, so the start waited for the clutch for ever. The axis takes the
 # collective again at its next movement once the start is done.
 var START_LEVER_IDLE = 0.35;        # the lever's idle position (fdm/artouste.py LEVER_IDLE)

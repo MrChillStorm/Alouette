@@ -102,10 +102,11 @@ pointing at it), and pick **Sud Aviation SA 316B Alouette III (JSBSim)**.
   lights off and idles at about 16 330 rpm; advance the fuel flow lever and
   the clutch engages from 19 000 rpm of the engine, the rotor turning by about
   21 000 and running up to 353 rpm. The Alouette menu's autostart does it all.
-- **Collective** is the throttle axis, inverted: full throttle is the
-  collective at the bottom, so pulling the axis back raises it. Untick
-  *Invert collective axis* in the Alouette menu's Configuration dialog for
-  full throttle at the top (`/controls/al3/invert-collective`). The same menu
+- **Collective** is the throttle axis: full throttle is the collective at the
+  top, so pushing the axis forward raises it and a lever at its back stop is
+  collective down. Tick *Invert collective axis* in the Alouette menu's
+  Configuration dialog for full throttle at the bottom, so that pulling the
+  axis back raises it (`/controls/al3/invert-collective`). The same menu
   opens FlightGear's Input Devices dialog, which the Mac's menu bar may not
   show.
 - **Brakes.** A ground start sets the parking brake (`B` toggles it, as does
@@ -215,8 +216,9 @@ Josh, Thorsten Renk and Colin Geniet (3-D model, systems, Nasal). Changed in
   original cockpit's switches, levers and gauges, and its systems'
   properties, onto the new model, and holds and trims an in-air start.
 - **Collective.** The model's collective is `/controls/al3/collective`, which
-  the throttle axis sets when it moves (inverted by default: the set file's
-  `/controls/al3/invert-collective`, a checkbox in the Configuration dialog)
+  the throttle axis sets when it moves (inverted when the set file's
+  `/controls/al3/invert-collective`, off by default and a checkbox in the
+  Configuration dialog, is on)
   and which is otherwise mirrored back onto the throttle. The cockpit lever
   (`Models/Alouette-III_Cockpit_Command.xml`) and Amelia (`Nasal/crew.nas`)
   use it in place of the throttle.
