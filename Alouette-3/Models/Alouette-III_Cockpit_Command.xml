@@ -1052,8 +1052,8 @@
 	    <object-name>PiCJ2</object-name>
 	    <object-name>PiCJ1</object-name>
 	    <property>/controls/al3/collective</property>	    
-            <factor>-18</factor>
-	    <offset-deg>-0</offset-deg>
+            <factor>18</factor>
+	    <offset-deg>-18</offset-deg>
             <center>
                 <x-m>-1.47019</x-m>
                 <y-m>-0.0</y-m>
@@ -1071,8 +1071,8 @@
             <type>rotate</type>
             <object-name>PiCJ6</object-name>
             <property>/controls/al3/collective</property>
-	     <offset-deg>0</offset-deg>
-            <factor>16</factor>
+	     <offset-deg>16</offset-deg>
+            <factor>-16</factor>
             <center>
                 <x-m>-1.46242</x-m>
                 <y-m>0</y-m>
@@ -1090,8 +1090,8 @@
             <type>rotate</type>
             <object-name>PiCJ5</object-name>
             <property>/controls/al3/collective</property>
-	     <offset-deg>0</offset-deg>
-            <factor>12</factor>
+	     <offset-deg>12</offset-deg>
+            <factor>-12</factor>
             <center>
                 <x-m>-1.46121</x-m>
                 <y-m>0</y-m>
@@ -1109,8 +1109,8 @@
             <type>rotate</type>
             <object-name>PiCJ4</object-name>
             <property>/controls/al3/collective</property>
-	     <offset-deg>0</offset-deg>
-            <factor>8</factor>
+	     <offset-deg>8</offset-deg>
+            <factor>-8</factor>
             <center>
                 <x-m>-1.46267</x-m>
                 <y-m>0</y-m>
@@ -1127,8 +1127,8 @@
             <type>rotate</type>
             <object-name>PiCJ3</object-name>
             <property>/controls/al3/collective</property>
-	     <offset-deg>0</offset-deg>
-            <factor>5</factor>
+	     <offset-deg>5</offset-deg>
+            <factor>-5</factor>
             <center>
                 <x-m>-1.46431</x-m>
                 <y-m>0</y-m>
@@ -1145,8 +1145,8 @@
             <type>rotate</type>
             <object-name>PiCJ2</object-name>
             <property>/controls/al3/collective</property>
-	     <offset-deg>0</offset-deg>
-            <factor>3</factor>
+	     <offset-deg>3</offset-deg>
+            <factor>-3</factor>
             <center>
                 <x-m>-1.46609</x-m>
                 <y-m>0</y-m>
@@ -1169,8 +1169,8 @@
 	    <object-name>CoPiCJ2</object-name>
 	    <object-name>CoPiCJ1</object-name>
 	    <property>/controls/al3/collective</property>	    
-            <factor>-20</factor>
-	    <offset-deg>-0</offset-deg>
+            <factor>20</factor>
+	    <offset-deg>-20</offset-deg>
             <center>
                 <x-m>-1.47019</x-m>
                 <y-m>-0.0</y-m>
@@ -1187,8 +1187,8 @@
             <type>rotate</type>
             <object-name>CoPiCJ6</object-name>
             <property>/controls/al3/collective</property>
-	     <offset-deg>0</offset-deg>
-            <factor>16</factor>
+	     <offset-deg>16</offset-deg>
+            <factor>-16</factor>
             <center>
                 <x-m>-1.46242</x-m>
                 <y-m>0</y-m>
@@ -1206,8 +1206,8 @@
             <type>rotate</type>
             <object-name>CoPiCJ5</object-name>
             <property>/controls/al3/collective</property>
-	     <offset-deg>0</offset-deg>
-            <factor>12</factor>
+	     <offset-deg>12</offset-deg>
+            <factor>-12</factor>
             <center>
                 <x-m>-1.46121</x-m>
                 <y-m>0</y-m>
@@ -1225,8 +1225,8 @@
             <type>rotate</type>
             <object-name>CoPiCJ4</object-name>
             <property>/controls/al3/collective</property>
-	     <offset-deg>0</offset-deg>
-            <factor>8</factor>
+	     <offset-deg>8</offset-deg>
+            <factor>-8</factor>
             <center>
                 <x-m>-1.46267</x-m>
                 <y-m>0</y-m>
@@ -1243,8 +1243,8 @@
             <type>rotate</type>
             <object-name>CoPiCJ3</object-name>
             <property>/controls/al3/collective</property>
-	     <offset-deg>0</offset-deg>
-            <factor>5</factor>
+	     <offset-deg>5</offset-deg>
+            <factor>-5</factor>
             <center>
                 <x-m>-1.46431</x-m>
                 <y-m>0</y-m>
@@ -1261,8 +1261,8 @@
             <type>rotate</type>
             <object-name>CoPiCJ2</object-name>
             <property>/controls/al3/collective</property>
-	     <offset-deg>0</offset-deg>
-            <factor>3</factor>
+	     <offset-deg>3</offset-deg>
+            <factor>-3</factor>
             <center>
                 <x-m>-1.46609</x-m>
                 <y-m>0</y-m>
