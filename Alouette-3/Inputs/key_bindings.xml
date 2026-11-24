@@ -190,6 +190,39 @@
          <min>0</min>
          <max>88</max>
     </binding>
+    <!-- Shift+w arrives as this key with the Shift modifier on some systems (a Windows desktop was seen sending
+         the lowercase code with Shift held, which key 87 never matches): the same as key 87 -->
+    <mod-shift>
+     <desc>Winch down</desc>
+     <repeatable type="bool">true</repeatable>
+     <binding>
+      <command>property-adjust</command>
+      <property>/sim/model/rescue-lift</property>
+      <step type="double">-0.01</step>
+      <min>0.0</min>
+      <max>1</max>
+     </binding>
+     <binding>
+      <command>property-adjust</command>
+      <property>/sim/winch/segments-reeled-in</property>
+      <step type="int">-1</step>
+      <min>0</min>
+      <max>88</max>
+     </binding>
+    </mod-shift>
+   </key>
+
+   <!-- Shift+v, the previous view: FlightGear binds it to key 86 (V) only, but a Windows desktop was seen sending the
+        lowercase code 118 with the Shift modifier held (nothing matched, the view did not move). The plain v, the next
+        view, stays FlightGear's own (its keyboard.xml); this adds only the Shifted one to the same key. -->
+   <key n="118">
+    <mod-shift>
+     <desc>Scroll in reverse through views</desc>
+     <binding>
+      <command>nasal</command>
+      <script>view.stepView(-1)</script>
+     </binding>
+    </mod-shift>
    </key>
 
    
