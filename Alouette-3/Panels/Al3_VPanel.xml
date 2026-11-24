@@ -26,7 +26,7 @@
             <path>Aircraft/Alouette-3/Instruments/Bezel.xml</path>
             <offsets>
                 <x-m>-0.000301468</x-m>
-                <y-m>-0.157376</y-m>
+                <y-m>0.0504375</y-m>
                 <z-m>0.0651907</z-m>
             </offsets>
     </model>
@@ -36,7 +36,7 @@
         <path>Aircraft/Alouette-3/Instruments/Attitude.xml</path>
         <offsets>
             <x-m>-0.059</x-m>
-            <y-m>-0.157376</y-m>
+            <y-m>0.0504375</y-m>
             <z-m>0.0651907</z-m>
         </offsets>
     </model>
@@ -72,7 +72,7 @@
     </model>
 
     <model>
-        <name>RPM</name>
+        <name>DME</name>
         <path>Aircraft/Alouette-3/Instruments/DME.xml</path>
         <offsets>
             <x-m>-0.000301468</x-m>
@@ -86,8 +86,8 @@
         <path>Aircraft/Alouette-3/Instruments/Bezel.xml</path>
         <offsets>
             <x-m>-0.000301468</x-m>
-            <y-m>-0.0504375</y-m>
-            <z-m>-0.055423</z-m>
+            <y-m>-0.157376</y-m>
+            <z-m>0.0651907</z-m>
         </offsets>
     </model>
 
@@ -96,8 +96,8 @@
         <path>Aircraft/Alouette-3/Instruments/ALT-AL_III.xml</path>
         <offsets>
             <x-m>-0.00938629</x-m>
-            <y-m>-0.0504375</y-m>
-            <z-m>-0.055423</z-m>
+            <y-m>-0.157376</y-m>
+            <z-m>0.0651907</z-m>
         </offsets>
     </model>
 
@@ -128,8 +128,8 @@
         <path>Aircraft/Alouette-3/Instruments/Bezel.xml</path>
         <offsets>
             <x-m>-0.000301468</x-m>
-            <y-m>0.0504375</y-m>
-            <z-m>0.0651907</z-m>
+            <y-m>-0.0504375</y-m>
+            <z-m>-0.055423</z-m>
         </offsets>
     </model>
 
@@ -138,8 +138,8 @@
         <path>Aircraft/Alouette-3/Instruments/HI-al3.xml</path>
         <offsets>
             <x-m>-0.000301468</x-m>
-            <y-m>0.0504375</y-m>
-            <z-m>0.0651907</z-m>
+            <y-m>-0.0504375</y-m>
+            <z-m>-0.055423</z-m>
         </offsets>
     </model>
 
