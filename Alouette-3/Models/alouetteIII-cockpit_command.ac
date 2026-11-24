@@ -25498,7 +25498,7 @@ kids 0
 OBJECT poly
 name "CoPi-Manche-Poignee"
 loc -1.84101 0.090718 0.121446
-texture "Instruments/knob-1.png"
+texture "knob-1.png"
 crease 45.000000
 numvert 2275
 0.00418437 0.0871775 0.015419
@@ -44871,7 +44871,7 @@ kids 0
 OBJECT poly
 name "Pi-Manche-Poignee"
 loc -1.84101 0.090718 -0.570117
-texture "Instruments/knob-1.png"
+texture "knob-1.png"
 crease 45.000000
 numvert 2146
 -0.00131869 0.0702899 -0.0308397
@@ -108752,7 +108752,7 @@ kids 0
 OBJECT poly
 name "Pi-Manche-Poignee_Land_Light_SW"
 loc -1.84101 0.090718 -0.570117
-texture "Instruments/knob-1.png"
+texture "knob-1.png"
 crease 45.000000
 numvert 193
 0.00418437 0.0871775 0.015419

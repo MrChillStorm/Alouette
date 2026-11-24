@@ -34,9 +34,9 @@
     <object-name>AR-GPorte-Poignee</object-name>
     <object-name>AV-DPorte-Poignee</object-name>
     <object-name>AV-DPorte-Struct1</object-name>
-    <object-name>AV-DPorte-Struct1.001</object-name>
+    <object-name>AV-DPorte-Struct-Trim</object-name>
     <object-name>AV-GPorte-Poignee</object-name>
-    <object-name>AV-GPorte-Struct1.002</object-name>
+    <object-name>AV-GPorte-Struct-Trim</object-name>
     <object-name>AV-Porte-StructFuse</object-name>
     <object-name>Ext-Fuselage-AVStruct</object-name>
     <object-name>Int-Fuselage</object-name>
@@ -233,7 +233,6 @@
             <inherits-from>Aircraft/Alouette-3/Models/Effects/reflect_rb-al3</inherits-from>
             <object-name>Fuselage</object-name>
 	     <object-name>Fuselage-AVStruc</object-name>
-	      <object-name>Fuselage-AVStrucB</object-name>
 	      <object-name>Hole0-Fuselage</object-name>
 	      <object-name>Hole1-Fuselage</object-name>
 	      <object-name>Hole2-Fuselage</object-name>
@@ -245,9 +244,7 @@
 	    <object-name>AR-DPorte-acsry</object-name>
 	    <object-name>AR-GPorte-acsry</object-name>
 	     <object-name>AV-Porte-StructFuse</object-name>
-	    <object-name>AV-GPorte-Struct</object-name>
             <object-name>AV-GPorte-Struct1</object-name>
-	    <object-name>AV-DPorte-Struct</object-name>
             <object-name>AV-DPorte-Struct1</object-name>
             <object-name>ARPorte-HRail</object-name>
 	    <object-name>Fuselage-TBeacon</object-name>
@@ -1324,8 +1321,7 @@
 	<animation>
             <type>rotate</type>
 	     <object-name>AV-GPorte-Struct1</object-name>
-            <object-name>AV-GPorte-Struct2</object-name>
-	    <object-name>AV-GPorte-Struct3</object-name>
+            <object-name>AV-GPorte-Struct-Trim</object-name>
            <object-name>AV-GPorte-Vitrage</object-name>
 	   <object-name>AV-GPorte-Poignee</object-name>
              <property>fdm/jsbsim/animation/left-door-pos-norm</property>
@@ -1379,8 +1375,7 @@
 	<animation>
             <type>rotate</type>
 	     <object-name>AV-DPorte-Struct1</object-name>
-            <object-name>AV-DPorte-Struct2</object-name>
-	    <object-name>AV-DPorte-Struct3</object-name>
+            <object-name>AV-DPorte-Struct-Trim</object-name>
            <object-name>AV-DPorte-Vitrage</object-name>
 	   <object-name>AV-DPorte-Poignee</object-name>
             <property>fdm/jsbsim/animation/right-door-pos-norm</property>

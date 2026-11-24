@@ -19,7 +19,7 @@
   <effect>
     <inherits-from>Models/Effects/cockpit-interior</inherits-from>
     <object-name>CoPi-DRudder-Pedal</object-name>
-    <object-name>CoPi-gRudder-Pedal</object-name>
+    <object-name>CoPi-GRudder-Pedal</object-name>
     <object-name>box.004</object-name>
     <object-name>box.005</object-name>
     <object-name>CoPi-Manche</object-name>

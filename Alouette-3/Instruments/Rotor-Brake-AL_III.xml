@@ -24,12 +24,12 @@
 	<animation>
 		<type>select</type>
                 <object-name>Brake-OFF</object-name>
-		<object-name>Temoin2MActif</object-name>
+		<object-name>Temoin2-close</object-name>
                 <object-name>Brake-ON</object-name>
-		<object-name>Temoin1-Actif</object-name>
+		<object-name>Temoin1-open</object-name>
 		<condition>
 			<greater-than>
-				<property>/systems/electrical/outputs/instr-ignition-switch</property>
+				<property>/fdm/jsbsim/electrical/outputs/instr-ignition-switch</property>
 				<value>27</value>
 			</greater-than>
 		</condition>

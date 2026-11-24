@@ -26,11 +26,4 @@
     <noise_strength>1</noise_strength>
   </parameters>
   
-  <technique n="4">
-   <pass>
-     <program>
-	  <fragment-shader n="0">Shaders/thrustflame-ALS-detailed.frag</fragment-shader>
-	 </program>
-   </pass>
-  </technique>
 </PropertyList>

@@ -22,7 +22,7 @@
             <attitude-indicator>
                     <name>attitude-indicator</name>
                     <number>0</number>
-                    <suction>/systems/vacuum[1]/suction-inhg</suction>
+                    <suction>/fdm/jsbsim/electrical/gyro-suction-inhg</suction>
             </attitude-indicator>
     
             <clock>
@@ -49,7 +49,7 @@
             <heading-indicator>
                     <name>heading-indicator</name>
                     <number>0</number>
-                    <suction>/systems/vacuum[1]/suction-inhg</suction>
+                    <suction>/fdm/jsbsim/electrical/gyro-suction-inhg</suction>
             </heading-indicator>
     
             <magnetic-compass>

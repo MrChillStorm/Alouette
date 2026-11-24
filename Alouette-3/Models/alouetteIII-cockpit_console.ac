@@ -2427,7 +2427,7 @@ kids 0
 OBJECT poly
 name "ParkFreins-base"
 loc -1.75217 -0.355179 -0.202317
-texture "Instruments/knob-1.png"
+texture "knob-1.png"
 crease 45.000000
 numvert 48
 0.153482 -0.0976187 0.0238764
@@ -2707,7 +2707,7 @@ kids 0
 OBJECT poly
 name "ParkFreins-Cde"
 loc -1.75217 -0.466395 -0.202317
-texture "Instruments/knob-1.png"
+texture "knob-1.png"
 crease 45.000000
 numvert 270
 0.149178 0.0929503 0.0388032

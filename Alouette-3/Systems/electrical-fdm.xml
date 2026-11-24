@@ -121,6 +121,17 @@
             </test>
         </switch>
 
+        <!-- The gyro instruments (attitude indicator, heading indicator) are driven through their "suction": FlightGear's own
+             vacuum system takes it from the engine's rpm node, which this model (its engine is FCS functions, not a JSBSim
+             engine) never sets, so they never spun up. The real instruments are electric: full power (5 inHg stands for
+             it) with the avionics bus alive. Instruments/instrumentation.xml reads this property. -->
+        <switch name="electrical/gyro-suction-inhg">
+            <default value="0"/>
+            <test logic="OR" value="5">
+                electrical/bus/master-avionic-volts GT 20
+            </test>
+        </switch>
+
         <switch name="master avionics">
             <default value="0"/>
             <test  logic="OR" value="1">
