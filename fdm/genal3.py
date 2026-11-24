@@ -1024,7 +1024,7 @@ def cockpit():
     o.fn('cockpit/lon-rad', M(v(1 / R2D), p('ctl/B1s-deg')), out=['propulsion/engine/longitudinal-ctrl-rad', 'fcs/x-lon'])
     o.fn('cockpit/lat-rad', M(v(1 / R2D), p('ctl/A1s-deg')), out=['propulsion/engine/lateral-ctrl-rad', 'fcs/x-lat'])
     o.fn('cockpit/ped-rad', M(v(1 / R2D), p('ctl/thetaTR-deg')), out=['propulsion/engine[1]/antitorque-ctrl-rad', 'fcs/x-ped'])
-    # the collective pitch indicator (Instruments/Afficheur_Fake.xml): the blades' pitch at 0.7 R in radians
+    # the collective pitch indicator (Instruments/Afficheur.xml): the blades' pitch at 0.7 R in radians
     o.fn('cockpit/x-col', M(v(1 / R2D), S(p('ctl/theta0-deg'), v(U.twist(0.7 * U.R)))), out='fcs/x-col')
     # the original instrumentation's radar altimeter (Systems/instrumentation.xml) subtracts the CG's height above the wheels
     o.fn('cockpit/agl-offset', Q(D(p('inertia/cg-z-in'), v(U.model_to_station(*U.MAIN_WHEELS[0])[2])), v(12)), out='instruments/agl-offset-ref')

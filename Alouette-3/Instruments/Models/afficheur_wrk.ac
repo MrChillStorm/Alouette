@@ -1,8 +1,9 @@
 AC3Db
 MATERIAL "ac3dmat1" rgb 1 1 1  amb 0.2 0.2 0.2  emis 0 0 0  spec 0 0 0  shi 10  trans 0
 MATERIAL "ac3dmat1" rgb 1 1 1  amb 1 1 1  emis 0 0 0  spec 0 0 0  shi 10  trans 0
+MATERIAL "reminder" rgb 0.95 0.35 0.08  amb 0.2 0.2 0.2  emis 0 0 0  spec 0 0 0  shi 10  trans 0
 OBJECT world
-kids 10
+kids 11
 OBJECT poly
 name "Cadran"
 loc 0.00304311 0 9.31905e-11
@@ -17364,4 +17365,19 @@ refs 4
 79 0.188437 0.761433
 111 0.147774 0.703358
 45 0.135683 0.710339
+kids 0
+OBJECT poly
+name "MaxPitch"
+loc 0 0 0
+numvert 3
+0.000400 -0.032701 0.016878
+0.000400 -0.035384 0.020401
+0.000400 -0.037127 0.017025
+numsurf 1
+SURF 0x30
+mat 2
+refs 3
+0 0 0
+1 0 0
+2 0 0
 kids 0

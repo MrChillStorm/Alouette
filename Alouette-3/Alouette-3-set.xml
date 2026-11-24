@@ -298,6 +298,9 @@
     <al3sound>
         <file>Aircraft/Alouette-3/Nasal/al3listener.nas</file>
     </al3sound>
+    <al3pc>
+        <file>Aircraft/Alouette-3/Nasal/pitch_computer.nas</file>
+    </al3pc>
     <terrain>
         <file>Aircraft/Alouette-3/Nasal/terrain.nas</file>
     </terrain>

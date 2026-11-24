@@ -274,6 +274,19 @@ Josh, Thorsten Renk and Colin Geniet (3-D model, systems, Nasal). Changed in
   aircraft symbol, and the bank scale along the bottom of the dial
   (`AIDial.png`) with a pointer. The original's bracket and yellow-black
   horizon bar are left out; the original model, `attitudeV6.ac`, is kept.
+- **Collective pitch indicator and its computer** (`Instruments/Afficheur.xml`,
+  `Nasal/pitch_computer.nas`). The needle reads the blade pitch at the root
+  against the dial's own scale. The computer is the real unit's: its logarithmic
+  rings (300 degrees a decade, measured on the artwork) are turned from the
+  outside temperature and the pressure altitude, which gives the density
+  altitude of the standard atmosphere; the reminder triangle (orange here, set by
+  hand on the real dial) stands at the highest pitch for it, the dial's "Z km"
+  arc (.80 at sea level, 1 at 4.7 km); the weight scale then reads the weight
+  against any pitch. Nothing in it is taken from the flight model: at the
+  highest pitch it agrees with the manual's hover ceiling in ground effect (fig.
+  3-5) to 0.1 % at 1730 m, 0.4 % at 6470 m and 3 % at the chart's knee. If the
+  aircraft's rotor needs a different pitch for a weight, the aircraft is what is
+  wrong. The values are under `/instrumentation/pitch-computer/`.
 
 Everything else is as its authors made it; they are credited in the files
 themselves.
