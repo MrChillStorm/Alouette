@@ -63,8 +63,6 @@ var effect_manager = {
 	dust: 0.0,
 	is_water: 0,
 	is_snow: 0,
-	dust_color: [1.0, 1.0,1.0],
-	dust_color_last: [0.0, 0.0, 0.0],
 
 	# node reference pointers for faster property I/O
 
@@ -100,6 +98,26 @@ var effect_manager = {
 	nd_ref_dust_b: props.globals.getNode("/fdm/jsbsim/effects/dust-b", 1),
 
 	nd_ref_heatblur: props.globals.getNode("/fdm/jsbsim/effects/heatblur", 1),
+	nd_ref_dust: props.globals.getNode("/fdm/jsbsim/effects/dust", 1),
+	nd_ref_particle_size: props.globals.getNode("/fdm/jsbsim/effects/particle-size", 1),
+
+	# the inputs, read through node references as well
+	nd_agl: props.globals.getNode("/position/altitude-agl-ft", 1),
+	nd_alt_ft: props.globals.getNode("/position/altitude-ft", 1),
+	nd_gear_agl: props.globals.getNode("/position/gear-agl-m", 1),
+	nd_rotor_rpm: props.globals.getNode("/fdm/jsbsim/propulsion/engine/rotor-rpm", 1),
+	nd_engine_rpm: props.globals.getNode("/fdm/jsbsim/propulsion/engine/engine-rpm", 1),
+	nd_torque: props.globals.getNode("/fdm/jsbsim/propulsion/engine/torque-lbsft", 1),
+	nd_skydome: props.globals.getNode("/sim/rendering/shaders/skydome", 1),
+	nd_hdr: props.globals.getNode("/sim/rendering/hdr/hdr-enabled", 1),
+	nd_material: props.globals.getNode("/sim/al3/terrain-material", 1),         # terrain.nas
+	nd_snowlevel: props.globals.getNode("/environment/snow-level-m", 1),
+	nd_dustcover: props.globals.getNode("/environment/surface/dust-cover-factor", 1),
+	nd_wetness: props.globals.getNode("/environment/surface/wetness", 1),
+	nd_sun_angle: props.globals.getNode("/sim/time/sun-angle-rad", 1),
+
+	timer: nil,
+	hdr_last: -1,
 
 	init: func {
 		# define your lights here
@@ -187,26 +205,55 @@ var effect_manager = {
  
 		setprop("/sim/rendering/als-secondary-lights/lightspot/stretch", me.light1_stretch);
  
-		me.run = 1;		
+		me.run = 1;
+		if (me.timer == nil)
+			{
+			me.timer = maketimer(0.1, func { me.update(); });
+			me.timer.simulatedTime = 1;		# as settimer did: it waits while the simulation does
+			}
 		me.update();
- 
- 
+		me.timer.start();
+
 		},
- 
+
 	stop: func {
 		me.run = 0;
- 
-		},
- 
-	update: func {
- 
-		if (me.run == 0) {return;}
- 
-		var alt_agl = getprop("/position/altitude-agl-ft");
-		var rotor_rpm = getprop("/fdm/jsbsim/propulsion/engine/rotor-rpm");
-		var als_on = getprop("/sim/rendering/shaders/skydome");
+		if (me.timer != nil) {me.timer.stop();}
 
-		setprop("/position/gear-agl-m", alt_agl * 0.3048 - 0.72);
+		},
+
+	update: func {
+
+		if (me.run == 0) {return;}
+
+		var alt_agl = me.nd_agl.getValue();
+		var rotor_rpm = me.nd_rotor_rpm.getValue();
+		var als_on = me.nd_skydome.getValue();
+		var hdr = me.nd_hdr.getValue() or 0;
+
+		# FlightGear 2024.2's HDR renderer has none of the ALS's secondary lights, rotor wash, rain splash or frost level, and
+		# nothing reads them there: only the rotor's dust, the heat blur and the height of the gear above the ground (the
+		# particles' rate, the multiplayer's) are kept, and ten times a second is enough for them. The ALS pipelines get all of it
+		# every frame, as before.
+
+		if (hdr != me.hdr_last)
+			{
+			me.hdr_last = hdr;
+			me.timer.restart(hdr ? 0.1 : 0.0);
+			}
+
+		me.nd_gear_agl.setValue(alt_agl * 0.3048 - 0.72);
+
+		if (hdr)
+			{
+			if ((als_on == 1) and (alt_agl < 100.0))
+				{
+				me.terrain_probe(me.nd_alt_ft.getValue() * 0.3048);
+				me.set_dust();
+				}
+			if (als_on == 1) {me.set_heatblur();}
+			return;
+			}
 
 		# lights and wash we only need to do close to the ground when ALS is on
 
@@ -282,7 +329,7 @@ var effect_manager = {
 
 			# rotor particle dust
 
-			me.terrain_probe(apos.lat(), apos.lon(), apos.alt());
+			me.terrain_probe(alt);
 			me.set_dust();
 
 
@@ -399,18 +446,19 @@ var effect_manager = {
 
 			me.nd_ref_frost_level.setValue(me.frost);
 
-			var turbine_rpm = getprop("/fdm/jsbsim/propulsion/engine/engine-rpm");
-
-			turbine_rpm = turbine_rpm / 5000.0;
-			if (turbine_rpm > 1.0) {turbine_rpm = 1.0;}
-
-			me.nd_ref_heatblur.setValue(turbine_rpm * 0.4);
+			me.set_heatblur();
 			}
-
- 
-		settimer ( func me.update(), 0.0);
 		},
- 
+
+	set_heatblur: func {
+
+		var turbine_rpm = me.nd_engine_rpm.getValue() / 5000.0;
+		if (turbine_rpm > 1.0) {turbine_rpm = 1.0;}
+
+		var heatblur = turbine_rpm * 0.4;
+		if (me.nd_ref_heatblur.getValue() != heatblur) {me.nd_ref_heatblur.setValue(heatblur);}
+		},
+
  
 	light1_on : func {
  		if (me.light1_is_on == 1) {return;}
@@ -477,125 +525,109 @@ var effect_manager = {
 		},
 
 
-	terrain_probe: func (lat, lon, alt) {
-		
-		var info = geodinfo(lat, lon);
-		if ((info != nil) and (info[1] != nil))
+	# the ground's dust factor from the material terrain.nas found under the aircraft (the first of its names), and the
+	# weather: alt is the aircraft's height above sea level in metres
+	terrain_probe: func (alt) {
+
+		var material = me.nd_material.getValue() or "";			# (not yet there when this file loads)
+		if (contains(landcover_map, material))
+			{me.dust = landcover_map[material];}
+		else
+			{me.dust = 0.2;}
+
+		if (me.dust > 2.99)
 			{
-	 		if (contains(landcover_map,info[1].names[0])) 
-				{me.dust = landcover_map[info[1].names[0]];}
-			else 
-				{me.dust = 0.2;}
-		
+			me.is_snow = 1;
+			me.is_water = 0;
+			me.dust = 2.0 * (me.dust - 2.0);
+			}
+		else if (me.dust > 1.99)
+			{
+			me.is_water = 1;
+			me.is_snow = 0;
+			me.dust = 3.0 * (me.dust - 1.0);
 			}
 		else
 			{
-			me.dust = 0.2;	
+			me.dust = 2.0 * me.dust;
+			me.is_snow = 0;
+			me.is_water = 0;
 			}
 
-			if (me.dust > 2.99)
-				{
-				me.is_snow = 1;
-				me.is_water = 0;
-				me.dust = 2.0 * (me.dust - 2.0);
-				}
-			else if (me.dust > 1.99)
-				{
-				me.is_water = 1;
-				me.is_snow = 0;
-				me.dust = 3.0 * (me.dust - 1.0);
-				}
-			else
-				{
-				me.dust = 2.0 * me.dust;
-				me.is_snow = 0;
-				me.is_water = 0;
-				}
-				
-         		var snowlevel = getprop("/environment/snow-level-m");
-			var dustcover = getprop("/environment/surface/dust-cover-factor");
-			var wetness = getprop("/environment/surface/wetness");
+		var snowlevel = me.nd_snowlevel.getValue();
+		var dustcover = me.nd_dustcover.getValue();
+		var wetness = me.nd_wetness.getValue();
 
-			if ((alt  > snowlevel) and (me.is_water == 0))
-				{
-				me.is_snow = 1;
-				}
-			else if ((wetness > 0.3) and (me.is_snow == 0))
-				{
-				me.is_water = 1;
-				}
+		if ((alt  > snowlevel) and (me.is_water == 0))
+			{
+			me.is_snow = 1;
+			}
+		else if ((wetness > 0.3) and (me.is_snow == 0))
+			{
+			me.is_water = 1;
+			}
 
-			if (me.is_snow == 1)
-				{
-				me.dust = 2.0 * (me.dust + 1.0);
-				}
-			else if (me.is_water == 1)
-				{
-				me.dust = 3.5 * me.dust + 1.0 * wetness ;
-				}
-			else
-				{
-				me.dust = me.dust + 3.5 * dustcover;
-				}
+		if (me.is_snow == 1)
+			{
+			me.dust = 2.0 * (me.dust + 1.0);
+			}
+		else if (me.is_water == 1)
+			{
+			me.dust = 3.5 * me.dust + 1.0 * wetness ;
+			}
+		else
+			{
+			me.dust = me.dust + 3.5 * dustcover;
+			}
 		},
 
 
-		set_dust: func {
+	set_dust: func {
 
+		var torque = me.nd_torque.getValue();
 
-			var torque = getprop("/fdm/jsbsim/propulsion/engine/torque-lbsft");
+		var size = 0.04 * math.sqrt(math.abs(torque)) + 0.8  + 0.00000004 * math.pow(torque, 2.0);
+		size *= me.dust;
+		if (me.nd_ref_dust.getValue() != me.dust) {me.nd_ref_dust.setValue(me.dust);}
+		if (me.nd_ref_particle_size.getValue() != size) {me.nd_ref_particle_size.setValue(size);}
 
-			var size = 0.04 * math.sqrt(math.abs(torque)) + 0.8  + 0.00000004 * math.pow(torque, 2.0);
-			size *= me.dust;
-			setprop("/fdm/jsbsim/effects/dust", me.dust);
-			setprop("/fdm/jsbsim/effects/particle-size", size);
-			
-			if ((me.is_snow) or (me.is_water))
-				{
-				me.dust_color = [1.0, 1.0, 1.0];
-				}
-			else 
-				{
-				me.dust_color = [0.75, 0.75, 0.6];
-				}
-			# (the ALS renderer's scene light; FlightGear 2024.2's HDR renderer has none: then the sun's elevation)
-			var diffuse = getprop("/rendering/scene/diffuse/red");
-			if (diffuse == nil)
-				{
-				var sun = getprop("/sim/time/sun-angle-rad") or 0.0;
-				diffuse = math.max(0.1, math.min(0.8, 0.8 * math.cos(sun) + 0.1));
-				}
-			var scenelight = 1.2 * diffuse;
-			if (me.light1_is_on == 1)
-				{
-				scenelight+= 0.5;
-				}
+		var r = 0.75;
+		var g = 0.75;
+		var b = 0.6;
+		if ((me.is_snow) or (me.is_water))
+			{
+			r = 1.0;
+			g = 1.0;
+			b = 1.0;
+			}
 
-			if (scenelight > 1.0) {scenelight = 1.0;}
+		# (the ALS renderer's scene light; FlightGear 2024.2's HDR renderer has none: then the sun's elevation)
+		var diffuse = getprop("/rendering/scene/diffuse/red");
+		if (diffuse == nil)
+			{
+			var sun = me.nd_sun_angle.getValue() or 0.0;
+			diffuse = math.max(0.1, math.min(0.8, 0.8 * math.cos(sun) + 0.1));
+			}
+		var scenelight = 1.2 * diffuse;
+		if (me.light1_is_on == 1)
+			{
+			scenelight+= 0.5;
+			}
 
-			me.dust_color[0] *= scenelight;
-			me.dust_color[1] *= scenelight;
-			me.dust_color[2] *= scenelight;
+		if (scenelight > 1.0) {scenelight = 1.0;}
 
-			if (me.dust_color[0] != me.dust_color_last[0])
-				{
-				me.nd_ref_dust_r.setValue(me.dust_color[0]);
-				me.dust_color_last[0] = me.dust_color[0];
-				}
-			if (me.dust_color[1] != me.dust_color_last[1])
-				{
-				me.nd_ref_dust_g.setValue(me.dust_color[1]);
-				me.dust_color_last[1] = me.dust_color[1];
-				}
-			if (me.dust_color[2] != me.dust_color_last[2])
-				{
-				me.nd_ref_dust_b.setValue(me.dust_color[2]);
-				me.dust_color_last[2] = me.dust_color[2];
-				}
+		r *= scenelight;
+		g *= scenelight;
+		b *= scenelight;
+
+		# compared with the property itself: the flight model's reset puts its own values back
+		if (me.nd_ref_dust_r.getValue() != r) {me.nd_ref_dust_r.setValue(r);}
+		if (me.nd_ref_dust_g.getValue() != g) {me.nd_ref_dust_g.setValue(g);}
+		if (me.nd_ref_dust_b.getValue() != b) {me.nd_ref_dust_b.setValue(b);}
 
 		},
 
- 
+
 };
 
 
