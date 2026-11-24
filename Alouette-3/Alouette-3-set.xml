@@ -154,7 +154,7 @@
                             <z-offset-m archive="y">-1.45</z-offset-m><!--back-->
                             <heading-offset-deg>0</heading-offset-deg>
                             <pitch-offset-deg>-14</pitch-offset-deg>
-                            <default-field-of-view-deg type="double">75.0</default-field-of-view-deg>
+                            <default-field-of-view-deg type="double">90.0</default-field-of-view-deg>
                 </config>
         </view>
         <view n="100">

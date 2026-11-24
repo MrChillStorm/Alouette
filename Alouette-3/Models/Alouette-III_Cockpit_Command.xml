@@ -81,7 +81,7 @@
             <object-name>Pi-GRudder</object-name>
             <!--<property>/controls/flight/rudder</property>
             <factor>27</factor>-->
-	    <property>animation/pedal-deflection-deg</property>
+	    <property>/fdm/jsbsim/animation/pedal-deflection-deg</property>
             <factor>1</factor>
             <center>
                 <x-m>-2.21566</x-m>
@@ -100,7 +100,7 @@
             <object-name>Pi-GRudder-Pedal</object-name>
             <!--<property>/controls/flight/rudder</property>
             <factor>-27</factor>-->
-	    <property>animation/pedal-deflection-deg</property>
+	    <property>/fdm/jsbsim/animation/pedal-deflection-deg</property>
             <factor>-1</factor>
             <center>
                 <x-m>-2.34903</x-m>
@@ -123,7 +123,7 @@
             <object-name>Pi-DRudder</object-name>
             <!--<property>/controls/flight/rudder</property>
             <factor>-27</factor>-->
-	    <property>animation/pedal-deflection-deg</property>
+	    <property>/fdm/jsbsim/animation/pedal-deflection-deg</property>
             <factor>-1</factor>
             <center>
                 <x-m>-2.21566</x-m>
@@ -142,7 +142,7 @@
             <object-name>Pi-DRudder-Pedal</object-name>
             <!--<property>/controls/flight/rudder</property>
             <factor>27</factor>-->
-	    <property>animation/pedal-deflection-deg</property>
+	    <property>/fdm/jsbsim/animation/pedal-deflection-deg</property>
             <factor>1</factor>
 	     <center>
                 <x-m>-2.34903</x-m>
@@ -161,7 +161,7 @@
             <object-name>CoPi-GRudder</object-name>
             <!--<property>/controls/flight/rudder</property>
             <factor>27</factor>-->
-	    <property>animation/pedal-deflection-deg</property>
+	    <property>/fdm/jsbsim/animation/pedal-deflection-deg</property>
             <factor>1</factor>
             <center>
                 <x-m>-2.21566</x-m>
@@ -179,7 +179,7 @@
             <object-name>CoPi-GRudder-Pedal</object-name>
             <!--<property>/controls/flight/rudder</property>
             <factor>-27</factor>-->
-	    <property>animation/pedal-deflection-deg</property>
+	    <property>/fdm/jsbsim/animation/pedal-deflection-deg</property>
             <factor>-1</factor>
 	     <center>
                 <x-m>-2.34903</x-m>
@@ -199,7 +199,7 @@
             <object-name>CoPi-DRudder</object-name>
             <!--<property>/controls/flight/rudder</property>
             <factor>-27</factor>-->
-	    <property>animation/pedal-deflection-deg</property>
+	    <property>/fdm/jsbsim/animation/pedal-deflection-deg</property>
             <factor>-1</factor>
             <center>
                 <x-m>-2.21566</x-m>
@@ -218,7 +218,7 @@
             <object-name>CoPi-DRudder-Pedal</object-name>
             <!--<property>/controls/flight/rudder</property>
             <factor>27</factor>-->
-	    <property>animation/pedal-deflection-deg</property>
+	    <property>/fdm/jsbsim/animation/pedal-deflection-deg</property>
             <factor>1</factor>
 	   <center>
                 <x-m>-2.34903</x-m>
