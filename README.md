@@ -260,8 +260,11 @@ Josh, Thorsten Renk and Colin Geniet (3-D model, systems, Nasal). Changed in
 - **Test autopilot** (`Systems/al3-autopilot.xml`, set through
   `/autopilot/al3`), as the UH-60's.
 - **Set file.** Description, credits, the flight model and its rate, the
-  minimum FlightGear version (2024.2.0), the launcher's HDR flag, the fuel
-  tank's usable capacity (555 l of its 565 l).
+  minimum and checked FlightGear versions (2024.2.0), the launcher's HDR
+  flag, the fuel tank's usable capacity (555 l of its 565 l).
+- **Attitude indicator** (`Instruments/Attitude.xml`). The ball is textured
+  (`AIBall.png`, a quiet sky and ground texture) and moves with pitch and roll;
+  the horizon bar follows the horizon on it.
 
 Everything else is as its authors made it; they are credited in the files
 themselves.

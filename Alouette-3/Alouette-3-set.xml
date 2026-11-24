@@ -32,6 +32,9 @@
         <status>beta</status>
         <version>2026-11</version>
         <minimum-fg-version>2024.2.0</minimum-fg-version>
+        <!-- the newest FlightGear it has been run on: without it the launcher warns that the aircraft has not been
+             checked for the version in use -->
+        <compatible-fg-version>2024.2.0</compatible-fg-version>
         <tags>
           <tag>HDR</tag>
           <tag>helicopter</tag>

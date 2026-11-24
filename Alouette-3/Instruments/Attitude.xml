@@ -24,6 +24,7 @@ Property of Gerard Robin
       <object-name>Fleche</object-name>
       <object-name>Fleche-Fond</object-name>
       <object-name>Horizon</object-name>
+      <object-name>Ball</object-name>
       <property>orientation/roll-deg</property>
        <center>
                 <x-m>0</x-m>
@@ -40,13 +41,16 @@ Property of Gerard Robin
       <type>rotate</type>
       <object-name>Horizon</object-name>
       <property>orientation/pitch-deg</property>
+      <!-- the horizon bar follows the horizon on the ball (the "Ball" below: 1.1 mm of the ball's face a degree of
+           pitch, the bar 0.1128 m from the pivot, so 0.563 deg of its swing a degree), until it reaches the edge of
+           the opening at 15 deg of swing, 26.65 deg of pitch -->
       <interpolation>
         <entry>
             <ind>-180</ind>
             <dep>-15</dep>
         </entry>
         <entry>
-            <ind>-90</ind>
+            <ind>-26.65</ind>
             <dep>-15</dep>
         </entry>
         <entry>
@@ -54,7 +58,7 @@ Property of Gerard Robin
             <dep>0</dep>
         </entry>
         <entry>
-            <ind>90</ind>
+            <ind>26.65</ind>
             <dep>15</dep>
         </entry>
         <entry>
@@ -67,6 +71,20 @@ Property of Gerard Robin
             <y-m>0</y-m>
             <z-m>-0.014306</z-m>
         </center>
+      <axis>
+        <x>0</x>
+        <y>1</y>
+        <z>0</z>
+      </axis>
+    </animation>
+
+    <!-- the ball (AIBall.png, generated: the horizon in the middle of the texture, 10 deg of pitch 0.0535 of it): nose up shows
+         more of the sky in the middle of the opening, the horizon going down; it rolls with the animation above -->
+    <animation>
+      <type>textranslate</type>
+      <object-name>Ball</object-name>
+      <property>orientation/pitch-deg</property>
+      <factor>0.005352</factor>
       <axis>
         <x>0</x>
         <y>1</y>
