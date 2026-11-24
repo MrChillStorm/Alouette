@@ -101,7 +101,11 @@ pointing at it), and pick **Sud Aviation SA 316B Alouette III (JSBSim)**.
   released, battery, alternator and fuel pump on, then the starter. The engine
   lights off and idles at about 16 330 rpm; advance the fuel flow lever and
   the clutch engages from 19 000 rpm of the engine, the rotor turning by about
-  21 000 and running up to 353 rpm. The Alouette menu's autostart does it all.
+  21 000 and running up to 353 rpm. The Alouette menu's autostart does it all,
+  and holds the collective, the cyclic and the pedals neutral while it runs:
+  the clutch has little torque to spare while it slips, and controllers that do
+  not centre (a pedal axis at half travel is enough) otherwise stop the rotor
+  short of the engine. Your controls take over again at their next movement.
 - **Collective** is the throttle axis: full throttle is the collective at the
   top, so pushing the axis forward raises it and a lever at its back stop is
   collective down. Tick *Invert collective axis* in the Alouette menu's

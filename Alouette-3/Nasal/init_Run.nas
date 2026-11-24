@@ -24,29 +24,37 @@ helper.add("fdm/jsbsim/propulsion/engine[0]/b1-rad");
 # then the lever to its stop over some 18 s, spool and rotor rising together to governed. Each step waits for the flight
 # model's own state (lit, at idle, the clutch engaged), so the start goes at the model's pace; the waits between them are
 # the recording's. Running it again starts over.
-# The collective lever is held at the bottom for the whole start, as in the cockpit. A throttle axis on a joystick or a
-# throttle quadrant sets the collective whenever it sends a value (with Invert collective axis on, a lever resting at its
-# back end is collective nearly up); with the collective up the rotor's load balances the slipping clutch's torque at about 10 rad/s
-# and the rotor never catches up with the spool, so the start waited for the clutch for ever. The axis takes the
-# collective again at its next movement once the start is done.
+# The flight controls are held neutral for the whole start, as in the cockpit: the collective at the bottom, the cyclic
+# and the pedals centred. The clutch has little to spare while it slips (the spool holds at 80 % and its torque is
+# about 1 480 ft lb), and every load on the rotor takes from it: the main rotor at its collective's lowest, the tail
+# rotor through its gearbox (5.5 times the rotor's speed) and the cyclic's drag. Controllers with no centring rest where
+# they were left (a pedal axis at half travel put the tail rotor at 14.7 degrees, the tail rotor then taking a third of
+# the clutch's torque, and the rotor stopped at 68 % while the spool ran at 80 %); a throttle axis sets the collective
+# whenever it sends a value (with Invert collective axis on, a lever resting at its back end is collective nearly up).
+# So the properties are set to neutral every 0.25 s until the start is done; an axis takes its own again at its next
+# movement.
 var START_LEVER_IDLE = 0.35;        # the lever's idle position (fdm/artouste.py LEVER_IDLE)
 var START_IDLE_HOLD = 50.0;         # s at idle before the lever goes forward (the recording's 54)
 var START_LEVER_SLIP = 0.74;        # the governor's reference about 26 600 rpm: the recording's 77-80 % while the clutch slips
 var START_LOCKED_HOLD = 10.0;       # s with the rotor caught up before the last of the lever
 var START_FINAL_S = 18.0;           # s for the lever to its stop
-var _start = { stage: 0, t: 0.0, timer: nil, msg: nil };
+var _start = { stage: 0, t: 0.0, timer: nil, hold: nil, msg: nil };    # hold: the timer that keeps the controls neutral
 
 var _start_say = func(text) {
     if (_start.msg == nil) _start.msg = screen.window.new(nil, -210, 1, 15);
     _start.msg.write(text, 0.5, 1, 0.9);
 };
 
-var _start_collective_down = func {
+var _start_hold_controls = func {
     if ((getprop("/controls/al3/collective") or 0) != 0) setprop("/controls/al3/collective", 0);
+    foreach (var axis; ["rudder", "aileron", "elevator"]) {
+        var path = "/controls/flight/" ~ axis;
+        if (math.abs(getprop(path) or 0) > 0.0001) setprop(path, 0);
+    }
 };
 
 var _start_step = func {
-    _start_collective_down();
+    _start_hold_controls();
     var now = getprop("/sim/time/elapsed-sec");
     var n = getprop("fdm/jsbsim/eng/n-pct") or 0;
     var lit = getprop("fdm/jsbsim/eng/lit") or 0;
@@ -74,6 +82,7 @@ var _start_step = func {
         _start.stage = 7;
     } elsif (_start.stage == 7 and now - _start.t >= START_FINAL_S + 1.0) {
         _start.timer.stop();
+        _start.hold.stop();
         _start.stage = 0;
         _start_say("Rotor at governed speed.");
     }
@@ -81,6 +90,7 @@ var _start_step = func {
 
 var init_Run = func {
     if (_start.timer != nil) _start.timer.stop();
+    if (_start.hold != nil) _start.hold.stop();
     setprop("/fdm/jsbsim/animation/cockpit-left-door-pos-cmd", 0);
     setprop("/fdm/jsbsim/animation/cockpit-right-door-pos-cmd", 0);
     setprop("fdm/jsbsim/electrical/switch/battery", 1);
@@ -91,12 +101,14 @@ var init_Run = func {
     setprop("fdm/jsbsim/propulsion/engine[0]/cutoff", 0);
     setprop("fdm/jsbsim/fcs/nominal-flow-cmd", 0);                  # closed for the start
     setprop("fdm/jsbsim/animation/master-switch-cmd", 0);           # the starter takes a fresh press
-    _start_collective_down();
+    _start_hold_controls();
     _start.stage = 1;
     _start.t = getprop("/sim/time/elapsed-sec");
     _start.timer = maketimer(0.25, _start_step);
     _start.timer.start();
-    _start_say("Autostart: battery, alternator, rotor brake off, collective down; starter.");
+    _start.hold = maketimer(0.05, _start_hold_controls);            # 20 times a second: an axis that jitters gets only a moment
+    _start.hold.start();
+    _start_say("Autostart: battery, alternator, rotor brake off, controls neutral; starter.");
 };
 
 #display_helper();
