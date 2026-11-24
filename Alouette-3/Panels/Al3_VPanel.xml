@@ -13,6 +13,12 @@
     <path>Models/al3-panel.ac</path>
     <texture-path>Models/Textures</texture-path>
 
+    <!-- a black box behind the sheet, so that nothing outside shows through the instruments' openings -->
+    <model>
+        <name>BackBox</name>
+        <path>Aircraft/Alouette-3/Panels/Models/backbox-v.ac</path>
+    </model>
+
 <!--== ========Gauche=================-->
 
     <model>

@@ -1,90 +1,44 @@
 <?xml version="1.0"?>
 
 <!--Usable with FlightGear
-Property of Gerard Robin
-    Copyright License:  GPLv2-->
+Original instrument (attitudeV6.ac): property of Gerard Robin, Copyright License: GPLv2.
+
+This version (attitudeV7.ac) is drawn after photographs of the SFENA 42-86 gyro horizon, the instrument the SA 316B
+specification lists for IFR flight: a teal sky and a dark ground with white pitch lines across the ball and an orange
+horizon, a fixed orange aircraft symbol, the bank scale along the bottom of the dial with a pointer on it. The original's
+bracket and the yellow-black horizon bar are left out; the original model is kept as attitudeV6.ac.
+-->
 
   <PropertyList>
-    <path>Models/attitudeV6.ac</path>
+    <path>Models/attitudeV7.ac</path>
     <texture-path>Models/Textures</texture-path>
 
-
-    <animation include="Instrument-Light4.xml">
-        <object-name>Mark</object-name>
-        <object-name>Horizon</object-name>
-        <object-name>Fleche</object-name>
-    </animation>
-
-    <animation include="Instrument-Light3.xml">
-        <object-name>Cadran</object-name>
-        </animation>
-
+    <!-- the ball and the bank pointer roll with the aircraft -->
     <animation>
       <type>rotate</type>
-      <object-name>Fleche</object-name>
-      <object-name>Fleche-Fond</object-name>
-      <object-name>Horizon</object-name>
       <object-name>Ball</object-name>
+      <object-name>BankPtr</object-name>
       <property>orientation/roll-deg</property>
-       <center>
-                <x-m>0</x-m>
-                <y-m>0</y-m>
-                <z-m>0</z-m>
-        </center>
+      <center>
+        <x-m>0</x-m>
+        <y-m>0</y-m>
+        <z-m>0</z-m>
+      </center>
       <axis>
         <x>1</x>
         <y>0</y>
         <z>0</z>
       </axis>
     </animation>
-    <animation>
-      <type>rotate</type>
-      <object-name>Horizon</object-name>
-      <property>orientation/pitch-deg</property>
-      <!-- the horizon bar follows the horizon on the ball (the "Ball" below: 1.1 mm of the ball's face a degree of
-           pitch, the bar 0.1128 m from the pivot, so 0.563 deg of its swing a degree), until it reaches the edge of
-           the opening at 15 deg of swing, 26.65 deg of pitch -->
-      <interpolation>
-        <entry>
-            <ind>-180</ind>
-            <dep>-15</dep>
-        </entry>
-        <entry>
-            <ind>-26.65</ind>
-            <dep>-15</dep>
-        </entry>
-        <entry>
-            <ind>0</ind>
-            <dep>0</dep>
-        </entry>
-        <entry>
-            <ind>26.65</ind>
-            <dep>15</dep>
-        </entry>
-        <entry>
-            <ind>180</ind>
-            <dep>15</dep>
-        </entry>
-      </interpolation>
-       <center>
-           <x-m>-0.056363</x-m>
-            <y-m>0</y-m>
-            <z-m>-0.014306</z-m>
-        </center>
-      <axis>
-        <x>0</x>
-        <y>1</y>
-        <z>0</z>
-      </axis>
-    </animation>
 
-    <!-- the ball (AIBall.png, generated: the horizon in the middle of the texture, 10 deg of pitch 0.0535 of it): nose up shows
-         more of the sky in the middle of the opening, the horizon going down; it rolls with the animation above -->
+    <!-- the ball (AIBall.png, the horizon in the middle of the texture): the real ball's marks are laid out as on a sphere
+         seen from the front, a degree of pitch moving the horizon 0.79 mm of the face (0.003816 of the texture); nose up
+         shows more of the sky in the middle of the opening, the horizon going down -->
     <animation>
       <type>textranslate</type>
       <object-name>Ball</object-name>
       <property>orientation/pitch-deg</property>
-      <factor>0.005352</factor>
+      <factor>0.003816</factor>
       <axis>
         <x>0</x>
         <y>1</y>

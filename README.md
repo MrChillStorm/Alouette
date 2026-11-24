@@ -261,10 +261,15 @@ Josh, Thorsten Renk and Colin Geniet (3-D model, systems, Nasal). Changed in
   `/autopilot/al3`), as the UH-60's.
 - **Set file.** Description, credits, the flight model and its rate, the
   minimum and checked FlightGear versions (2024.2.0), the launcher's HDR
-  flag, the fuel tank's usable capacity (555 l of its 565 l).
-- **Attitude indicator** (`Instruments/Attitude.xml`). The ball is textured
-  (`AIBall.png`, a quiet sky and ground texture) and moves with pitch and roll;
-  the horizon bar follows the horizon on it.
+  and PBR compatibility flags, the fuel tank's usable capacity (555 l of its
+  565 l).
+- **Attitude indicator** (`Instruments/Attitude.xml`, `attitudeV7.ac`), drawn
+  after photographs of the SFENA 42-86 gyro horizon that the SA 316B
+  specification lists for IFR flight: a teal sky and dark ground with white
+  pitch lines and an orange horizon on the ball (`AIBall.png`), a fixed orange
+  aircraft symbol, and the bank scale along the bottom of the dial
+  (`AIDial.png`) with a pointer. The original's bracket and yellow-black
+  horizon bar are left out; the original model, `attitudeV6.ac`, is kept.
 
 Everything else is as its authors made it; they are credited in the files
 themselves.
