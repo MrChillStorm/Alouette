@@ -65,7 +65,12 @@ are in the report:
   rotor's, as much again, so the rotor speed hardly droops when you pull.
 - **Flight controls** with hydraulic servos and no stability augmentation, as
   the real aircraft. The original aircraft's autopilot (heading and altitude
-  holds) and Amelia, the co-pilot who hovers for the hoist, still work.
+  holds) and Amelia, the co-pilot who hovers for the hoist, still work. Not
+  modelled: the real tail rotor control has no servo and "incorporates a
+  hydraulic damper" (the type specification, section 7), and runs on cables and
+  a rod, so it has some play. Neither the damper's rate nor the play is
+  published in anything found, so the tail rotor takes the same servo response
+  as the other controls (the UH-60's, an assumption) and no play.
 - **Landing gear** with the 355×150-4 tyres' spring rates; the nose wheel
   castors.
 
