@@ -1,11 +1,28 @@
 <?xml version="1.0"?>
-<!-- the Alouette's glass: written by fdm/hdrmodel.py -->
+<!-- The Alouette's glass for the HDR pipeline: Effects/model-transparent with its fragment shader replaced by Shaders/HDR/glass.frag,
+     which has no sun or shadow term (a clear pane: the view through it a little darkened, the sky's and ground's reflection by
+     Fresnel). Used by the outer glass and the inner (cabin-side) layers; written by hand, fdm/hdrmodel.py edits the models
+     that use it. -->
 <PropertyList>
   <name>al3-glass</name>
-  <inherits-from>Effects/model-pbr-transparent</inherits-from>
+  <inherits-from>Effects/model-transparent</inherits-from>
   <parameters>
-    <base-color-factor type="vec4d">0.600 0.670 0.640 0.120</base-color-factor>
-    <metallic-factor type="float">1.000</metallic-factor>
-    <roughness-factor type="float">0.050</roughness-factor>
+    <!-- smooth: the reflection sharp -->
+    <pbr-roughness type="float">0.05</pbr-roughness>
+    <!-- the pane's tint: 12 % of the view is taken, 88 % passes -->
+    <glass-alpha type="float">0.12</glass-alpha>
   </parameters>
+
+  <technique n="128">
+    <pass>
+      <program>
+        <fragment-shader n="0">Aircraft/Alouette-3/Shaders/HDR/glass.frag</fragment-shader>
+      </program>
+      <uniform n="30">
+        <name>glass_alpha</name>
+        <type>float</type>
+        <value><use>glass-alpha</use></value>
+      </uniform>
+    </pass>
+  </technique>
 </PropertyList>

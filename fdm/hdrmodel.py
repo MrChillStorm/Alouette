@@ -18,14 +18,17 @@ sets /sim/rendering/hdr/hdr-enabled), as the Bo 105 and UH-60 models'.
   which swings out 30 deg as it lights (animation/landing-light-pos-norm), to 12 deg below the fuselage's axis.
 - Glass: the canopy, the door windows and the mirror (Models/alouetteIII_SC-ss_cockpit.ac) had no texture, a legacy
   chrome shader and the material's transparency, all of which the HDR pipeline leaves out: opaque grey there. They
-  get a plain white texture (Models/Textures/glass.png) and their own effect, Models/Effects/Glass/al3-glass: HDR's
-  physically based transparent shader (Effects/model-pbr-transparent) as the X-57 pilot's sunglasses,
-  with the tint and the opacity in its base colour (light, 28 % opaque: clear) and a smooth surface (roughness 0.04,
-  metallic 0.1) that reflects the sky and the sun, which is what makes it read as glass. Its surfaces are one-sided, facing out: seen from
+  get a plain white texture (Models/Textures/glass.png) and their own effect, Models/Effects/Glass/al3-glass (written
+  by hand, with its shader Shaders/HDR/glass.frag). FlightGear's transparent shaders
+  light a pane as a surface, with the sun and the shadow map, which lays a milky film over the view and shows the
+  frame's shadows on it; this one has only what clear glass has: the view through it a little darkened (12 %) and the
+  sky's and ground's reflection by Fresnel (4 % face on, all of it at a grazing angle), no sun term, no shadow lookup. Its surfaces are one-sided, facing out: seen from
   the cabin they are culled, and the inside of the glass is a second layer facing in (alouetteIII-windows.ac: the
   doors' windows; alouetteIII-glass-inner.ac: the canopy), which had the ALS glass shader, drawn opaque and dark by
   the HDR pipeline. It gets the same texture and effect: from outside the outer layer shows, from inside the inner
-  (the PBR shader culls back faces).
+  (the shader culls back faces). The inner layers lacked some of the outer's faces (8 pieces of the canopy, 5 faces of
+  each front door window), and both layers were panes with gaps of 2-5 cm between them: holes in the glass once it was
+  tinted. glassfill.py adds the faces and bridges the gaps.
 - The engine's heat blur (an ALS shader) is hidden under HDR likewise.
 
     python3 hdrmodel.py      writes Models/Lights/HDR, edits Models/Alouette-III-sc_jsb.xml (idempotent)
@@ -66,21 +69,15 @@ LIGHTS = [('nav-green', 'GreenLight.ac', (-2.199, 0.932, -0.486), (0, 1, 0), GRE
 HALO_OUT = {'nav-green': 0.011, 'nav-red': 0.011, 'beacon-top': 0.066, 'beacon-bottom': 0.068, 'tail': 0.024, 'landing': 0.033}
 HALO_SCALE = [(0, 0.15), (20, 0.35), (1500, 4.0)]      # m -> the halo's size (m)
 GLASS = ['Vitrage', 'AV-DPorte-Vitrage', 'AR-DPorte-Vitrage', 'AV-GPorte-Vitrage', 'AR-GPorte-Vitrage', 'rear-view mirror-glass']
-GLASS_RGBA = (255, 255, 255, 255)       # white: the effect's base colour gives the tint and the opacity
-# the glass's effect (HDR's transparent PBR shader blends the lit surface, the sun's and the sky's reflections included,
-# by its alpha). Glass shows itself by what it reflects, not by light it scatters: metallic 1 leaves the surface no
-# diffuse part, so no milky film over the view and no shadows cast on it (the shadow maps darken only the sun's
-# light, which a smooth reflector shows only in its glint). 12 % opaque (88 % of the view through it); the base colour
-# is the reflectance, a light grey-green, so that it reflects about 8 % face on (a pane's two faces) with a faint tint
-# and more towards grazing; smooth (roughness 0.05: the sun's glint sharp). (Before, a 28 % diffuse grey-green showed
-# cast shadows; the Bo 105's ALS glass under HDR: a dark grey film 9 % opaque. The X-57's sunglasses, dark: 0.045
-# 0.085 0.045 at 0.8, roughness 0.04.) From inside a pane reflects the cabin's side, which HDR's light probe fills
-# with the ground, so clean glass shows little there in daylight: 18 % on the inner layers changed the view through
-# them by 2-3 % (FlightGear, EFHK at noon in November).
+GLASS_RGBA = (255, 255, 255, 255)       # white: the glass objects' texture; the tint and the opacity are the effect's (Models/Effects/Glass/al3-glass.eff)
+# the glass's effect, Models/Effects/Glass/al3-glass.eff with Shaders/HDR/glass.frag, is written by hand: glass shows itself by
+# what it reflects, not by light it scatters, so the pane has no diffuse part, no sun term and no shadow lookup (no milky
+# film over the view, no shadows cast on it); 12 % opaque (88 % of the view through it), the reflection by Fresnel, a faint
+# grey-green cast in it. (Before: Effects/model-pbr-transparent with metallic 1, which still had the sun's glint under the
+# shadow map; before that a 28 % diffuse grey-green showed cast shadows; the Bo 105's ALS glass under HDR: a dark grey film
+# 9 % opaque.) From inside a pane reflects the cabin's side, which HDR's light probe fills with the ground, so clean glass
+# shows little there in daylight (FlightGear, EFHK at noon in November).
 GLASS_EFFECT = 'Aircraft/Alouette-3/Models/Effects/Glass/al3-glass'
-GLASS_BASE_COLOR = (0.60, 0.67, 0.64, 0.12)
-GLASS_METALLIC = 1.0
-GLASS_ROUGHNESS = 0.05
 MAIN_AC = os.path.join(MODELS, 'alouetteIII_SC-ss_cockpit.ac')
 GLOW_REF_M = HALO_SCALE[-1][0]
 PROCEDURAL = ['upper_beacon_red', 'lower_beacon_red', 'rear_beacon', 'flashlight_green', 'flashlight_red', 'landing_light_white']
@@ -251,13 +248,6 @@ def glass_ac():
             x = x.replace('<inherits-from>%s</inherits-from>' % old, '<inherits-from>%s</inherits-from>' % GLASS_EFFECT)
         open(p, 'w').write(x)
     Image.new('RGBA', (8, 8), GLASS_RGBA).save(os.path.join(MODELS, 'Textures', 'glass.png'))
-    open(os.path.join(MODELS, 'Effects', 'Glass', 'al3-glass.eff'), 'w').write(
-        '<?xml version="1.0"?>\n<!-- the Alouette\'s glass: written by fdm/hdrmodel.py -->\n<PropertyList>\n'
-        '  <name>al3-glass</name>\n  <inherits-from>Effects/model-pbr-transparent</inherits-from>\n  <parameters>\n'
-        '    <base-color-factor type="vec4d">%.3f %.3f %.3f %.3f</base-color-factor>\n'
-        '    <metallic-factor type="float">%.3f</metallic-factor>\n'
-        '    <roughness-factor type="float">%.3f</roughness-factor>\n  </parameters>\n</PropertyList>\n'
-        % (GLASS_BASE_COLOR + (GLASS_METALLIC, GLASS_ROUGHNESS)))
 
 
 def glass_xml(s):

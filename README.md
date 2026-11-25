@@ -282,12 +282,19 @@ Josh, Thorsten Renk and Colin Geniet (3-D model, systems, Nasal). Changed in
   alternating position lights, the anticollision beacons, the tail light and
   the searchlight, which swings out with its lamp; the ALS-only lights and heat
   blur are hidden there. The glass, both its outer and its inner (cabin-side)
-  layer, has its own physically based effect, as the X-57 pilot's
-  sunglasses: a pure reflector, 12 % opaque, with a faint grey-green tint in
-  its reflections (about 8 % face on, more toward grazing). It reflects the
-  sky and the sun's glint but scatters no light, so no milky film lies over
-  the view and no shadows fall on it. It replaces the old chrome and ALS glass
-  shaders, which the HDR renderer drew opaque. One- and
+  layer, has its own effect and shader (`Models/Effects/Glass/al3-glass.eff`,
+  `Shaders/HDR/glass.frag`): a
+  clear pane, 12 % opaque, that shows the sky's and the ground's reflection by
+  Fresnel (4 % face on, all of it at a grazing angle) with a faint grey-green
+  cast. FlightGear's transparent shaders also light a pane by the sun under the
+  shadow map, which lays a milky film over the view and shows the frame's
+  shadows on the glass; this one has no sun term and no shadow lookup, so
+  neither appears. It replaces the old chrome and ALS glass
+  shaders, which the HDR renderer drew opaque. The cabin-side layers lacked
+  some of the outer layer's faces, and both layers were made of panes with
+  gaps of a few centimetres between them (where the frame sits), which left
+  strips and patches in the glass once it was tinted; `fdm/glassfill.py` adds
+  the faces and bridges the gaps. One- and
   two-channel textures are stored as RGB(A).
 - **Test autopilot** (`Systems/al3-autopilot.xml`, set through
   `/autopilot/al3`), as the UH-60's.
