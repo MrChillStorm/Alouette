@@ -83,13 +83,16 @@ AGL = 'position/altitude-agl-ft'
 # cone PyWopWop fits to its levels round the aircraft (pywopwop/cones.py), a pair of sources (right, left) with the loop each;
 # the main rotor plays at every bearing
 OUTSIDE_VIEW = 'side'
-# The cockpit's tail rotor on the ground. The one real cockpit recording of an Alouette III on the ground at full rotor speed,
-# doors closed (the first 5 s, and 1-20 s, of the airfield film in PyWopWop/refs/recordings), has the tail rotor's 97 Hz line
-# standing +18 dB over the 2 kHz octave in the 125 Hz octave, against +7 dB in the ground run's cockpit loops: 11 dB light.
-# In flight (cruise, 60 and 100 kt) the loops are within 2-4 dB of the recording there, so the correction is the ground
-# run's cockpit tail rotor alone, by the loops' own speed fades. (Its main rotor lines stand within 5 dB of the recording
-# from 100 Hz up, and 9 dB over under 100 Hz: left as they are.)
+# The cockpit's tail rotor. The one real cockpit recording of an Alouette III, doors closed (the airfield film in
+# PyWopWop/refs/recordings), has the tail rotor's 97 Hz line standing +18 dB over the 2 kHz octave in the 125 Hz octave on the
+# ground at full rotor speed (the first 5 s, and 1-20 s), against +7 dB in the ground run's cockpit loops: 11 dB light
+# (GROUND_TAIL_COCKPIT_DB). In flight at 60-100 kt it stands +14.4 to +15.9 there, against +12.7 to +13.3 in the cruise loops:
+# 2.5 dB light (CRUISE_TAIL_COCKPIT_DB). A rotor's sound can't jump as the wheels touch, so the hover and the slow flight, which
+# the film doesn't separate, take the ground's correction at a standstill and the cruise's from BLEND_KT on, by airspeed. (Its
+# main rotor lines stand within 5 dB of the recording from 100 Hz up, and 9 dB over under 100 Hz: left as they are.)
 GROUND_TAIL_COCKPIT_DB = 11.0
+CRUISE_TAIL_COCKPIT_DB = 2.5
+BLEND_KT = 60.0
 SET_XML = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'Alouette-3', 'Alouette-3-set.xml')
 
 
@@ -414,8 +417,13 @@ def rotor_entries(bank, nbank, door, g_min):
                 lo_rpm = 0.2 * rot['nominal_rpm']
             gg = gain_near if f['file'] in near else gains[group]
             vol = vol + vv + ([v(gg)] if gg < 0.9999 else [])
-            if view.startswith('cockpit') and c['ground_run'] and s == 'tail':
-                vol = vol + [v(10.0 ** (GROUND_TAIL_COCKPIT_DB / 20.0))]
+            if view.startswith('cockpit') and s == 'tail':
+                g_amp, c_amp = 10.0 ** (GROUND_TAIL_COCKPIT_DB / 20.0), 10.0 ** (CRUISE_TAIL_COCKPIT_DB / 20.0)
+                if c['ground_run']:
+                    vol = vol + [v(g_amp)]
+                else:       # the ground's correction at a standstill, the cruise's from BLEND_KT, by airspeed
+                    vol = vol + [e('sum', v(c_amp), e('product', v(g_amp - c_amp), e('clip', e('difference', v(1.0), e('product', p(SPD), v(1.0 / BLEND_KT))),
+                                                                                   '<clipMin>0</clipMin><clipMax>1</clipMax>')))]
             fname = f['file']
             if slap and s == 'slap' and not c['ground_run']:
                 if name != al3slap.SLAP_REF:
