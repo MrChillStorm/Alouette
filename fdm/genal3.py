@@ -35,6 +35,7 @@ import vrs as VRS
 
 G0 = 32.174
 R2D = 180 / math.pi
+RUDDER_DAMPER_MIN = 0.005       # s: the rudder damper's lag below this is a straight pass-through (and the lag filter's floor)
 INLINE = True
 KEEP = {'drive/torque-pct', 'aero/rotor/a1-deg', 'aero/rotor/b1-deg', 'aero/rotor/power-hp', 'aero/rotor/thrust-lbs', 'aero/rotor/torque-ftlb',
         'aero/rotor/tr/power-hp', 'aero/rotor/tr/thrust-lbs', 'aero/rotor/tr/torque-ftlb', 'drive/loss-ftlb',
@@ -144,6 +145,14 @@ class Model:
         # JSBSim's rudder is positive left (FlightGear hands it the negated pedal): negated back
         ped = c.fn('ctl/ped-norm', NEG(S(p('fcs/rudder-cmd-norm'), p('fcs/yaw-trim-cmd-norm'), p('systems/amelia/yaw-cmd'),
                                          M(v(1 / 0.18), p('autopilot/ap-yaw-cmd')))), clip=('-1', '1'), desc='+ right')
+        # the tail rotor control's hydraulic damper (type specification, section 7): its rate is not published, so the pilot
+        # sets it, /controls/al3/rudder-damper (the Configuration dialog's slider), as the time constant in seconds of a
+        # first-order lag between the pedals and the tail rotor's pitch (a damper in series with the control run's
+        # stiffness); 0, the default, passes the pedals straight through
+        tau = c.declare('/controls/al3/rudder-damper', 0.0)
+        c.fn('ctl/ped-damper-c1', Q(v(1), MAX(tau, v(RUDDER_DAMPER_MIN))), desc='the damper lag filter\'s corner, 1/s')
+        lagged = c.lag_by('ctl/ped-lagged', 'ctl/ped-norm', 'ctl/ped-damper-c1')
+        ped = c.fn('ctl/ped-damped', IFTHEN(GT(tau, v(RUDDER_DAMPER_MIN)), lagged, ped), desc='the pedals through the damper, + right')
         # fixed gear: retractable for JSBSim (so that it has gear/unit[n]/pos-norm, which the original aircraft's systems read),
         # held down
         c.fn('ctl/gear-down', v(1), out='gear/gear-pos-norm')

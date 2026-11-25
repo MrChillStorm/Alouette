@@ -67,12 +67,15 @@ are in the report:
   the real aircraft. The original aircraft's autopilot (heading and altitude
   holds) and Amelia, the co-pilot who hovers for the hoist (in the left seat
   from the start; look left to see her, and pick the pilot and co-pilot
-  figures or none in the Configuration dialog), still work. Not
-  modelled: the real tail rotor control has no servo and "incorporates a
-  hydraulic damper" (the type specification, section 7), and runs on cables and
-  a rod, so it has some play. Neither the damper's rate nor the play is
-  published in anything found, so the tail rotor takes the same servo response
-  as the other controls (the UH-60's, an assumption) and no play.
+  figures or none in the Configuration dialog), still work. The real tail
+  rotor control has no servo and "incorporates a hydraulic damper" (the type
+  specification, section 7), and runs on cables and a rod, so it has some play.
+  Neither the damper's rate nor the play is published in anything found, so the
+  tail rotor takes the same servo response as the other controls (the UH-60's,
+  an assumption) and no play, and the damper is left to taste: the
+  Configuration dialog's Rudder damper slider (0 to 0.5 s, 0 by default, which
+  is none) sets the time constant of a lag between the pedals and the tail
+  rotor's pitch, a damper in series with the control run's stiffness.
 - **Landing gear** with the 355×150-4 tyres' spring rates; the nose wheel
   castors.
 
@@ -233,6 +236,11 @@ Josh, Thorsten Renk and Colin Geniet (3-D model, systems, Nasal). Changed in
   and which is otherwise mirrored back onto the throttle. The cockpit lever
   (`Models/Alouette-III_Cockpit_Command.xml`) and Amelia (`Nasal/crew.nas`)
   use it in place of the throttle.
+- **Rudder damper.** `/controls/al3/rudder-damper` (seconds, 0 by default, the
+  Configuration dialog's slider) is the time constant of a first-order lag on
+  the pedal command, the autopilot's and Amelia's included, before the tail
+  rotor's servo (`ctl/ped-damped` in the flight model); at 0 the pedals pass
+  straight through.
 - **System rates.** The build writes an `execrate` into the channels of the
   original systems it keeps (`steady-behaviour`, `crash-detect`, the
   electrical and lighting systems, `instrumentation`, `autopilot`, `amelia`,

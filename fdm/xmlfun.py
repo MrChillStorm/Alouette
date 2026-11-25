@@ -121,6 +121,10 @@ class FCS:
         """1/(tau s + 1) of the property inp"""
         return s._comp('lag_filter', name, inp, '<c1>%.8g</c1>' % (1.0 / tau), clip, out)
 
+    def lag_by(s, name, inp, c1, clip=None, out=None):
+        """1/(s/c1 + 1) of the property inp, c1 (rad/s) a property JSBSim reads every frame"""
+        return s._comp('lag_filter', name, inp, '<c1>%s</c1>' % c1, clip, out)
+
     def washout(s, name, inp, tau, clip=None, out=None):
         """tau s/(tau s + 1)"""
         return s._comp('washout_filter', name, inp, '<c1>%.8g</c1>' % (1.0 / tau), clip, out)

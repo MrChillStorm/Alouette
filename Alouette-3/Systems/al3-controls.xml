@@ -11,6 +11,7 @@
 <property value="0">autopilot/ap-pitch-cmd</property>
 <property value="0">autopilot/ap-roll-cmd</property>
 <property value="0">autopilot/ap-yaw-cmd</property>
+<property value="0">/controls/al3/rudder-damper</property>
 <property value="0">gear/NWS/engaged</property>
 <channel name="mirror">
 <fcs_function name="mir/velocities-v-aero-fps"><description>mirror image</description><function><product><value>-1</value><property>velocities/v-aero-fps</property></product></function></fcs_function>
@@ -32,6 +33,9 @@
 <fcs_function name="ctl/lon-norm"><description>+ forward</description><function><sum><property>fcs/elevator-cmd-norm</property><property>fcs/pitch-trim-cmd-norm</property><property>systems/amelia/pitch-cmd</property><product><value>5.8823529</value><property>autopilot/ap-pitch-cmd</property></product></sum></function><clipto><min>-1</min><max>1</max></clipto></fcs_function>
 <fcs_function name="ctl/lat-norm"><description>+ right</description><function><sum><property>fcs/aileron-cmd-norm</property><property>fcs/roll-trim-cmd-norm</property><property>systems/amelia/roll-cmd</property><product><value>14.705882</value><property>autopilot/ap-roll-cmd</property></product></sum></function><clipto><min>-1</min><max>1</max></clipto></fcs_function>
 <fcs_function name="ctl/ped-norm"><description>+ right</description><function><product><value>-1</value><sum><property>fcs/rudder-cmd-norm</property><property>fcs/yaw-trim-cmd-norm</property><property>systems/amelia/yaw-cmd</property><product><value>5.5555556</value><property>autopilot/ap-yaw-cmd</property></product></sum></product></function><clipto><min>-1</min><max>1</max></clipto></fcs_function>
+<fcs_function name="ctl/ped-damper-c1"><description>the damper lag filter's corner, 1/s</description><function><quotient><value>1</value><max><property>/controls/al3/rudder-damper</property><value>0.005</value></max></quotient></function></fcs_function>
+<lag_filter name="ctl/ped-lagged"><input>ctl/ped-norm</input><c1>ctl/ped-damper-c1</c1></lag_filter>
+<fcs_function name="ctl/ped-damped"><description>the pedals through the damper, + right</description><function><ifthen><gt><property>/controls/al3/rudder-damper</property><value>0.005</value></gt><property>ctl/ped-lagged</property><property>ctl/ped-norm</property></ifthen></function></fcs_function>
 <fcs_function name="ctl/gear-down"><function><value>1</value></function><output>gear/gear-pos-norm</output></fcs_function>
 <fcs_function name="ctl/nose-castered"><function><lt><property>gear/NWS/engaged</property><value>0.5</value></lt></function><output>gear/unit[2]/castered</output></fcs_function>
 </channel>
@@ -39,7 +43,7 @@
 <fcs_function name="ctl/theta0-cmd-deg"><description>blade pitch at the shaft, deg</description><function><sum><value>3.38</value><product><value>16</value><property>ctl/coll-norm</property></product></sum></function></fcs_function>
 <fcs_function name="ctl/B1s-cmd-deg"><description>longitudinal cyclic, + forward</description><function><sum><value>2</value><product><value>12</value><property>ctl/lon-norm</property></product></sum></function></fcs_function>
 <fcs_function name="ctl/A1s-cmd-deg"><description>lateral cyclic, + right (the real aircraft)</description><function><sum><value>0</value><product><value>7</value><property>ctl/lat-norm</property></product></sum></function></fcs_function>
-<fcs_function name="ctl/thetaTR-cmd-deg"><description>tail rotor blade pitch, + thrust to the left (anti-torque); right pedal +</description><function><sum><value>7</value><product><value>15</value><property>ctl/ped-norm</property></product></sum></function></fcs_function>
+<fcs_function name="ctl/thetaTR-cmd-deg"><description>tail rotor blade pitch, + thrust to the left (anti-torque); right pedal +</description><function><sum><value>7</value><product><value>15</value><property>ctl/ped-damped</property></product></sum></function></fcs_function>
 </channel>
 <channel name="servos">
 <second_order_filter name="ctl/B1s-deg"><input>ctl/B1s-cmd-deg</input><c1>0</c1><c2>0</c2><c3>1</c3><c4>0.0002081</c4><c5>0.02</c5><c6>1</c6></second_order_filter>

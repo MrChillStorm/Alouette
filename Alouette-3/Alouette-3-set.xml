@@ -234,6 +234,9 @@
 	<al3>
 		<!-- 1: the collective is 1 - throttle (Configuration dialog: Invert collective axis) -->
 		<invert-collective type="bool">false</invert-collective>
+		<!-- the tail rotor control's hydraulic damper, as the time constant in seconds of a lag between pedals and tail rotor
+		     (Configuration dialog's slider); 0: none -->
+		<rudder-damper type="double">0</rudder-damper>
 		<collective type="double">0</collective>
 	</al3>
         <gear>
