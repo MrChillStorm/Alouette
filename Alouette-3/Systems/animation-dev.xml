@@ -16,9 +16,11 @@
     <property>systems/rotor/pos-deg</property>    
     <property value="1">systems/rotor/blade-deployed</property>
     
+    <!-- the crew in the cockpit (Configuration dialog): Amelia in the left seat from the start; she turns up in the view
+         when the pilot looks left (the left seat is beside the eye, outside the 90 degree view ahead) -->
     <property value="0">animation/pilot-copilot</property>
-    <property value="0">animation/amelia</property>
-    <property value="1">animation/none</property>
+    <property value="1">animation/amelia</property>
+    <property value="0">animation/none</property>
     <property value="1">animation/rotor-particles</property>
     <property value="1">animation/master-switch-lock-cmd</property>   
     <property value="0">animation/cutoff-switch-lock-cmd</property>    

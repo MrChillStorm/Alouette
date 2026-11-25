@@ -65,7 +65,9 @@ are in the report:
   rotor's, as much again, so the rotor speed hardly droops when you pull.
 - **Flight controls** with hydraulic servos and no stability augmentation, as
   the real aircraft. The original aircraft's autopilot (heading and altitude
-  holds) and Amelia, the co-pilot who hovers for the hoist, still work. Not
+  holds) and Amelia, the co-pilot who hovers for the hoist (in the left seat
+  from the start; look left to see her, and pick the pilot and co-pilot
+  figures or none in the Configuration dialog), still work. Not
   modelled: the real tail rotor control has no servo and "incorporates a
   hydraulic damper" (the type specification, section 7), and runs on cables and
   a rod, so it has some play. Neither the damper's rate nor the play is

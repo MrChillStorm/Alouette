@@ -960,3 +960,9 @@ var amelia = {
 
 
 amelia.init();
+
+# Amelia is there from the start (the crew switch's default, Systems/animation-dev.xml): her movements and her menu entry
+# begin once the flight model is up, and again after a reset. The Configuration dialog's radios still start or stop her.
+setlistener("/sim/signals/fdm-initialized", func (n) {
+	if (n.getBoolValue() and getprop("/fdm/jsbsim/animation/amelia") == 1) {amelia.start();}
+}, 1);

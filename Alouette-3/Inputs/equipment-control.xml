@@ -3,7 +3,7 @@
 <PropertyList>
 	<name>other</name>
 	<dialog-name>equipment-control</dialog-name>
-	<x>-10</x>
+	<x>10</x>
 	<y>-30</y>
 	<layout>vbox</layout>
 	<width>200</width>
