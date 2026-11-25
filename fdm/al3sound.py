@@ -19,14 +19,24 @@ written XML, over random states and along flights.
 
 Fades. As PyWopWop's sections make them: the rotors' loops by airspeed (hover, translational lift, 80 and 100 kt), the
 climb and the descents by vertical speed inside an airspeed window, the level loops taking what those leave, the hover in
-ground effect by height, the ground run by rotor speed on the ground; linear in amplitude. The engine's by the spool's
-speed, equal power, lit or cold. In the cockpit the shut and the all-open cockpit's loops by how much of the doors is open,
+ground effect by height, the ground run by rotor speed on the ground; their weights add to one and the loops play at the
+square root of theirs, equal power (two different loops at one rotor speed add as power, not as amplitude: linear fades
+would dip 3 dB between them). The engine's by the spool's speed, equal power, lit or cold. In the cockpit the shut and the all-open cockpit's loops by how much of the doors is open,
 by equal power over their areas.
 
 Levels. The banks' groups (rotors and engine, cockpit and outside) have their own gains (manifest gain_db); each loop's
 volume carries its group's back to one scale, the loudest group's at 1, so nothing needs a volume over one (FlightGear
-clips it). The outside's loops are PyWopWop's levels at their recording distance (100 m in flight, 50 m on the ground and
-in ground effect), which is their reference distance here.
+clips it). Outside, every group is first brought to the distance of the aircraft's helicopter view (its chase distance, the
+camera's: 15 m), which is the loops' reference distance here; FlightGear plays a loop in full inside it, so banks recorded
+50-100 m out leave the camera's balance wrong (the blades 20 dB under the tail rotor, where PyWopWop's own model, rendered
+at 15 m, has them 5-10 dB under). PyWopWop's cone bank (bank --cones --distance 15) has the rotors that way, one loop per
+layer, made where it is loudest; the engine, gear and tyres, point sources, are brought in by the inverse distance law. The
+outside's blades are then lifted EXTERIOR_BLADE_BOOST_DB over everything else outside, and the outside main rotor's harmonics
+above 90 Hz raised to the recordings' (BLADE_EQ_*).
+
+Direction. The tail rotor's loops carry FlightGear's sound cone, fitted by PyWopWop to its levels round the aircraft
+(pywopwop/cones.py): a pair of sources, to the right and to the left, each playing the loop. The main rotor plays at every
+bearing. Nothing is faded by the listener's direction.
 
 The wind on the canopy (in the cockpit), the gear in the airflow and the tyres rolling are PyWopWop's too (mkbanks.py):
 the wind by the equivalent sea level airspeed PyWopWop's own section works out (its gate on the equivalent airspeed,
@@ -41,6 +51,7 @@ the aircraft's reach.
 import json
 import math
 import os
+import re
 import shutil
 import sys
 import xml.etree.ElementTree as ET
@@ -54,6 +65,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 AC = os.path.join(HERE, '..', 'Alouette-3')
 SND = os.path.join(AC, 'Sounds')
 PWW = os.path.expanduser('~/git/PyWopWop/out')
+sys.path.insert(0, os.path.dirname(PWW))
+from pywopwop import cones as pww_cones     # the fits' sources and volumes
 SOUND_DIR = 'Sounds/pywopwop'                # as the sound file's paths have it (from the aircraft's folder)
 OUT_XML = os.path.join(SND, 'al3-sound.xml')
 
@@ -63,13 +76,105 @@ WOW = ('gear/gear[0]/wow', 'gear/gear[1]/wow')     # the two main wheels
 SPD = 'velocities/airspeed-kt'
 VS = 'velocities/vertical-speed-fps'
 AGL = 'position/altitude-agl-ft'
-# outside, the rotors as rendered from ahead and to the right, abeam and behind (PyWopWop's front_right, side and rear),
-# cross-faded by equal power over the listener's bearing from the aircraft (Nasal/al3listener.nas: 0 ahead, 180 behind,
-# the two sides alike); ahead of 45 deg the front quarter's held. A rotor's sound differs with the direction: the tail
-# rotor's tones nearly vanish on its axis, abeam, and stand out from behind and ahead
-AZ = 'sim/sound/al3/listener-az-deg'
-OUT_AZ = {'front_right': 45.0, 'side': 90.0, 'rear': 180.0}
+# Outside there's one view, the side's (the slap's calibrated on it), and each layer outside is one loop, made where PyWopWop
+# finds it loudest, at the distance of the aircraft's helicopter view (its chase distance: the camera's), reference-dist
+# that distance: FlightGear plays a loop at full volume inside it, so a bank rendered 100 m out has the blades 20 dB under the
+# tail rotor at the camera's 15 m, where PyWopWop's own model has them 5-10 dB under. The tail rotor's direction is the sound
+# cone PyWopWop fits to its levels round the aircraft (pywopwop/cones.py), a pair of sources (right, left) with the loop each;
+# the main rotor plays at every bearing
+OUTSIDE_VIEW = 'side'
+# The cockpit's tail rotor on the ground. The one real cockpit recording of an Alouette III on the ground at full rotor speed,
+# doors closed (the first 5 s, and 1-20 s, of the airfield film in PyWopWop/refs/recordings), has the tail rotor's 97 Hz line
+# standing +18 dB over the 2 kHz octave in the 125 Hz octave, against +7 dB in the ground run's cockpit loops: 11 dB light.
+# In flight (cruise, 60 and 100 kt) the loops are within 2-4 dB of the recording there, so the correction is the ground
+# run's cockpit tail rotor alone, by the loops' own speed fades. (Its main rotor lines stand within 5 dB of the recording
+# from 100 Hz up, and 9 dB over under 100 Hz: left as they are.)
+GROUND_TAIL_COCKPIT_DB = 11.0
+SET_XML = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'Alouette-3', 'Alouette-3-set.xml')
+
+
+def view_distance():
+    """the helicopter view's distance, m (/sim/chase-distance-m of the aircraft's set file)"""
+    return abs(float(re.search(r'<chase-distance-m[^>]*>\s*(-?[\d.]+)', open(SET_XML).read()).group(1)))
+
+
+VIEW_DIST = view_distance()
+CONE_REPORT = []        # (state, the loudest direction, the fit) of every loop's cone (the tail rotor's, the engine's), printed by main()
+
+
+def ext_db(m):
+    """dB to the view distance from the bank's own exterior distance (the inverse distance law, a point source)"""
+    d = m.get('exterior_distance_m') or (m.get('cones') or {}).get('distance_m') or \
+        (m['observers'][0]['distance_m'] if m.get('observers') else VIEW_DIST)
+    return 20.0 * math.log10(d / VIEW_DIST)
+
+
+def group_level(m, group, blades=False):
+    """a bank group's gain, dB, at the view distance, the outside's blades EXTERIOR_BLADE_BOOST_DB over the rest"""
+    lev = m['gain_db'][group]
+    if group == 'exterior':
+        lev -= ext_db(m) + (EXTERIOR_BLADE_BOOST_DB if blades else 0.0)
+    return lev
+
+
+def group_gain(m, group, g_min, blades=False):
+    return 10.0 ** ((g_min - group_level(m, group, blades)) / 20.0)
+
+
 MASKED_DB = 40.0        # a layer this far (dB(A)) under its loop's loudest isn't wired
+# The outside's blades against everything else outside. PyWopWop's own balance has them far under the turbine's whine in the
+# 250-1000 Hz octaves, where a blade's and a tail rotor's sound is; three recordings of a real Alouette III
+# (PyWopWop/refs/recordings: a hover, a fly-by, an overhead pass), their octave spectra aligned with the model's at the
+# turbine's band (1.4-2.8 kHz), show the model's blades under theirs there by 9-11 dB (the hover), 14 dB (the fly-by) and
+# 19-21 dB (the overhead pass; the observers' elevation differs). The recorders high-passed them below 125 Hz, so only
+# those mid bands could be read. 12 dB is taken, between the hover's and the fly-by's (the hover is the one with a fixed
+# observer, like the bank's). Raise it to hear the blades more, lower it for less.
+EXTERIOR_BLADE_BOOST_DB = 12.0
+
+# The outside main rotor's harmonics above 90 Hz. A real rotor's sound is a line spectrum at multiples of its blade passing
+# frequency (17.7 Hz here); measured on real Alouette III recordings (PyWopWop/refs/recordings, the airfield ground run and the
+# hover, at 355 rpm), each main-rotor line against the tail rotor's own line (97 Hz) in the same recording, the model's
+# harmonics are as strong as the real ones up to about 70 Hz, then fall away too fast: under the real ones, against the
+# tail's line, by 3-13 dB at 88-125 Hz (harmonics 5-7) and 6-34 dB at 140-250 Hz (8-14), in both recordings, about 6 dB
+# at 100 Hz rising by about 12 dB an octave. The tail's lines are right (they set the reference), the main rotor's high
+# harmonics are what a laptop's speakers could play and the model leaves out. This gain, in the outside main rotor loops
+# only (circular, the loops are periodic), brings them to the recordings'. Nothing is measured above 250 Hz: the gain holds at
+# the 250 Hz figure to 400 Hz and returns to nil by 800 Hz so that the loops' faint broadband floor isn't raised.
+BLADE_EQ_HZ = [60.0, 90.0, 110.0, 140.0, 180.0, 220.0, 260.0, 400.0, 800.0]
+BLADE_EQ_DB = [0.0, 3.0, 6.0, 7.0, 10.0, 16.0, 20.0, 20.0, 0.0]
+# On top of the recordings' balance, BLADE_SMALL_SPEAKER_DB more over the same band (its weights at BLADE_EQ_HZ). This is a choice,
+# not a measurement: a faithful main rotor is mostly a thump under 100 Hz (harmonics 1-5, 18-88 Hz) and, above 120 Hz where
+# a laptop's speakers start, 14 dB under the tail rotor's and 14 under the turbine's whine (the model, as the recordings), so
+# on small speakers or headphones it can't be heard. 10 dB brings it to within 2.4 dB of the tail rotor there (-40.6 against -38.2 dBFS
+# at the ground run, from -47.5). 0 is the recordings' own balance.
+BLADE_SMALL_SPEAKER_DB = 0.0
+BLADE_SMALL_SPEAKER_W = [0.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0]
+
+
+def exterior_main_rotor(name):
+    return name.endswith('_rotor.wav') and 'cockpit' not in name
+
+
+def main_rotor_eq(y, fs):
+    x = y.astype(np.float64)
+    X = np.fft.rfft(x)
+    db = np.array(BLADE_EQ_DB) + BLADE_SMALL_SPEAKER_DB * np.array(BLADE_SMALL_SPEAKER_W)
+    g = 10.0 ** (np.interp(np.fft.rfftfreq(len(x), 1.0 / fs), BLADE_EQ_HZ, db) / 20.0)
+    return np.fft.irfft(X * g, len(x))
+
+
+def limit16(out):
+    peak = np.abs(out).max()
+    if peak > 31000.0:
+        out = out * (31000.0 / peak)
+    return np.round(out).astype(np.int16)
+
+
+def write_main_rotor_eq(src, dst):
+    fs, y = wavfile.read(src)
+    wavfile.write(dst, fs, limit16(main_rotor_eq(y, fs)))
+
+
 HEARD = 1e-3            # -60 dB: where a fade's last loop stops
 FLAT_RPM = 0.01         # half the width of the rotor's flat tops at its run-up speeds, of its nominal speed
 FLAT_PCT = 0.6          # the spool's, percent, at its ground idle and governed speed
@@ -121,6 +226,11 @@ def lt(prop, x):
     return e('less-than', p(prop), v(x))
 
 
+def eq_power(w):
+    """fade weights that add to one, played at their square root: equal power"""
+    return [e('sqrt', e('product', *w) if len(w) > 1 else w[0])] if w else []
+
+
 def tents(nodes, flat, lo0=None):
     """fades over sorted grid points: for each, the (from, to) of its rising and falling ramps (None at an end) and its
     open interval. With flat tops of half width flat[i]: within it only point i plays, and both ramps either side move
@@ -152,7 +262,7 @@ def gates(prop, a, b):
     return g
 
 
-def entry(tag, name, path, cond, vol, pitch=None, ref_dist=None):
+def entry(tag, name, path, cond, vol, pitch=None, ref_dist=None, cone=None):
     s = (f'\t\t<{tag}>\n\t\t\t<name>{name}</name>\n\t\t\t<mode>looped</mode>\n\t\t\t<path>{path}</path>\n'
          f'\t\t\t<condition>{e("and", *cond)}</condition>\n'
          f'\t\t\t<volume><expression>{e("product", *vol) if len(vol) > 1 else vol[0]}</expression></volume>\n')
@@ -164,6 +274,10 @@ def entry(tag, name, path, cond, vol, pitch=None, ref_dist=None):
         s += f'\t\t\t{pitch}\n'
     if ref_dist:
         s += f'\t\t\t<reference-dist>{ref_dist:g}</reference-dist>\n\t\t\t<max-dist>4000</max-dist>\n'
+    if cone:       # (x, y, z of the axis in FlightGear's sound frame, whole inner and outer angle, outer gain)
+        s += (f'\t\t\t<orientation><x>{cone[0]:.4f}</x><y>{cone[1]:.4f}</y><z>{cone[2]:.4f}</z>'
+              f'<inner-angle>{cone[3]:g}</inner-angle><outer-angle>{cone[4]:g}</outer-angle>'
+              f'<outer-gain>{cone[5]:.4f}</outer-gain></orientation>\n')
     return s + f'\t\t</{tag}>\n'
 
 
@@ -196,11 +310,18 @@ ON_GROUND_VOL = e('difference', v(1.0), AIRBORNE_VOL)
 
 # ---------------------------------------------------------------- the rotors
 
-def rotor_entries(bank, door, g_min):
+def rotor_entries(bank, nbank, door, g_min):
     m = json.load(open(os.path.join(bank, 'manifest.json')))
-    gains = {g: 10.0 ** ((g_min - x) / 20.0) for g, x in m['gain_db'].items()}
+    nm = json.load(open(os.path.join(nbank, 'manifest.json')))
+    gains = {g: group_gain(m, g, g_min, blades=True) for g in m['gain_db']}      # (the slap's exterior, from the bank's 100 m)
+    gain_near = group_gain(nm, 'exterior', g_min, blades=True)
     conds = {c['name']: c for c in m['conditions']}
     files = {(f['condition'], f['observer'], f['source']): f for f in m['files']}
+    files_old = dict(files)         # (the slap's: its level against the bank's own mix)
+    for f in nm['files']:           # outside: the cone bank's loops, one per layer, as the side's
+        if f['observer'] == 'cone' and f['source'] != 'slap':
+            files[(f['condition'], OUTSIDE_VIEW, f['source'])] = f
+    near = {f['file'] for f in nm['files'] if f.get('file')}
     main, tail = m['rotors']['main'], m['rotors']['tail']
     nom = main['nominal_rpm']
     R_ft = 5.51 / 0.3048
@@ -250,16 +371,10 @@ def rotor_entries(bank, door, g_min):
         plan[c['name']] = ([ramp(AGL, z_hi, z_lo), ramp(SPD, nxt, 0.0)] + ([rest] if rest else []),
                            [lt(AGL, z_hi), lt(SPD, nxt)])
     out, used, dropped = [], [], []
-    outside = [o for o in OUT_AZ if any(k[1] == o for k in files)]
-    az_fade = {}
-    for (up, dn, a, b), o in zip(tents([OUT_AZ[o] for o in outside], [0.0] * len(outside)), outside):
-        w = ([ramp(AZ, *up)] if up else []) + ([ramp(AZ, *dn)] if dn else [])
-        az_fade[o] = ([e('sqrt', e('product', *w) if len(w) > 1 else w[0])] if w else [], gates(AZ, a, b))
+    outside = [OUTSIDE_VIEW]
     for view in outside + ['cockpit', 'cockpit_open']:
         group = 'cockpit' if view.startswith('cockpit') else 'exterior'
         vg, vv = view_gate(view, door)
-        if view in az_fade:
-            vv, vg = vv + az_fade[view][0], vg + az_fade[view][1]
         # the run-up's loudest loop, against which its slowest fades out to HEARD
         top = max(files[(c['name'], view, 'mix')]['dba'] for c in runup)
         low = files[(runup[0]['name'], view, 'mix')]['dba']
@@ -287,15 +402,20 @@ def rotor_entries(bank, door, g_min):
             ref = rot['nominal_rpm'] * c['rpm_percent'] / 100.0
             if c['ground_run']:
                 vol, g = plan[name + '@' + view]
+                vol = eq_power(vol)
                 k = runup.index(c)
                 lo_rpm = rot['nominal_rpm'] * (runup[k - 1]['rpm_percent'] / 100.0 if k else 0.05)
             else:
                 vol, g = plan[name]
+                vol = eq_power(vol)
                 vol = vol + [AIRBORNE_VOL, e('clip', e('product', p(prop), v(1.0 / rot['nominal_rpm'])),
                                              '<clipMin>0</clipMin><clipMax>1</clipMax>')]
                 g = g + [e('not', ON_GROUND), gt(prop, 0.2 * rot['nominal_rpm'])]
                 lo_rpm = 0.2 * rot['nominal_rpm']
-            vol = vol + vv + ([v(gains[group])] if gains[group] < 0.9999 else [])
+            gg = gain_near if f['file'] in near else gains[group]
+            vol = vol + vv + ([v(gg)] if gg < 0.9999 else [])
+            if view.startswith('cockpit') and c['ground_run'] and s == 'tail':
+                vol = vol + [v(10.0 ** (GROUND_TAIL_COCKPIT_DB / 20.0))]
             fname = f['file']
             if slap and s == 'slap' and not c['ground_run']:
                 if name != al3slap.SLAP_REF:
@@ -309,22 +429,32 @@ def rotor_entries(bank, door, g_min):
                 # and the inflow has the airspeed and the descent in it), not the reference state's fades
                 vol = [AIRBORNE_VOL, e('clip', e('product', p(prop), v(1.0 / rot['nominal_rpm'])),
                                        '<clipMin>0</clipMin><clipMax>1</clipMax>')] + vv \
-                    + ([v(gains[group])] if gains[group] < 0.9999 else []) \
+                    + ([v(gg)] if gg < 0.9999 else []) \
                     + [e('clip', e('product', p('rotors/main/slap-' + key), v(1.0 / b)), '<clipMin>0</clipMin><clipMax>1</clipMax>')]
                 # off where it falls 66 dB under the reference state's whole sound (as rendered it stands below that
                 # by its slap less its mix; 6 dB more, as a single layer of another loop may then be the loudest)
-                under = files[(name, view, 'slap')]['dba'] - files[(name, view, 'mix')]['dba']
+                under = files_old[(name, view, 'slap')]['dba'] - files_old[(name, view, 'mix')]['dba']
                 g = [e('not', ON_GROUND), gt(prop, 0.2 * rot['nominal_rpm']),
                      gt('rotors/main/slap-' + key, 0.5 * HEARD * 10.0 ** (-under / 20.0))]
                 if b > 1.0001:
                     fname = fname[:-4] + '_raised.wav'
                     raised[fname] = (os.path.join(bank, f['file']), b)
             pitch = (f'<pitch>{p(prop)}<factor>{1.0 / ref:.6g}</factor><min>{min(0.2, lo_rpm / ref):.3g}</min>'
-                     f'<max>1.25</max></pitch>')
-            ref_d = None if view.startswith('cockpit') else (
-                (c['listener_distance_m'] or 50.0) if c['ground_clearance_m'] is not None else 100.0)
-            out.append(entry('rotor', f'pww-{name}-{view}-{s}', f'{SOUND_DIR}/{fname}', vg + g, vol, pitch, ref_d))
+                     f'<max>{m["pitch_headroom"]:g}</max></pitch>')
+            ref_d = None if view.startswith('cockpit') else VIEW_DIST
             used.append(fname)
+            if view == OUTSIDE_VIEW and s == 'tail':
+                ft = f['cone']              # PyWopWop's fit of its levels round the aircraft
+                srcs = pww_cones.sources(ft)
+                CONE_REPORT.append((name, f['az'], ft))
+                if not srcs:
+                    out.append(entry('rotor', f'pww-{name}-{view}-{s}', f'{SOUND_DIR}/{fname}', vg + g,
+                                     vol + [v(pww_cones.volume(ft))], pitch, ref_d))
+                for sfx, cx, cy, cz, inner, outer, ogain in srcs:
+                    out.append(entry('rotor', f'pww-{name}-{view}-{s}{sfx}', f'{SOUND_DIR}/{fname}', vg + g,
+                                     vol + [v(pww_cones.volume(ft))], pitch, ref_d, (cx, cy, cz, inner, outer, ogain)))
+            else:
+                out.append(entry('rotor', f'pww-{name}-{view}-{s}', f'{SOUND_DIR}/{fname}', vg + g, vol, pitch, ref_d))
     return out, used, dropped, raised
 
 
@@ -336,10 +466,15 @@ def lit_share(run):
     return e('product', p(run), warm)
 
 
-def engine_entries(bank, door, g_min):
+def engine_entries(bank, ebank, door, g_min):
     m = json.load(open(os.path.join(bank, 'manifest.json')))
-    gains = {g: 10.0 ** ((g_min - x) / 20.0) for g, x in m['gain_db'].items()}
+    em = json.load(open(os.path.join(ebank, 'manifest.json')))
+    gains = {g: group_gain(m, g, g_min) for g in m['gain_db']}
+    gain_near = group_gain(em, 'exterior', g_min)
     have = {(f['engine'], f['layer'], f['state'], f['ng'], f['observer']): f for f in m['files']}
+    for f in em['files']:           # outside: the cone bank's loops, one per layer, as the side's
+        have[(f['engine'], f['layer'], f['state'], f['ng'], 'side')] = f
+    near = {f['file'] for f in em['files']}
     out, used = [], []
     for eng in m['engines']:
         who = eng['name']
@@ -382,13 +517,22 @@ def engine_entries(bank, door, g_min):
                     else:
                         vol.append(e('sqrt', e('difference', v(1.0), lit_share(run))))
                         g = [e('or', lt(run, 0.5), lt(T4, T4_COLD_GATE))]
-                    vol = vol + vv + ([v(gains[group])] if gains[group] < 0.9999 else [])
+                    gg = gain_near if f['file'] in near else gains[group]
+                    vol = vol + vv + ([v(gg)] if gg < 0.9999 else [])
                     lo, hi = (up[0] if up else n), (dn[0] if dn else 1.3 * n)
                     pitch = (f'<pitch>{p(n1)}<factor>{1.0 / n:.6g}</factor><min>{max(lo, 1.0) / n:.4g}</min>'
                              f'<max>{hi / n:.4g}</max></pitch>')
-                    out.append(entry('engine', f'pww-{who}-{layer}-{state}-{n:g}-{view}', f'{SOUND_DIR}/{f["file"]}',
-                                     vg + g + gates(n1, a, b), vol, pitch,
-                                     None if view.startswith('cockpit') else m['exterior_distance_m']))
+                    ref_d = None if view.startswith('cockpit') else VIEW_DIST
+                    srcs = pww_cones.sources(f['cone']) if f['file'] in near else []
+                    if f['file'] in near:
+                        CONE_REPORT.append((f'{who} {layer} {state} {n:g}', f['az'], f['cone']))
+                        vol = vol + [v(pww_cones.volume(f['cone']))] if pww_cones.volume(f['cone']) < 0.9999 else vol
+                    nm_ = f'pww-{who}-{layer}-{state}-{n:g}-{view}'
+                    if not srcs:
+                        out.append(entry('engine', nm_, f'{SOUND_DIR}/{f["file"]}', vg + g + gates(n1, a, b), vol, pitch, ref_d))
+                    for sfx, cx, cy, cz, inner, outer, ogain in srcs:
+                        out.append(entry('engine', nm_ + sfx, f'{SOUND_DIR}/{f["file"]}', vg + g + gates(n1, a, b), vol, pitch,
+                                         ref_d, (cx, cy, cz, inner, outer, ogain)))
                     used.append(f['file'])
     gb = m.get('gearbox')
     f = next((f for f in m['files'] if f['engine'] == 'gearbox'), None)
@@ -457,7 +601,7 @@ def gear_entries(bank, g_min):
     out, used = [], []
     for view in ('side', 'cockpit'):
         group = 'cockpit' if view == 'cockpit' else 'exterior'
-        gain = 10.0 ** ((g_min - m['gain_db'][group]) / 20.0)
+        gain = group_gain(m, group, g_min)
         fs = sorted([f for f in m['files'] if f['view'] == view], key=lambda f: f['airspeed_kt'])
         speeds = [f['airspeed_kt'] for f in fs]
         # the slowest from half its speed: under it the gear is 36 dB down, as M^6
@@ -466,7 +610,7 @@ def gear_entries(bank, g_min):
             vol = [e('sqrt', e('product', *w) if len(w) > 1 else w[0]), SIGMA] + ([v(gain)] if gain < 0.9999 else [])
             g = ([p(INTERNAL)] if view == 'cockpit' else [e('not', p(INTERNAL))]) + [e('not', p(CRASHED))] + gates(tas_p, a, b)
             out.append(entry('gearair', f'pww-gear-{f["airspeed_kt"]:g}kt-{view}', f'{SOUND_DIR}/{f["file"]}', g, vol,
-                             None, None if view == 'cockpit' else m['exterior_distance_m']))
+                             None, None if view == 'cockpit' else VIEW_DIST))
             used.append(f['file'])
     return out, used
 
@@ -486,7 +630,7 @@ def tyre_entries(bank, g_min):
                                      v(1.0 / (0.25 * t['static_compression_ft']))), '<clipMin>0</clipMin><clipMax>1</clipMax>'))
         for view in ('cockpit', 'side'):
             group = 'cockpit' if view == 'cockpit' else 'exterior'
-            gain = 10.0 ** ((g_min - m['gain_db'][group]) / 20.0)
+            gain = group_gain(m, group, g_min)
             for i, sp in enumerate(speeds):
                 f = have.get((t['name'], sp, view))
                 if f is None:
@@ -508,7 +652,7 @@ def tyre_entries(bank, g_min):
                     g.append(lt(raw, hi / sc))
                 vol = w + [load] + ([v(gain)] if gain < 0.9999 else [])
                 s = entry('tyre', f'pww-tyre-{t["name"]}-{sp:g}kt-{view}', f'{SOUND_DIR}/{f["file"]}', g, vol, None,
-                          None if view == 'cockpit' else m['exterior_distance_m'])
+                          None if view == 'cockpit' else VIEW_DIST)
                 out.append(s.replace('\t\t</tyre>\n', f'\t\t\t{position(t["position"])}\n\t\t</tyre>\n'))
                 used.append(f['file'])
     return out, used
@@ -537,11 +681,19 @@ def main():
     rb = sys.argv[1] if len(sys.argv) > 1 else os.path.join(PWW, 'alouette3')
     eb = sys.argv[2] if len(sys.argv) > 2 else os.path.join(PWW, 'alouette3_engines')
     wb, gb, tb = (os.path.join(PWW, 'alouette3_' + k) for k in ('wind', 'gear', 'tyres'))
-    banks = [rb, eb, wb, gb, tb]
-    g_min = min(x for b in banks for x in json.load(open(os.path.join(b, 'manifest.json')))['gain_db'].values())
+    nb = sys.argv[3] if len(sys.argv) > 3 else os.path.join(PWW, 'alouette3_near')
+    ecb = sys.argv[4] if len(sys.argv) > 4 else os.path.join(PWW, 'alouette3_enginecones')
+    banks = [rb, eb, wb, gb, tb, nb, ecb]
+    # every bank's groups at the view distance, the outside's blades EXTERIOR_BLADE_BOOST_DB over the rest of the outside; the
+    # least gain is the reference, every loop's volume is 1 or under
+    levels = []
+    for b in banks:
+        mb = json.load(open(os.path.join(b, 'manifest.json')))
+        levels += [group_level(mb, g, blades=b in (rb, nb)) for g in mb['gain_db']]
+    g_min = min(levels)
     door = doors(json.load(open(os.path.join(eb, 'manifest.json')))['openings'])
-    r, used_r, dropped, raised = rotor_entries(rb, door, g_min)
-    en, used_e = engine_entries(eb, door, g_min)
+    r, used_r, dropped, raised = rotor_entries(rb, nb, door, g_min)
+    en, used_e = engine_entries(eb, ecb, door, g_min)
     wi, used_w = wind_entries(wb, g_min)
     ga, used_g = gear_entries(gb, g_min)
     ty, used_t = tyre_entries(tb, g_min)
@@ -556,7 +708,7 @@ def main():
     for b, names in ((rb, used_r), (eb, used_e), (wb, used_w), (gb, used_g), (tb, used_t)):
         for n in names:
             if n not in raised:
-                want[n] = os.path.join(b, n)
+                want[n] = next(os.path.join(d, n) for d in (b, nb, ecb) if os.path.exists(os.path.join(d, n)))
     for n in os.listdir(dst):
         if n not in want and n not in raised:
             os.remove(os.path.join(dst, n))
@@ -566,10 +718,17 @@ def main():
     copied = len(raised)
     for n, src in want.items():
         t = os.path.join(dst, n)
+        if exterior_main_rotor(n):
+            write_main_rotor_eq(src, t)
+            copied += 1
+            continue
         if not os.path.exists(t) or os.path.getsize(t) != os.path.getsize(src) or os.path.getmtime(t) < os.path.getmtime(src):
             shutil.copy2(src, t)
             copied += 1
     size = sum(os.path.getsize(os.path.join(dst, n)) for n in list(want) + list(raised)) / 1e6
+    for name, az, ft in CONE_REPORT:
+        print(f'  cone {name:26s} loop from {az:3.0f} deg: ' + ('flat' if ft['flat'] else
+              f"cone pair at +-{ft['axis']:.0f} deg, {ft['inner']:.0f}/{ft['outer']:.0f} deg, outer {20 * math.log10(ft['gain']):.1f} dB, rms {ft['rms']:.1f} dB"))
     print(f'{OUT_XML}: {len(r)} rotor loops, {len(en)} engine and gearbox loops, {len(wi)} wind, {len(ga)} gear, '
           f'{len(ty)} tyre loops, {len(keep)} kept sounds; '
           f'{len(want)} files ({size:.0f} MB, {copied} copied); {len(dropped)} masked layers left out')
