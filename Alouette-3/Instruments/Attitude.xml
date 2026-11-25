@@ -46,4 +46,477 @@ bracket and the yellow-black horizon bar are left out; the original model is kep
       </axis>
     </animation>
 
-  </PropertyList>
+  
+  <!-- lamps: begin (written by fdm/instrlamps.py) -->
+
+  <light>
+    <name>lamp-nvis-0</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0683 </x-m>
+      <y-m> 0.0425 </y-m>
+      <z-m> 0.0176 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0623 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
+      <scale> 3.05001e-05 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.6 </spot-cutoff>
+    <range-m> 0.099 </range-m>
+  </light>
+
+  <light>
+    <name>lamp-nvis-1</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0683 </x-m>
+      <y-m> 0.0176 </y-m>
+      <z-m> 0.0425 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0623 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
+      <scale> 3.05001e-05 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.6 </spot-cutoff>
+    <range-m> 0.099 </range-m>
+  </light>
+
+  <light>
+    <name>lamp-nvis-2</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0683 </x-m>
+      <y-m> -0.0176 </y-m>
+      <z-m> 0.0425 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0623 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
+      <scale> 3.05001e-05 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.6 </spot-cutoff>
+    <range-m> 0.099 </range-m>
+  </light>
+
+  <light>
+    <name>lamp-nvis-3</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0683 </x-m>
+      <y-m> -0.0425 </y-m>
+      <z-m> 0.0176 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0623 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
+      <scale> 3.05001e-05 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.6 </spot-cutoff>
+    <range-m> 0.099 </range-m>
+  </light>
+
+  <light>
+    <name>lamp-nvis-4</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0683 </x-m>
+      <y-m> -0.0427 </y-m>
+      <z-m> -0.0172 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0623 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
+      <scale> 3.05001e-05 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.6 </spot-cutoff>
+    <range-m> 0.099 </range-m>
+  </light>
+
+  <light>
+    <name>lamp-nvis-5</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0683 </x-m>
+      <y-m> -0.0180 </y-m>
+      <z-m> -0.0423 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0623 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
+      <scale> 3.05001e-05 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.6 </spot-cutoff>
+    <range-m> 0.099 </range-m>
+  </light>
+
+  <light>
+    <name>lamp-nvis-6</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0683 </x-m>
+      <y-m> 0.0172 </y-m>
+      <z-m> -0.0427 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0623 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
+      <scale> 3.05001e-05 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.6 </spot-cutoff>
+    <range-m> 0.099 </range-m>
+  </light>
+
+  <light>
+    <name>lamp-nvis-7</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0683 </x-m>
+      <y-m> 0.0423 </y-m>
+      <z-m> -0.0180 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0623 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
+      <scale> 3.05001e-05 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.6 </spot-cutoff>
+    <range-m> 0.099 </range-m>
+  </light>
+
+  <animation>
+    <type>select</type>
+    <object-name>lamp-nvis-0</object-name>
+    <object-name>lamp-nvis-1</object-name>
+    <object-name>lamp-nvis-2</object-name>
+    <object-name>lamp-nvis-3</object-name>
+    <object-name>lamp-nvis-4</object-name>
+    <object-name>lamp-nvis-5</object-name>
+    <object-name>lamp-nvis-6</object-name>
+    <object-name>lamp-nvis-7</object-name>
+    <condition>
+      <greater-than>
+        <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
+        <value>0</value>
+      </greater-than>
+    </condition>
+  </animation>
+
+  <light>
+    <name>lamp-std-0</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0683 </x-m>
+      <y-m> 0.0425 </y-m>
+      <z-m> 0.0176 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0623 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 1.00 </r>
+      <g> 0.10 </g>
+      <b> 0.03 </b>
+    </color>
+    <intensity>
+      <property>/fdm/jsbsim/electrical/lighting/instruments-std</property>
+      <scale> 5.18501e-05 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.6 </spot-cutoff>
+    <range-m> 0.099 </range-m>
+  </light>
+
+  <light>
+    <name>lamp-std-1</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0683 </x-m>
+      <y-m> 0.0176 </y-m>
+      <z-m> 0.0425 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0623 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 1.00 </r>
+      <g> 0.10 </g>
+      <b> 0.03 </b>
+    </color>
+    <intensity>
+      <property>/fdm/jsbsim/electrical/lighting/instruments-std</property>
+      <scale> 5.18501e-05 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.6 </spot-cutoff>
+    <range-m> 0.099 </range-m>
+  </light>
+
+  <light>
+    <name>lamp-std-2</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0683 </x-m>
+      <y-m> -0.0176 </y-m>
+      <z-m> 0.0425 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0623 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 1.00 </r>
+      <g> 0.10 </g>
+      <b> 0.03 </b>
+    </color>
+    <intensity>
+      <property>/fdm/jsbsim/electrical/lighting/instruments-std</property>
+      <scale> 5.18501e-05 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.6 </spot-cutoff>
+    <range-m> 0.099 </range-m>
+  </light>
+
+  <light>
+    <name>lamp-std-3</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0683 </x-m>
+      <y-m> -0.0425 </y-m>
+      <z-m> 0.0176 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0623 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 1.00 </r>
+      <g> 0.10 </g>
+      <b> 0.03 </b>
+    </color>
+    <intensity>
+      <property>/fdm/jsbsim/electrical/lighting/instruments-std</property>
+      <scale> 5.18501e-05 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.6 </spot-cutoff>
+    <range-m> 0.099 </range-m>
+  </light>
+
+  <light>
+    <name>lamp-std-4</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0683 </x-m>
+      <y-m> -0.0427 </y-m>
+      <z-m> -0.0172 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0623 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 1.00 </r>
+      <g> 0.10 </g>
+      <b> 0.03 </b>
+    </color>
+    <intensity>
+      <property>/fdm/jsbsim/electrical/lighting/instruments-std</property>
+      <scale> 5.18501e-05 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.6 </spot-cutoff>
+    <range-m> 0.099 </range-m>
+  </light>
+
+  <light>
+    <name>lamp-std-5</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0683 </x-m>
+      <y-m> -0.0180 </y-m>
+      <z-m> -0.0423 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0623 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 1.00 </r>
+      <g> 0.10 </g>
+      <b> 0.03 </b>
+    </color>
+    <intensity>
+      <property>/fdm/jsbsim/electrical/lighting/instruments-std</property>
+      <scale> 5.18501e-05 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.6 </spot-cutoff>
+    <range-m> 0.099 </range-m>
+  </light>
+
+  <light>
+    <name>lamp-std-6</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0683 </x-m>
+      <y-m> 0.0172 </y-m>
+      <z-m> -0.0427 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0623 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 1.00 </r>
+      <g> 0.10 </g>
+      <b> 0.03 </b>
+    </color>
+    <intensity>
+      <property>/fdm/jsbsim/electrical/lighting/instruments-std</property>
+      <scale> 5.18501e-05 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.6 </spot-cutoff>
+    <range-m> 0.099 </range-m>
+  </light>
+
+  <light>
+    <name>lamp-std-7</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0683 </x-m>
+      <y-m> 0.0423 </y-m>
+      <z-m> -0.0180 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0623 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 1.00 </r>
+      <g> 0.10 </g>
+      <b> 0.03 </b>
+    </color>
+    <intensity>
+      <property>/fdm/jsbsim/electrical/lighting/instruments-std</property>
+      <scale> 5.18501e-05 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.6 </spot-cutoff>
+    <range-m> 0.099 </range-m>
+  </light>
+
+  <animation>
+    <type>select</type>
+    <object-name>lamp-std-0</object-name>
+    <object-name>lamp-std-1</object-name>
+    <object-name>lamp-std-2</object-name>
+    <object-name>lamp-std-3</object-name>
+    <object-name>lamp-std-4</object-name>
+    <object-name>lamp-std-5</object-name>
+    <object-name>lamp-std-6</object-name>
+    <object-name>lamp-std-7</object-name>
+    <condition>
+      <greater-than>
+        <property>/fdm/jsbsim/electrical/lighting/instruments-std</property>
+        <value>0</value>
+      </greater-than>
+    </condition>
+  </animation>
+
+  <!-- lamps: end -->
+
+</PropertyList>

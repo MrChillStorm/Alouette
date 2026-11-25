@@ -351,6 +351,24 @@
 			</binding>
 		    </checkbox>
 
+		    <text>
+			<label>NVIS instrument lights</label>
+			<halign>left</halign>
+			<row>12</row>
+		    <col>0</col>
+		    </text>
+		     <checkbox>
+			<row>12</row>
+			<col>1</col>
+			<property>/controls/al3/instrument-nvis</property>
+			<command>dialog-apply</command>
+			<live>true</live>
+			<binding>
+			    <command>property-toggle</command>
+			    <property>/controls/al3/instrument-nvis</property>
+			</binding>
+		    </checkbox>
+
 		</group>
 	     <hrule/>
 
@@ -381,6 +399,40 @@
 			<label>0.00</label>
 			<format>%.2f</format>
 			<property>/controls/al3/rudder-damper</property>
+			<live>true</live>
+			<pref-width>40</pref-width>
+		    </text>
+		</group>
+	     </group>
+	     <hrule/>
+
+	     <!-- the instrument lights' level, a gain on the dimmer knob's: the HDR renderer's exposure is no real eye's, so it wants setting at times -->
+	     <group>
+		<layout>vbox</layout>
+		<default-padding>2</default-padding>
+		<text>
+		    <label>Instrument light level</label>
+		    <halign>left</halign>
+		</text>
+		<group>
+		    <layout>hbox</layout>
+		    <slider>
+			<name>instrument-light-gain</name>
+			<property>/controls/al3/instrument-light-gain</property>
+			<min>0.1</min>
+			<max>4</max>
+			<step>0.05</step>
+			<pref-width>130</pref-width>
+			<live>true</live>
+			<binding>
+			    <command>dialog-apply</command>
+			    <object-name>instrument-light-gain</object-name>
+			</binding>
+		    </slider>
+		    <text>
+			<label>2.00</label>
+			<format>%.2f</format>
+			<property>/controls/al3/instrument-light-gain</property>
 			<live>true</live>
 			<pref-width>40</pref-width>
 		    </text>

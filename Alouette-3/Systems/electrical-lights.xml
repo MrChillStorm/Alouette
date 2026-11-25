@@ -10,6 +10,8 @@
 
 <system name="instruments-lights">
     <property>systems/effets/lights/blinker-kinemat-out</property>
+    <property value="1">/controls/al3/instrument-nvis</property>
+    <property value="2">/controls/al3/instrument-light-gain</property>
 
     <channel name="lights" execrate="4">
         <switch name="electrical/instruments-factor">
@@ -37,6 +39,34 @@
             <gain>animation/instrument-dimmer</gain>
             <output>electrical/lighting/instruments-norm</output>
         </pure_gain>
+
+        <!-- The instruments' lamps in the HDR renderer (the rings of spot lights fdm/instrlamps.py writes into the instruments'
+             XML): the dimmer's level goes to the standard (red) lights or, with the Configuration dialog's NVIS switch,
+             to the NVIS ones (night vision goggle compatible, green as the UH-60 model's); the other is 0, and a ring
+             whose level is 0 is taken out of the scene. The Configuration
+             dialog's light level is a gain on both: the HDR renderer's exposure is no real eye's, so the lights are set to taste. -->
+        <fcs_function name="electrical/lighting/instruments-std">
+            <function>
+                <product>
+                    <property>electrical/lighting/instruments-norm</property>
+                    <property>/controls/al3/instrument-light-gain</property>
+                    <difference>
+                        <value>1</value>
+                        <property>/controls/al3/instrument-nvis</property>
+                    </difference>
+                </product>
+            </function>
+        </fcs_function>
+
+        <fcs_function name="electrical/lighting/instruments-nvis">
+            <function>
+                <product>
+                    <property>electrical/lighting/instruments-norm</property>
+                    <property>/controls/al3/instrument-light-gain</property>
+                    <property>/controls/al3/instrument-nvis</property>
+                </product>
+            </function>
+        </fcs_function>
     </channel>
 
     <channel name="light-outdoor" execrate="4">
