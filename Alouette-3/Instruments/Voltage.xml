@@ -61,8 +61,8 @@
     <type>spot</type>
     <position>
       <x-m> 0.0046 </x-m>
-      <y-m> 0.0251 </y-m>
-      <z-m> 0.0102 </z-m>
+      <y-m> 0.0236 </y-m>
+      <z-m> 0.0134 </z-m>
     </position>
     <direction>
       <lookat-x-m> 0.0011 </lookat-x-m>
@@ -76,10 +76,10 @@
     </color>
     <intensity>
       <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
-      <scale> 1.05862e-05 </scale>
+      <scale> 1.41714e-05 </scale>
     </intensity>
     <spot-exponent> 3 </spot-exponent>
-    <spot-cutoff> 58.6 </spot-cutoff>
+    <spot-cutoff> 59.2 </spot-cutoff>
     <range-m> 0.058 </range-m>
   </light>
 
@@ -88,8 +88,8 @@
     <type>spot</type>
     <position>
       <x-m> 0.0046 </x-m>
-      <y-m> 0.0106 </y-m>
-      <z-m> 0.0250 </z-m>
+      <y-m> 0.0002 </y-m>
+      <z-m> 0.0271 </z-m>
     </position>
     <direction>
       <lookat-x-m> 0.0011 </lookat-x-m>
@@ -103,10 +103,10 @@
     </color>
     <intensity>
       <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
-      <scale> 1.05862e-05 </scale>
+      <scale> 1.41714e-05 </scale>
     </intensity>
     <spot-exponent> 3 </spot-exponent>
-    <spot-cutoff> 58.6 </spot-cutoff>
+    <spot-cutoff> 59.2 </spot-cutoff>
     <range-m> 0.058 </range-m>
   </light>
 
@@ -115,8 +115,8 @@
     <type>spot</type>
     <position>
       <x-m> 0.0046 </x-m>
-      <y-m> -0.0102 </y-m>
-      <z-m> 0.0252 </z-m>
+      <y-m> -0.0234 </y-m>
+      <z-m> 0.0138 </z-m>
     </position>
     <direction>
       <lookat-x-m> 0.0011 </lookat-x-m>
@@ -130,10 +130,10 @@
     </color>
     <intensity>
       <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
-      <scale> 1.05862e-05 </scale>
+      <scale> 1.41714e-05 </scale>
     </intensity>
     <spot-exponent> 3 </spot-exponent>
-    <spot-cutoff> 58.6 </spot-cutoff>
+    <spot-cutoff> 59.2 </spot-cutoff>
     <range-m> 0.058 </range-m>
   </light>
 
@@ -142,8 +142,8 @@
     <type>spot</type>
     <position>
       <x-m> 0.0046 </x-m>
-      <y-m> -0.0249 </y-m>
-      <z-m> 0.0106 </z-m>
+      <y-m> -0.0235 </y-m>
+      <z-m> -0.0135 </z-m>
     </position>
     <direction>
       <lookat-x-m> 0.0011 </lookat-x-m>
@@ -157,10 +157,10 @@
     </color>
     <intensity>
       <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
-      <scale> 1.05862e-05 </scale>
+      <scale> 1.41714e-05 </scale>
     </intensity>
     <spot-exponent> 3 </spot-exponent>
-    <spot-cutoff> 58.6 </spot-cutoff>
+    <spot-cutoff> 59.2 </spot-cutoff>
     <range-m> 0.058 </range-m>
   </light>
 
@@ -169,8 +169,8 @@
     <type>spot</type>
     <position>
       <x-m> 0.0046 </x-m>
-      <y-m> -0.0250 </y-m>
-      <z-m> -0.0103 </z-m>
+      <y-m> -0.0000 </y-m>
+      <z-m> -0.0271 </z-m>
     </position>
     <direction>
       <lookat-x-m> 0.0011 </lookat-x-m>
@@ -184,10 +184,10 @@
     </color>
     <intensity>
       <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
-      <scale> 1.05862e-05 </scale>
+      <scale> 1.41714e-05 </scale>
     </intensity>
     <spot-exponent> 3 </spot-exponent>
-    <spot-cutoff> 58.6 </spot-cutoff>
+    <spot-cutoff> 59.2 </spot-cutoff>
     <range-m> 0.058 </range-m>
   </light>
 
@@ -196,8 +196,8 @@
     <type>spot</type>
     <position>
       <x-m> 0.0046 </x-m>
-      <y-m> -0.0104 </y-m>
-      <z-m> -0.0250 </z-m>
+      <y-m> 0.0234 </y-m>
+      <z-m> -0.0137 </z-m>
     </position>
     <direction>
       <lookat-x-m> 0.0011 </lookat-x-m>
@@ -211,64 +211,10 @@
     </color>
     <intensity>
       <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
-      <scale> 1.05862e-05 </scale>
+      <scale> 1.41714e-05 </scale>
     </intensity>
     <spot-exponent> 3 </spot-exponent>
-    <spot-cutoff> 58.6 </spot-cutoff>
-    <range-m> 0.058 </range-m>
-  </light>
-
-  <light>
-    <name>lamp-nvis-6</name>
-    <type>spot</type>
-    <position>
-      <x-m> 0.0046 </x-m>
-      <y-m> 0.0104 </y-m>
-      <z-m> -0.0250 </z-m>
-    </position>
-    <direction>
-      <lookat-x-m> 0.0011 </lookat-x-m>
-      <lookat-y-m> 0.0000 </lookat-y-m>
-      <lookat-z-m> 0.0000 </lookat-z-m>
-    </direction>
-    <color>
-      <r> 0.10 </r>
-      <g> 1.00 </g>
-      <b> 0.45 </b>
-    </color>
-    <intensity>
-      <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
-      <scale> 1.05862e-05 </scale>
-    </intensity>
-    <spot-exponent> 3 </spot-exponent>
-    <spot-cutoff> 58.6 </spot-cutoff>
-    <range-m> 0.058 </range-m>
-  </light>
-
-  <light>
-    <name>lamp-nvis-7</name>
-    <type>spot</type>
-    <position>
-      <x-m> 0.0046 </x-m>
-      <y-m> 0.0249 </y-m>
-      <z-m> -0.0106 </z-m>
-    </position>
-    <direction>
-      <lookat-x-m> 0.0011 </lookat-x-m>
-      <lookat-y-m> 0.0000 </lookat-y-m>
-      <lookat-z-m> 0.0000 </lookat-z-m>
-    </direction>
-    <color>
-      <r> 0.10 </r>
-      <g> 1.00 </g>
-      <b> 0.45 </b>
-    </color>
-    <intensity>
-      <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>
-      <scale> 1.05862e-05 </scale>
-    </intensity>
-    <spot-exponent> 3 </spot-exponent>
-    <spot-cutoff> 58.6 </spot-cutoff>
+    <spot-cutoff> 59.2 </spot-cutoff>
     <range-m> 0.058 </range-m>
   </light>
 
@@ -280,8 +226,6 @@
     <object-name>lamp-nvis-3</object-name>
     <object-name>lamp-nvis-4</object-name>
     <object-name>lamp-nvis-5</object-name>
-    <object-name>lamp-nvis-6</object-name>
-    <object-name>lamp-nvis-7</object-name>
     <condition>
       <greater-than>
         <property>/fdm/jsbsim/electrical/lighting/instruments-nvis</property>

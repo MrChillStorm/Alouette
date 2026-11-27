@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """The instruments' lighting for FlightGear's HDR pipeline, which leaves out the material animation's glow the
 instruments had (Instruments/Instrument-Light*.xml): a ring of small lamps round each dial lighting its face, as the
-UH-60 model's lighted bezels (its fdm/cockpit/instruments.py, bezel_lamps and lamp_xml, used here as they are).
+UH-60 model's lighted bezels (its fdm/cockpit/instruments.py, bezel_lamps and lamp_xml, used here as they are but for the
+fewer lamps round the smallest dials).
 
 Each instrument gets a ring of spot lights, aimed inward across its face from just in front of it, in NVIS green
 (night vision goggle compatible, NVIS Green A as the UH-60's). Their intensity is a property of the lighting system
@@ -23,6 +24,7 @@ import acread
 NVIS_GREEN = (0.10, 1.00, 0.45)        # NVIS Green A (MIL-L-85762A: u' 0.088, v' 0.543), sRGB about (0, 255, 110)
 LIGHT_LUX = 20.0                       # the mean illuminance of an instrument's face at full brightness, lux: the UH-60 model's 6 lux, raised for the HDR renderer's exposure in a dark cockpit
 HDR_CD = 635.0                         # the HDR pipeline's unit of a light's intensity, cd
+SMALL_DIAL = 0.025                     # a dial of a smaller radius, m, gets six lamps instead of eight: the fuel, voltage and tailpipe temperature gauges (24 mm)
 LEVEL = '/fdm/jsbsim/electrical/lighting/instruments-nvis'    # Systems/electrical-lights.xml
 BEGIN = '<!-- lamps: begin (written by fdm/instrlamps.py) -->'
 END = '<!-- lamps: end -->'
@@ -38,8 +40,8 @@ FACE = {'Fuel': 'Cadran', 'ALT-AL_III': 'Cadran', 'ASI-S51': 'Cadran', 'IVSI-Nor
 def bezel_lamps(face, half, round=False, glass=None, out=None):
     """The UH-60 model's: the lamps of a lighted bezel: spot lights round the face, a quarter of its half size (the
     smaller one, m) above it but behind its glass (at depth `glass`) and 0.15 of it out from its edge, 0.9 apart
-    (eight round a dial), each aimed inward across the face at the nearest point of its centre line (a round face's
-    centre) 0.1 above it. Their exponent of 3 holds back the lamp's light on the face near it, so the face is lit about
+    (round a dial: eight, or six if its radius is under SMALL_DIAL), each aimed inward across the face at the nearest
+    point of its centre line (a round face's centre) 0.1 above it. Their exponent of 3 holds back the lamp's light on the face near it, so the face is lit about
     evenly, a little brighter toward the edge as a lighted bezel is; the cone takes in the face, and nothing outside
     the bezel: lights cast no shadows in FlightGear. face: (d, y, z) of the face's centre; half: its half width and
     height, or with `round` its radius twice. Returns [(position, aim point)], the exponent, cutoff (deg), range (m),
@@ -68,7 +70,7 @@ def bezel_lamps(face, half, round=False, glass=None, out=None):
     P = np.array(path); seg = np.hypot(*(np.roll(P, -1, 0) - P).T); s = np.concatenate([[0], np.cumsum(seg)[:-1]])
     n = max(4, int(math.floor(s[-1] / gap + 0.5)))
     if round:
-        n = 8
+        n = 6 if R < SMALL_DIAL else 8
     lamps = []
     for k in range(n):
         q = P[np.searchsorted(s, (k + 0.5) * seg.sum() / n) - 1]

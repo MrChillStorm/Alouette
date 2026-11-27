@@ -243,7 +243,8 @@ Josh, Thorsten Renk and Colin Geniet (3-D model, systems, Nasal). Changed in
   straight through.
 - **Instrument lights** in the HDR renderer, which leaves out the material
   animation's glow the instruments had: a ring of eight small lamps round
-  each dial lights its face, as the UH-60 model's lighted bezels
+  each dial (six round the smallest ones: fuel, voltage and tailpipe
+  temperature) lights its face, as the UH-60 model's lighted bezels
   (`fdm/instrlamps.py` writes them into `Instruments/*.xml`), in NVIS green
   (night vision goggle compatible). They light only from sunset to sunrise:
   while the sun is above the horizon their level is 0. The panel's dimmer knob
