@@ -1,0 +1,979 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- FlightGear's HDR pipeline (Compositor/HDR/hdr.xml, GPL-2.0-or-later, the FlightGear
+     authors) cut down for a view into a texture. Written by fdm/renderviews.py (see there). -->
+<PropertyList>
+  <name>RenderView</name>
+  
+  <use-osg-uniforms>true</use-osg-uniforms>
+  <use-vertex-attribute-aliasing>true</use-vertex-attribute-aliasing>
+
+  
+  <multiview>
+      
+      <view-align-mask>127</view-align-mask>
+
+      
+      <sceneview>true</sceneview>
+
+      
+      <intermediates-tiled>true</intermediates-tiled>
+  </multiview>
+
+  
+  <buffer include="screen-buffer.xml">
+    <name>gbuffer0</name>
+    <format>rgb10-a2</format>
+  </buffer>
+  <buffer include="screen-buffer.xml">
+    <name>gbuffer1</name>
+    <format>rgba8</format>
+  </buffer>
+  <buffer include="screen-buffer.xml">
+    <name>gbuffer2</name>
+    <format>rgba8</format>
+  </buffer>
+  <buffer include="screen-buffer.xml">
+    <name>gbuffer3</name>
+    <format>r11f-g11f-b10f</format>
+  </buffer>
+  <buffer include="screen-buffer.xml">
+    <name>depth-stencil</name>
+    <format>depth24-stencil8</format>
+  </buffer>
+
+  
+  <buffer include="screen-buffer.xml">
+    <name>hdr-result</name>
+    <format>r11f-g11f-b10f</format>
+  </buffer>
+
+  
+  <buffer include="cloud-buffer.xml">
+    <name>clouds</name>
+    <format>rgba16f</format>
+  </buffer>
+  <buffer include="cloud-buffer.xml">
+    <name>clouds-depth-stencil</name>
+    <format>depth24-stencil8</format>
+  </buffer>
+
+  
+  <buffer include="screen-buffer.xml">
+    <name>hdr-forward</name>
+    <format>rgba16f</format>
+  </buffer>
+
+  
+  <buffer include="screen-buffer.xml">
+    <name>render-view-output</name>
+    <format>r11f-g11f-b10f</format>
+  </buffer>
+
+  
+  <buffer>
+    <name>transmittance</name>
+    <type>2d</type>
+    <width>256</width>
+    <height>64</height>
+    <format>rgba16f</format>
+    <min-filter>linear</min-filter>
+    <mag-filter>linear</mag-filter>
+    <wrap-s>clamp-to-edge</wrap-s>
+    <wrap-t>clamp-to-edge</wrap-t>
+  </buffer>
+  <buffer>
+    <name>multiple-scattering</name>
+    <type>2d</type>
+    <width>32</width>
+    <height>32</height>
+    <format>rgba16f</format>
+    <min-filter>linear</min-filter>
+    <mag-filter>linear</mag-filter>
+    <wrap-s>clamp-to-edge</wrap-s>
+    <wrap-t>clamp-to-edge</wrap-t>
+  </buffer>
+  <buffer>
+    <name>sky-view</name>
+    <type>2d</type>
+    <width>256</width>
+    <height>256</height>
+    <format>rgba16f</format>
+    <min-filter>linear</min-filter>
+    <mag-filter>linear</mag-filter>
+    <wrap-s>repeat</wrap-s>
+    <wrap-t>clamp-to-edge</wrap-t>
+  </buffer>
+  <buffer>
+    <name>aerial-perspective</name>
+    <type>3d-mvr</type>
+    <width>64</width>
+    <height>64</height>
+    <depth>32</depth>
+    <format>rgba16f</format>
+    <min-filter>linear</min-filter>
+    <mag-filter>linear</mag-filter>
+    <wrap-s>clamp-to-edge</wrap-s>
+    <wrap-t>clamp-to-edge</wrap-t>
+    <wrap-r>clamp-to-edge</wrap-r>
+  </buffer>
+
+  
+  <buffer>
+    <name>envmap-brdf-lut</name>
+    <type>2d</type>
+    <width>512</width>
+    <height>512</height>
+    <format>rg16f</format>
+    <min-filter>linear</min-filter>
+    <mag-filter>linear</mag-filter>
+    <wrap-s>clamp-to-edge</wrap-s>
+    <wrap-t>clamp-to-edge</wrap-t>
+  </buffer>
+
+  
+  <buffer>
+    <name>envmap</name>
+    <type>cubemap</type>
+    <width><property>/sim/rendering/hdr/envmap/cubemap-size</property></width>
+    <height><property>/sim/rendering/hdr/envmap/cubemap-size</property></height>
+    <format>r11f-g11f-b10f</format>
+    <min-filter>linear-mipmap-linear</min-filter>
+    <mag-filter>linear</mag-filter>
+    <wrap-s>clamp-to-edge</wrap-s>
+    <wrap-t>clamp-to-edge</wrap-t>
+    <mipmap-levels>5</mipmap-levels>
+  </buffer>
+  <buffer>
+    <name>prefiltered-envmap</name>
+    <type>cubemap</type>
+    <width><property>/sim/rendering/hdr/envmap/cubemap-size</property></width>
+    <height><property>/sim/rendering/hdr/envmap/cubemap-size</property></height>
+    <format>r11f-g11f-b10f</format>
+    <min-filter>linear-mipmap-linear</min-filter>
+    <mag-filter>linear</mag-filter>
+    <wrap-s>clamp-to-edge</wrap-s>
+    <wrap-t>clamp-to-edge</wrap-t>
+    <mipmap-levels>5</mipmap-levels>
+  </buffer>
+
+  
+  <buffer>
+    <name>sun-shadowmap-atlas</name>
+    <type>2d</type>
+    <width>2048</width>
+    <height>2048</height>
+    <format>depth16</format>
+    <wrap-s>clamp-to-border</wrap-s>
+    <wrap-t>clamp-to-border</wrap-t>
+    <min-filter>linear</min-filter>
+    <mag-filter>linear</mag-filter>
+    <border-color type="vec4d">1.0 1.0 1.0 1.0</border-color>
+    <shadow-comparison>true</shadow-comparison>
+  </buffer>
+
+  
+  <buffer>
+    <name>prev-luminance</name>
+    <type>2d</type>
+    <width>1</width>
+    <height>1</height>
+    <format>rg32f</format>
+    <min-filter>nearest</min-filter>
+    <mag-filter>nearest</mag-filter>
+  </buffer>
+
+  
+  <buffer include="ao-buffer.xml">
+    <name>ao-filtered</name>
+  </buffer>
+
+  
+  <pass>
+    <name>clear-gbuffer</name>
+    <type>quad</type>
+    <multiview>true</multiview>
+    <effect>Effects/HDR/gbuffer-clear</effect>
+    <condition>
+      <not>
+        <property>/sim/rendering/hdr/debug/show-gbuffer</property>
+      </not>
+    </condition>
+    <attachment>
+      <component>color0</component>
+      <buffer>gbuffer1</buffer>
+    </attachment>
+  </pass>
+
+  
+  <pass>
+    <name>envmap-brdf</name>
+    <type>quad</type>
+    <render-once>true</render-once>
+    <effect>Effects/HDR/envmap-brdf</effect>
+    <attachment>
+      <component>color0</component>
+      <buffer>envmap-brdf-lut</buffer>
+    </attachment>
+  </pass>
+
+  
+  <pass>
+    <name>reset-luminance</name>
+    <type>quad</type>
+    <render-once>true</render-once>
+    <effect>Effects/HDR/reset-luminance</effect>
+    <attachment>
+      <component>color0</component>
+      <buffer>prev-luminance</buffer>
+    </attachment>
+  </pass>
+
+  
+  <pass>
+    <name>atmos-transmittance</name>
+    <render-condition>
+      <not><property>/sim/rendering/hdr/atmos-tables/hold</property></not>
+    </render-condition>
+    <type>quad</type>
+    <effect>Effects/HDR/atmos-transmittance</effect>
+    <attachment>
+      <component>color0</component>
+      <buffer>transmittance</buffer>
+    </attachment>
+  </pass>
+  <pass>
+    <name>atmos-multiple-scattering</name>
+    <render-condition>
+      <not><property>/sim/rendering/hdr/atmos-tables/hold</property></not>
+    </render-condition>
+    <type>quad</type>
+    <effect>Effects/HDR/atmos-multiple-scattering</effect>
+    <binding>
+      <unit>0</unit>
+      <buffer>transmittance</buffer>
+    </binding>
+    <attachment>
+      <component>color0</component>
+      <buffer>multiple-scattering</buffer>
+    </attachment>
+  </pass>
+  <pass>
+    <name>atmos-sky-view</name>
+    <type>quad</type>
+    <effect>Effects/HDR/atmos-sky-view</effect>
+    <binding>
+      <unit>0</unit>
+      <buffer>transmittance</buffer>
+    </binding>
+    <binding>
+      <unit>1</unit>
+      <buffer>multiple-scattering</buffer>
+    </binding>
+    <attachment>
+      <component>color0</component>
+      <buffer>sky-view</buffer>
+    </attachment>
+  </pass>
+  
+  <pass>
+    <name>atmos-aerial-perspective-compute</name>
+    <type>compute</type>
+    <multiview>multipass</multiview>
+    <workgroup-size>
+      <x>8</x>
+      <y>8</y>
+      <z>8</z>
+    </workgroup-size>
+    <global-size>
+      <x>64</x>
+      <y>64</y>
+      <z>32</z>
+    </global-size>
+    <effect>Effects/HDR/atmos-aerial-perspective-compute</effect>
+    <binding>
+      <unit>0</unit>
+      <buffer>transmittance</buffer>
+    </binding>
+    <binding>
+      <unit>1</unit>
+      <buffer>multiple-scattering</buffer>
+    </binding>
+    <image-binding>
+      <unit>0</unit>
+      <buffer>aerial-perspective</buffer>
+      <access>write-only</access>
+      <format>rgba16f</format>
+      <layered>true</layered>
+    </image-binding>
+  </pass>
+  
+  <pass>
+    <name>atmos-aerial-perspective-layered</name>
+    <type>quad</type>
+    <effect>Effects/HDR/atmos-aerial-perspective-layered</effect>
+    <binding>
+      <unit>0</unit>
+      <buffer>transmittance</buffer>
+    </binding>
+    <binding>
+      <unit>1</unit>
+      <buffer>multiple-scattering</buffer>
+    </binding>
+    <attachment>
+      <component>color0</component>
+      <buffer>aerial-perspective</buffer>
+      <face>controlled-by-geometry-shader</face>
+    </attachment>
+  </pass>
+
+  
+  <pass include="env-capture-pass.xml">
+    <name>env-capture0</name>
+    <cubemap-face>0</cubemap-face>
+    <attachment>
+      <component>color0</component>
+      <buffer>envmap</buffer>
+      <face>0</face>
+    </attachment>
+    <render-condition>
+      <property>/sim/rendering/hdr/envmap/should-render-face-0</property>
+    </render-condition>
+  </pass>
+  <pass include="env-capture-pass.xml">
+    <name>env-capture1</name>
+    <cubemap-face>1</cubemap-face>
+    <attachment>
+      <component>color0</component>
+      <buffer>envmap</buffer>
+      <face>1</face>
+    </attachment>
+    <render-condition>
+      <property>/sim/rendering/hdr/envmap/should-render-face-1</property>
+    </render-condition>
+  </pass>
+  <pass include="env-capture-pass.xml">
+    <name>env-capture2</name>
+    <cubemap-face>2</cubemap-face>
+    <attachment>
+      <component>color0</component>
+      <buffer>envmap</buffer>
+      <face>2</face>
+    </attachment>
+    <render-condition>
+      <property>/sim/rendering/hdr/envmap/should-render-face-2</property>
+    </render-condition>
+  </pass>
+  <pass include="env-capture-pass.xml">
+    <name>env-capture3</name>
+    <cubemap-face>3</cubemap-face>
+    <attachment>
+      <component>color0</component>
+      <buffer>envmap</buffer>
+      <face>3</face>
+    </attachment>
+    <render-condition>
+      <property>/sim/rendering/hdr/envmap/should-render-face-3</property>
+    </render-condition>
+  </pass>
+  <pass include="env-capture-pass.xml">
+    <name>env-capture4</name>
+    <cubemap-face>4</cubemap-face>
+    <attachment>
+      <component>color0</component>
+      <buffer>envmap</buffer>
+      <face>4</face>
+    </attachment>
+    <render-condition>
+      <property>/sim/rendering/hdr/envmap/should-render-face-4</property>
+    </render-condition>
+  </pass>
+  <pass include="env-capture-pass.xml">
+    <name>env-capture5</name>
+    <cubemap-face>5</cubemap-face>
+    <attachment>
+      <component>color0</component>
+      <buffer>envmap</buffer>
+      <face>5</face>
+      
+      <mipmap-generation>true</mipmap-generation>
+    </attachment>
+    <render-condition>
+      <property>/sim/rendering/hdr/envmap/should-render-face-5</property>
+    </render-condition>
+  </pass>
+
+  
+  <pass include="env-prefilter-pass.xml">
+    <name>env-prefilter0</name>
+    <effect>Effects/HDR/envmap-copy</effect>
+    <attachment>
+      <component>color0</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>0</face>
+      <level>0</level>
+    </attachment>
+    <attachment>
+      <component>color1</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>1</face>
+      <level>0</level>
+    </attachment>
+    <attachment>
+      <component>color2</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>2</face>
+      <level>0</level>
+    </attachment>
+    <attachment>
+      <component>color3</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>3</face>
+      <level>0</level>
+    </attachment>
+    <attachment>
+      <component>color4</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>4</face>
+      <level>0</level>
+    </attachment>
+    <attachment>
+      <component>color5</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>5</face>
+      <level>0</level>
+    </attachment>
+  </pass>
+  <pass include="env-prefilter-pass.xml">
+    <name>env-prefilter1</name>
+    <effect>Effects/HDR/envmap-prefilter1</effect>
+    <attachment>
+      <component>color0</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>0</face>
+      <level>1</level>
+    </attachment>
+    <attachment>
+      <component>color1</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>1</face>
+      <level>1</level>
+    </attachment>
+    <attachment>
+      <component>color2</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>2</face>
+      <level>1</level>
+    </attachment>
+    <attachment>
+      <component>color3</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>3</face>
+      <level>1</level>
+    </attachment>
+    <attachment>
+      <component>color4</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>4</face>
+      <level>1</level>
+    </attachment>
+    <attachment>
+      <component>color5</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>5</face>
+      <level>1</level>
+    </attachment>
+  </pass>
+  <pass include="env-prefilter-pass.xml">
+    <name>env-prefilter2</name>
+    <effect>Effects/HDR/envmap-prefilter2</effect>
+    <attachment>
+      <component>color0</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>0</face>
+      <level>2</level>
+    </attachment>
+    <attachment>
+      <component>color1</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>1</face>
+      <level>2</level>
+    </attachment>
+    <attachment>
+      <component>color2</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>2</face>
+      <level>2</level>
+    </attachment>
+    <attachment>
+      <component>color3</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>3</face>
+      <level>2</level>
+    </attachment>
+    <attachment>
+      <component>color4</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>4</face>
+      <level>2</level>
+    </attachment>
+    <attachment>
+      <component>color5</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>5</face>
+      <level>2</level>
+    </attachment>
+  </pass>
+  <pass include="env-prefilter-pass.xml">
+    <name>env-prefilter3</name>
+    <effect>Effects/HDR/envmap-prefilter3</effect>
+    <attachment>
+      <component>color0</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>0</face>
+      <level>3</level>
+    </attachment>
+    <attachment>
+      <component>color1</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>1</face>
+      <level>3</level>
+    </attachment>
+    <attachment>
+      <component>color2</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>2</face>
+      <level>3</level>
+    </attachment>
+    <attachment>
+      <component>color3</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>3</face>
+      <level>3</level>
+    </attachment>
+    <attachment>
+      <component>color4</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>4</face>
+      <level>3</level>
+    </attachment>
+    <attachment>
+      <component>color5</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>5</face>
+      <level>3</level>
+    </attachment>
+  </pass>
+  <pass include="env-prefilter-pass.xml">
+    <name>env-prefilter4</name>
+    <effect>Effects/HDR/envmap-prefilter4</effect>
+    <attachment>
+      <component>color0</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>0</face>
+      <level>4</level>
+    </attachment>
+    <attachment>
+      <component>color1</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>1</face>
+      <level>4</level>
+    </attachment>
+    <attachment>
+      <component>color2</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>2</face>
+      <level>4</level>
+    </attachment>
+    <attachment>
+      <component>color3</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>3</face>
+      <level>4</level>
+    </attachment>
+    <attachment>
+      <component>color4</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>4</face>
+      <level>4</level>
+    </attachment>
+    <attachment>
+      <component>color5</component>
+      <buffer>prefiltered-envmap</buffer>
+      <face>5</face>
+      <level>4</level>
+    </attachment>
+  </pass>
+
+  
+  <pass>
+    <name>geometry</name>
+    <type>scene</type>
+    <effect-scheme>hdr-geometry</effect-scheme>
+    <clear-mask>depth stencil</clear-mask>
+    <clear-depth>1.0</clear-depth>
+    <cull-mask>0xfffff7ff</cull-mask>
+    <clustered-shading>
+      <tile-size>128</tile-size>
+      <depth-slices>1</depth-slices>
+      <num-threads>1</num-threads>
+      <max-pointlights>1024</max-pointlights>
+      <max-spotlights>1024</max-spotlights>
+      <pbr-lights>true</pbr-lights>
+      <expose-uniforms>false</expose-uniforms>
+    </clustered-shading>
+    <attachment>
+      <component>color0</component>
+      <buffer>gbuffer0</buffer>
+    </attachment>
+    <attachment>
+      <component>color1</component>
+      <buffer>gbuffer1</buffer>
+    </attachment>
+    <attachment>
+      <component>color2</component>
+      <buffer>gbuffer2</buffer>
+    </attachment>
+    <attachment>
+      <component>color3</component>
+      <buffer>gbuffer3</buffer>
+    </attachment>
+    <attachment>
+      <component>depth</component>
+      <buffer>depth-stencil</buffer>
+    </attachment>
+    <attachment>
+      <component>stencil</component>
+      <buffer>depth-stencil</buffer>
+    </attachment>
+  <lod-scale>2</lod-scale></pass>
+
+  
+  <pass>
+    <name>gtao-denoiser</name>
+    <type>quad</type>
+    <multiview>true</multiview>
+    <condition>
+      <property>/sim/rendering/hdr/ambient-occlusion/enabled</property>
+    </condition>
+    <attachment>
+      <component>color0</component>
+      <buffer>ao-filtered</buffer>
+    </attachment>
+  <cull-mask>0x0</cull-mask><clear-mask>color</clear-mask><clear-color type="vec4d">1.0 1.0 1.0 1.0</clear-color><clear-depth>1.0</clear-depth></pass>
+
+  
+  <pass include="csm-pass.xml">
+    <name>csm0</name>
+    <near-m>0.1</near-m>
+    <far-m>2.0</far-m>
+    <viewport>
+      <x>0.0</x>
+      <y>0.0</y>
+      <width>0.5</width>
+      <height>0.5</height>
+    </viewport>
+  </pass>
+  <pass include="csm-pass.xml">
+    <name>csm1</name>
+    <near-m>2.0</near-m>
+    <far-m>40.0</far-m>
+    <viewport>
+      <x>0.5</x>
+      <y>0.0</y>
+      <width>0.5</width>
+      <height>0.5</height>
+    </viewport>
+  </pass>
+  <pass>
+    <name>csm2</name>
+    <near-m>40.0</near-m>
+    <far-m>150.0</far-m>
+    <viewport>
+      <x>0.0</x>
+      <y>0.5</y>
+      <width>0.5</width>
+      <height>0.5</height>
+    </viewport>
+  <type>csm</type>
+  <effect-scheme>hdr-shadow</effect-scheme>
+  <clear-mask>depth</clear-mask>
+  
+  <cull-mask>0x0</cull-mask>
+  <render-at-night>false</render-at-night>
+  <attachment>
+    <buffer>sun-shadowmap-atlas</buffer>
+    <component>depth</component>
+  </attachment>
+</pass>
+  <pass>
+    <name>csm3</name>
+    <near-m>150.0</near-m>
+    <far-m>500.0</far-m>
+    <viewport>
+      <x>0.5</x>
+      <y>0.5</y>
+      <width>0.5</width>
+      <height>0.5</height>
+    </viewport>
+  <type>csm</type>
+  <effect-scheme>hdr-shadow</effect-scheme>
+  <clear-mask>depth</clear-mask>
+  
+  <cull-mask>0x0</cull-mask>
+  <render-at-night>false</render-at-night>
+  <attachment>
+    <buffer>sun-shadowmap-atlas</buffer>
+    <component>depth</component>
+  </attachment>
+</pass>
+
+  
+  <pass>
+    <name>shading-opaque</name>
+    <type>quad</type>
+    
+    <memory-barrier>texture_fetch</memory-barrier>
+    <multiview>true</multiview>
+    <effect>Effects/HDR/shading-opaque</effect>
+    <use-shadow-pass>csm0</use-shadow-pass>
+    <use-shadow-pass>csm1</use-shadow-pass>
+    <use-shadow-pass>csm2</use-shadow-pass>
+    <use-shadow-pass>csm3</use-shadow-pass>
+    <use-clustered-uniforms>
+      <pass>geometry</pass>
+      <clusters-bind-unit>5</clusters-bind-unit>
+      <indices-bind-unit>6</indices-bind-unit>
+      <pointlights-bind-unit>13</pointlights-bind-unit>
+      <spotlights-bind-unit>15</spotlights-bind-unit>
+    </use-clustered-uniforms>
+    <binding>
+      <unit>0</unit>
+      <buffer>gbuffer0</buffer>
+    </binding>
+    <binding>
+      <unit>1</unit>
+      <buffer>gbuffer1</buffer>
+    </binding>
+    <binding>
+      <unit>2</unit>
+      <buffer>gbuffer2</buffer>
+    </binding>
+    <binding>
+      <unit>3</unit>
+      <buffer>gbuffer3</buffer>
+    </binding>
+    <binding>
+      <unit>4</unit>
+      <buffer>depth-stencil</buffer>
+    </binding>
+    <binding>
+      <unit>7</unit>
+      <buffer>ao-filtered</buffer>
+      <condition>
+        <property>/sim/rendering/hdr/ambient-occlusion/enabled</property>
+      </condition>
+    </binding>
+    <binding>
+      <unit>8</unit>
+      <buffer>envmap-brdf-lut</buffer>
+    </binding>
+    <binding>
+      <unit>9</unit>
+      <buffer>prefiltered-envmap</buffer>
+    </binding>
+    <binding>
+      <unit>10</unit>
+      <buffer>sun-shadowmap-atlas</buffer>
+    </binding>
+    <binding>
+      <unit>11</unit>
+      <buffer>aerial-perspective</buffer>
+    </binding>
+    <binding>
+      <unit>12</unit>
+      <buffer>transmittance</buffer>
+    </binding>
+    <binding>
+      <unit>14</unit>
+      <buffer>prev-luminance</buffer>
+    </binding>
+    <attachment>
+      <component>color0</component>
+      <buffer>hdr-result</buffer>
+    </attachment>
+    <attachment>
+      <component>stencil</component>
+      <buffer>depth-stencil</buffer>
+    </attachment>
+  </pass>
+
+  <pass>
+    <name>shading-water</name>
+    <type>quad</type>
+    <multiview>true</multiview>
+    <effect>Effects/HDR/shading-water</effect>
+    <binding>
+      <unit>0</unit>
+      <buffer>gbuffer0</buffer>
+    </binding>
+    <binding>
+      <unit>1</unit>
+      <buffer>gbuffer1</buffer>
+    </binding>
+    <binding>
+      <unit>3</unit>
+      <buffer>depth-stencil</buffer>
+    </binding>
+    <binding>
+      <unit>9</unit>
+      <buffer>prefiltered-envmap</buffer>
+    </binding>
+    <binding>
+      <unit>11</unit>
+      <buffer>aerial-perspective</buffer>
+    </binding>
+    <binding>
+      <unit>12</unit>
+      <buffer>transmittance</buffer>
+    </binding>
+    <binding>
+      <unit>14</unit>
+      <buffer>prev-luminance</buffer>
+    </binding>
+    <attachment>
+      <component>color0</component>
+      <buffer>hdr-result</buffer>
+    </attachment>
+    <attachment>
+      <component>stencil</component>
+      <buffer>depth-stencil</buffer>
+    </attachment>
+  </pass>
+
+  
+  <pass>
+    <name>clouds</name>
+    <type>quad</type>
+    <multiview>true</multiview>
+    <attachment>
+      <component>color0</component>
+      <buffer>clouds</buffer>
+    </attachment>
+    <attachment>
+      <component>depth</component>
+      <buffer>clouds-depth-stencil</buffer>
+    </attachment>
+  <cull-mask>0x0</cull-mask><clear-mask>color depth</clear-mask><clear-color type="vec4d">0.0 0.0 0.0 0.0</clear-color><clear-depth>1.0</clear-depth></pass>
+
+  
+  <pass>
+    <name>clear-forward</name>
+    <type>quad</type>
+    <multiview>true</multiview>
+    <effect>Effects/HDR/gbuffer-clear</effect>
+    <attachment>
+      <component>color0</component>
+      <buffer>hdr-forward</buffer>
+    </attachment>
+  </pass>
+  <pass>
+    <name>forward</name>
+    <type>scene</type>
+    <effect-scheme>hdr-forward</effect-scheme>
+    <use-shadow-pass>csm0</use-shadow-pass>
+    <use-shadow-pass>csm1</use-shadow-pass>
+    <use-shadow-pass>csm2</use-shadow-pass>
+    <use-shadow-pass>csm3</use-shadow-pass>
+    
+    <binding>
+      <unit>7</unit>
+      <buffer>depth-stencil</buffer>
+    </binding>
+    <binding>
+      <unit>8</unit>
+      <buffer>envmap-brdf-lut</buffer>
+    </binding>
+    <binding>
+      <unit>9</unit>
+      <buffer>prefiltered-envmap</buffer>
+    </binding>
+    <binding>
+      <unit>10</unit>
+      <buffer>sun-shadowmap-atlas</buffer>
+    </binding>
+    <binding>
+      <unit>11</unit>
+      <buffer>aerial-perspective</buffer>
+    </binding>
+    <binding>
+      <unit>12</unit>
+      <buffer>transmittance</buffer>
+    </binding>
+    <binding>
+      <unit>13</unit>
+      <buffer>sky-view</buffer>
+    </binding>
+    <binding>
+      <unit>14</unit>
+      <buffer>prev-luminance</buffer>
+    </binding>
+    <binding>
+      <unit>15</unit>
+      <buffer>clouds-depth-stencil</buffer>
+    </binding>
+    <attachment>
+      <component>color0</component>
+      <buffer>hdr-result</buffer>
+    </attachment>
+    <attachment>
+      <component>color1</component>
+      <buffer>hdr-forward</buffer>
+    </attachment>
+    <attachment>
+      <component>depth</component>
+      <buffer>depth-stencil</buffer>
+    </attachment>
+    <attachment>
+      <component>stencil</component>
+      <buffer>depth-stencil</buffer>
+    </attachment>
+  </pass>
+
+  
+  <pass>
+    <name>demosaic</name>
+    <type>quad</type>
+    <multiview>true</multiview>
+    <effect>Effects/HDR/demosaic</effect>
+    <binding>
+      <unit>0</unit>
+      <buffer>hdr-result</buffer>
+    </binding>
+    <binding>
+      <unit>1</unit>
+      <buffer>gbuffer1</buffer>
+    </binding>
+    <binding>
+      <unit>2</unit>
+      <buffer>depth-stencil</buffer>
+    </binding>
+    <binding>
+      <unit>3</unit>
+      <buffer>clouds</buffer>
+    </binding>
+    <binding>
+      <unit>4</unit>
+      <buffer>clouds-depth-stencil</buffer>
+    </binding>
+    <binding>
+      <unit>5</unit>
+      <buffer>hdr-forward</buffer>
+    </binding>
+    <attachment>
+      <component>color0</component>
+      <buffer>render-view-output</buffer>
+    </attachment>
+  </pass>
+
+  
+  </PropertyList>

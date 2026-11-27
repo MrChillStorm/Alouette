@@ -315,6 +315,12 @@
 		<object-name>rear-view mirror-glass</object-name>
 	</effect>
 	<!--== end of fdm/hdrmodel.py's glass ==-->
+    <!--== screen model: written by fdm/renderviews.py ==-->
+    <model>
+        <name>camera-screen</name>
+        <path>Aircraft/Alouette-3/Models/RenderView/screen.xml</path>
+    </model>
+    <!--== end of fdm/renderviews.py's screen model ==-->
 	
 	
         <!--==============RESCUE=======================-->

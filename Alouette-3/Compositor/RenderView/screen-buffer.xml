@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PropertyList>
+  <type>2d</type>
+  <width>screen</width>
+  <height>screen</height>
+  <screen-width-scale><property>/sim/rendering/hdr/render-scale</property></screen-width-scale>
+  <screen-height-scale><property>/sim/rendering/hdr/render-scale</property></screen-height-scale>
+</PropertyList>

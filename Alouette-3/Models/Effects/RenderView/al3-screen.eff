@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The cockpit screen: the hoist or tail camera while that view is on, else the rear-view mirror. Written by fdm/renderviews.py. -->
+<PropertyList>
+  <name>al3-screen</name>
+  <inherits-from>Effects/model-transparent</inherits-from>
+  <technique n="125">
+    <predicate>
+      <and>
+        <property>/sim/rendering/render-views/view[2]/ready</property>
+        <property>/sim/rendering/render-views/view[2]/enabled</property>
+      </and>
+    </predicate>
+    <scheme>hdr-forward</scheme>
+    <pass>
+      <depth>
+        <enabled>true</enabled>
+        <function>less</function>
+        <write-mask>false</write-mask>
+      </depth>
+      <texture-unit>
+        <unit>2</unit>
+        <type>buffer</type>
+        <buffer>al3-hoistcam</buffer>
+      </texture-unit>
+      <blend>
+        <active>true</active>
+        <source-rgb>src-alpha</source-rgb>
+        <destination-rgb>one-minus-src-alpha</destination-rgb>
+        <source-alpha>one-minus-dst-alpha</source-alpha>
+        <destination-alpha>one</destination-alpha>
+      </blend>
+      <rendering-hint>transparent</rendering-hint>
+      <cull-face><use>cull-face</use></cull-face>
+      <program>
+        <vertex-shader>Shaders/HDR/model_transparent.vert</vertex-shader>
+        <vertex-shader>Shaders/HDR/logarithmic_depth.glsl</vertex-shader>
+        <vertex-shader>Shaders/HDR/aerial_perspective.glsl</vertex-shader>
+        <vertex-shader>Shaders/HDR/mvr.vert</vertex-shader>
+        <fragment-shader>Aircraft/Alouette-3/Shaders/HDR/render-view.frag</fragment-shader>
+        <fragment-shader>Shaders/HDR/math.glsl</fragment-shader>
+        <fragment-shader>Shaders/HDR/logarithmic_depth.glsl</fragment-shader>
+        <fragment-shader>Shaders/HDR/exposure.glsl</fragment-shader>
+        <fragment-shader>Shaders/HDR/forward_pack.glsl</fragment-shader>
+        <fragment-shader>Shaders/HDR/mvr.frag</fragment-shader>
+      </program>
+      <uniform>
+        <name>render_view_tex</name>
+        <type>sampler-2d</type>
+        <value type="int">2</value>
+      </uniform>
+      <uniform>
+        <name>render_view_mode</name>
+        <type>int</type>
+        <value type="int">2</value>
+      </uniform>
+      <uniform>
+        <name>render_view_gain</name>
+        <type>float</type>
+        <value type="float">1</value>
+      </uniform>
+      <uniform>
+        <name>screen_aspect</name>
+        <type>float</type>
+        <value type="float">0.75</value>
+      </uniform>
+      <uniform>
+        <name>aerial_perspective_tex</name>
+        <type>sampler-3d</type>
+        <value type="int">11</value>
+      </uniform>
+      <uniform>
+        <name>lum_tex</name>
+        <type>sampler-2d</type>
+        <value type="int">14</value>
+      </uniform>
+      <uniform>
+        <name>exposure_compensation</name>
+        <type>float</type>
+        <value><use>exposure-compensation</use></value>
+      </uniform>
+      <uniform>
+        <name>clouds_depth_tex</name>
+        <type>sampler-2d</type>
+        <value type="int">15</value>
+      </uniform>
+    </pass>
+  </technique>
+  <technique n="126">
+    <predicate>
+      <and>
+        <property>/sim/rendering/render-views/view[1]/ready</property>
+        <property>/sim/rendering/render-views/view[1]/enabled</property>
+      </and>
+    </predicate>
+    <scheme>hdr-forward</scheme>
+    <pass>
+      <depth>
+        <enabled>true</enabled>
+        <function>less</function>
+        <write-mask>false</write-mask>
+      </depth>
+      <texture-unit>
+        <unit>2</unit>
+        <type>buffer</type>
+        <buffer>al3-tailcam</buffer>
+      </texture-unit>
+      <blend>
+        <active>true</active>
+        <source-rgb>src-alpha</source-rgb>
+        <destination-rgb>one-minus-src-alpha</destination-rgb>
+        <source-alpha>one-minus-dst-alpha</source-alpha>
+        <destination-alpha>one</destination-alpha>
+      </blend>
+      <rendering-hint>transparent</rendering-hint>
+      <cull-face><use>cull-face</use></cull-face>
+      <program>
+        <vertex-shader>Shaders/HDR/model_transparent.vert</vertex-shader>
+        <vertex-shader>Shaders/HDR/logarithmic_depth.glsl</vertex-shader>
+        <vertex-shader>Shaders/HDR/aerial_perspective.glsl</vertex-shader>
+        <vertex-shader>Shaders/HDR/mvr.vert</vertex-shader>
+        <fragment-shader>Aircraft/Alouette-3/Shaders/HDR/render-view.frag</fragment-shader>
+        <fragment-shader>Shaders/HDR/math.glsl</fragment-shader>
+        <fragment-shader>Shaders/HDR/logarithmic_depth.glsl</fragment-shader>
+        <fragment-shader>Shaders/HDR/exposure.glsl</fragment-shader>
+        <fragment-shader>Shaders/HDR/forward_pack.glsl</fragment-shader>
+        <fragment-shader>Shaders/HDR/mvr.frag</fragment-shader>
+      </program>
+      <uniform>
+        <name>render_view_tex</name>
+        <type>sampler-2d</type>
+        <value type="int">2</value>
+      </uniform>
+      <uniform>
+        <name>render_view_mode</name>
+        <type>int</type>
+        <value type="int">2</value>
+      </uniform>
+      <uniform>
+        <name>render_view_gain</name>
+        <type>float</type>
+        <value type="float">1</value>
+      </uniform>
+      <uniform>
+        <name>screen_aspect</name>
+        <type>float</type>
+        <value type="float">0.75</value>
+      </uniform>
+      <uniform>
+        <name>aerial_perspective_tex</name>
+        <type>sampler-3d</type>
+        <value type="int">11</value>
+      </uniform>
+      <uniform>
+        <name>lum_tex</name>
+        <type>sampler-2d</type>
+        <value type="int">14</value>
+      </uniform>
+      <uniform>
+        <name>exposure_compensation</name>
+        <type>float</type>
+        <value><use>exposure-compensation</use></value>
+      </uniform>
+      <uniform>
+        <name>clouds_depth_tex</name>
+        <type>sampler-2d</type>
+        <value type="int">15</value>
+      </uniform>
+    </pass>
+  </technique>
+  <technique n="127">
+    <predicate>
+      <and>
+        <property>/sim/rendering/render-views/view[0]/ready</property>
+        <property>/sim/rendering/render-views/view[0]/enabled</property>
+      </and>
+    </predicate>
+    <scheme>hdr-forward</scheme>
+    <pass>
+      <depth>
+        <enabled>true</enabled>
+        <function>less</function>
+        <write-mask>false</write-mask>
+      </depth>
+      <texture-unit>
+        <unit>2</unit>
+        <type>buffer</type>
+        <buffer>al3-mirror</buffer>
+      </texture-unit>
+      <blend>
+        <active>true</active>
+        <source-rgb>src-alpha</source-rgb>
+        <destination-rgb>one-minus-src-alpha</destination-rgb>
+        <source-alpha>one-minus-dst-alpha</source-alpha>
+        <destination-alpha>one</destination-alpha>
+      </blend>
+      <rendering-hint>transparent</rendering-hint>
+      <cull-face><use>cull-face</use></cull-face>
+      <program>
+        <vertex-shader>Shaders/HDR/model_transparent.vert</vertex-shader>
+        <vertex-shader>Shaders/HDR/logarithmic_depth.glsl</vertex-shader>
+        <vertex-shader>Shaders/HDR/aerial_perspective.glsl</vertex-shader>
+        <vertex-shader>Shaders/HDR/mvr.vert</vertex-shader>
+        <fragment-shader>Aircraft/Alouette-3/Shaders/HDR/render-view.frag</fragment-shader>
+        <fragment-shader>Shaders/HDR/math.glsl</fragment-shader>
+        <fragment-shader>Shaders/HDR/logarithmic_depth.glsl</fragment-shader>
+        <fragment-shader>Shaders/HDR/exposure.glsl</fragment-shader>
+        <fragment-shader>Shaders/HDR/forward_pack.glsl</fragment-shader>
+        <fragment-shader>Shaders/HDR/mvr.frag</fragment-shader>
+      </program>
+      <uniform>
+        <name>render_view_tex</name>
+        <type>sampler-2d</type>
+        <value type="int">2</value>
+      </uniform>
+      <uniform>
+        <name>render_view_mode</name>
+        <type>int</type>
+        <value type="int">3</value>
+      </uniform>
+      <uniform>
+        <name>render_view_gain</name>
+        <type>float</type>
+        <value type="float">1</value>
+      </uniform>
+      <uniform>
+        <name>screen_aspect</name>
+        <type>float</type>
+        <value type="float">0.75</value>
+      </uniform>
+      <uniform>
+        <name>aerial_perspective_tex</name>
+        <type>sampler-3d</type>
+        <value type="int">11</value>
+      </uniform>
+      <uniform>
+        <name>lum_tex</name>
+        <type>sampler-2d</type>
+        <value type="int">14</value>
+      </uniform>
+      <uniform>
+        <name>exposure_compensation</name>
+        <type>float</type>
+        <value><use>exposure-compensation</use></value>
+      </uniform>
+      <uniform>
+        <name>clouds_depth_tex</name>
+        <type>sampler-2d</type>
+        <value type="int">15</value>
+      </uniform>
+    </pass>
+  </technique>
+</PropertyList>

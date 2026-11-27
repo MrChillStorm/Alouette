@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The cockpit screen: there only while FlightGear renders its views. Written by fdm/renderviews.py. -->
+<PropertyList>
+  <path>screen.ac</path>
+  <effect>
+    <inherits-from>Aircraft/Alouette-3/Models/Effects/RenderView/al3-screen</inherits-from>
+    <object-name>al3-camera-screen</object-name>
+  </effect>
+  <animation>
+    <type>select</type>
+    <object-name>al3-camera-screen</object-name>
+    <object-name>al3-camera-screen-bezel</object-name>
+    <condition>
+      <and>
+        <property>/sim/rendering/render-views/view[0]/ready</property>
+        <or>
+          <property>/sim/rendering/render-views/view[0]/enabled</property>
+          <property>/sim/rendering/render-views/view[1]/enabled</property>
+          <property>/sim/rendering/render-views/view[2]/enabled</property>
+        </or>
+      </and>
+    </condition>
+  </animation>
+  <animation>
+    <type>pick</type>
+    <object-name>al3-camera-screen</object-name>
+    <action>
+      <button>0</button>
+      <binding>
+        <command>nasal</command>
+        <script>al3screen.cycle();</script>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>al3-camera-screen</tooltip-id>
+        <label>Screen: mirror / tail camera / hoist camera</label>
+      </binding>
+    </hovered>
+  </animation>
+</PropertyList>
