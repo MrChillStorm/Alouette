@@ -237,8 +237,6 @@
 		<!-- the tail rotor control's hydraulic damper, as the time constant in seconds of a lag between pedals and tail rotor
 		     (Configuration dialog's slider); 0: none -->
 		<rudder-damper type="double">0</rudder-damper>
-		<!-- the instrument lights, NVIS (night vision goggle compatible, green) or standard (red): Configuration dialog's switch -->
-		<instrument-nvis type="bool">true</instrument-nvis>
 		<!-- a gain on their level (Configuration dialog's slider): the HDR renderer's exposure is no real eye's, so it starts at 2 -->
 		<instrument-light-gain type="double">2</instrument-light-gain>
 		<collective type="double">0</collective>

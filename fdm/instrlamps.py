@@ -3,11 +3,11 @@
 instruments had (Instruments/Instrument-Light*.xml): a ring of small lamps round each dial lighting its face, as the
 UH-60 model's lighted bezels (its fdm/cockpit/instruments.py, bezel_lamps and lamp_xml, used here as they are).
 
-Each instrument gets two rings of spot lights, aimed inward across its face from just in front of it: the NVIS ones
-(night vision goggle compatible, NVIS Green A as the UH-60's) and the standard red ones. The intensity of each is a
-property of the lighting system (Systems/electrical-lights.xml: the dimmer knob's level, the sun's height, the
-Configuration dialog's light level, 0 for the ring not in use), and a select animation takes the ring out of the
-scene when its level is 0: lights off draw no lamps.
+Each instrument gets a ring of spot lights, aimed inward across its face from just in front of it, in NVIS green
+(night vision goggle compatible, NVIS Green A as the UH-60's). Their intensity is a property of the lighting system
+(Systems/electrical-lights.xml: the dimmer knob's level times the Configuration dialog's light level, 0 while the sun is
+above the horizon), and a select animation takes the ring out of the scene when that is 0: by day, or with the lights
+off, no lamps are drawn.
 
 The light level is the mean illuminance of the face at full brightness, LIGHT_LUX; the pipeline has no photometric
 units, its unit of a light's intensity being 635 cd (see the UH-60 model's HDR_CD).
@@ -21,11 +21,9 @@ import numpy as np
 import acread
 
 NVIS_GREEN = (0.10, 1.00, 0.45)        # NVIS Green A (MIL-L-85762A: u' 0.088, v' 0.543), sRGB about (0, 255, 110)
-STD_RED = (1.00, 0.10, 0.03)           # the standard instrument lights
-RED_SCALE = 1.7                        # their intensity relative to the NVIS ones: red on the screen is brighter than the same candela of green
 LIGHT_LUX = 20.0                       # the mean illuminance of an instrument's face at full brightness, lux: the UH-60 model's 6 lux, raised for the HDR renderer's exposure in a dark cockpit
 HDR_CD = 635.0                         # the HDR pipeline's unit of a light's intensity, cd
-LEVEL = '/fdm/jsbsim/electrical/lighting/instruments-'    # + std or nvis: Systems/electrical-lights.xml
+LEVEL = '/fdm/jsbsim/electrical/lighting/instruments-nvis'    # Systems/electrical-lights.xml
 BEGIN = '<!-- lamps: begin (written by fdm/instrlamps.py) -->'
 END = '<!-- lamps: end -->'
 
@@ -129,13 +127,9 @@ def face_of(ac, obj):
 
 def lamps_xml(face, radius):
     lamps, e, cut, rng, cd1, even = bezel_lamps(face, (radius, radius), round=True)
-    out, names = '', {}
-    for tag, color, scale in (('nvis', NVIS_GREEN, 1.0), ('std', STD_RED, RED_SCALE)):
-        names[tag] = ['lamp-%s-%d' % (tag, k) for k in range(len(lamps))]
-        for nm, (p, a) in zip(names[tag], lamps):
-            out += lamp_xml(nm, p, a, color, LEVEL + tag, LIGHT_LUX * cd1 * scale, e, cut, rng)
-        out += select_xml(names[tag], LEVEL + tag)
-    return out, len(lamps), even
+    names = ['lamp-nvis-%d' % k for k in range(len(lamps))]
+    out = ''.join(lamp_xml(nm, p, a, NVIS_GREEN, LEVEL, LIGHT_LUX * cd1, e, cut, rng) for nm, (p, a) in zip(names, lamps))
+    return out + select_xml(names, LEVEL), len(lamps), even
 
 
 def write(xml, text):
@@ -158,7 +152,7 @@ def main(root):
         face, radius = face_of(os.path.join(instr, mesh), obj)
         text, n, even = lamps_xml(face, radius)
         write(xml, text)
-        print('%-26s face x %.4f y %+.4f z %+.4f  R %.4f  %d lamps x 2, evenness %.1f' % ((name,) + face + (radius, n, even)))
+        print('%-26s face x %.4f y %+.4f z %+.4f  R %.4f  %d lamps, evenness %.1f' % ((name,) + face + (radius, n, even)))
 
 
 if __name__ == '__main__':

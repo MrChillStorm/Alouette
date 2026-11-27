@@ -351,24 +351,6 @@
 			</binding>
 		    </checkbox>
 
-		    <text>
-			<label>NVIS instrument lights</label>
-			<halign>left</halign>
-			<row>12</row>
-		    <col>0</col>
-		    </text>
-		     <checkbox>
-			<row>12</row>
-			<col>1</col>
-			<property>/controls/al3/instrument-nvis</property>
-			<command>dialog-apply</command>
-			<live>true</live>
-			<binding>
-			    <command>property-toggle</command>
-			    <property>/controls/al3/instrument-nvis</property>
-			</binding>
-		    </checkbox>
-
 		</group>
 	     <hrule/>
 

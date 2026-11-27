@@ -245,14 +245,14 @@ Josh, Thorsten Renk and Colin Geniet (3-D model, systems, Nasal). Changed in
   animation's glow the instruments had: a ring of eight small lamps round
   each dial lights its face, as the UH-60 model's lighted bezels
   (`fdm/instrlamps.py` writes them into `Instruments/*.xml`), in NVIS green
-  (night vision goggle compatible) or, with the Configuration dialog's NVIS
-  switch off, in red. The panel's dimmer knob sets the level, the sun's height
-  dims it by day, and the dialog's Instrument light level slider (0.1 to 4,
+  (night vision goggle compatible). They light only from sunset to sunrise:
+  while the sun is above the horizon their level is 0. The panel's dimmer knob
+  sets the level, and the dialog's Instrument light level slider (0.1 to 4,
   2 to start, `/controls/al3/instrument-light-gain`) scales it: the HDR renderer's exposure
   is no real eye's, so the lights want setting to taste, and it follows the
   strobe lights' flashes, so the lights seem to pump with them (switch the
   strobes off to steady them). The lights need the master switch. A ring whose
-  level is 0 (the one not in use, or both with the lights off) is taken out of
+  level is 0 (by day, or with the lights off) is taken out of
   the scene by a select animation: no lamps are drawn.
 - **System rates.** The build writes an `execrate` into the channels of the
   original systems it keeps (`steady-behaviour`, `crash-detect`, the

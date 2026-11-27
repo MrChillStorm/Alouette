@@ -10,7 +10,6 @@
 
 <system name="instruments-lights">
     <property>systems/effets/lights/blinker-kinemat-out</property>
-    <property value="1">/controls/al3/instrument-nvis</property>
     <property value="2">/controls/al3/instrument-light-gain</property>
 
     <channel name="lights" execrate="4">
@@ -41,29 +40,19 @@
         </pure_gain>
 
         <!-- The instruments' lamps in the HDR renderer (the rings of spot lights fdm/instrlamps.py writes into the instruments'
-             XML): the dimmer's level goes to the standard (red) lights or, with the Configuration dialog's NVIS switch,
-             to the NVIS ones (night vision goggle compatible, green as the UH-60 model's); the other is 0, and a ring
-             whose level is 0 is taken out of the scene. The Configuration
-             dialog's light level is a gain on both: the HDR renderer's exposure is no real eye's, so the lights are set to taste. -->
-        <fcs_function name="electrical/lighting/instruments-std">
-            <function>
-                <product>
-                    <property>electrical/lighting/instruments-norm</property>
-                    <property>/controls/al3/instrument-light-gain</property>
-                    <difference>
-                        <value>1</value>
-                        <property>/controls/al3/instrument-nvis</property>
-                    </difference>
-                </product>
-            </function>
-        </fcs_function>
-
+             XML), NVIS green (night vision goggle compatible, as the UH-60 model's). Their level is the dimmer knob's times
+             the Configuration dialog's light level (a gain: the HDR renderer's exposure is no real eye's, so the lights are
+             set to taste), and 0 while the sun is above the horizon (sun-angle-rad, its angle from straight up, under
+             pi/2). A ring whose level is 0 is taken out of the scene, so by day no lamps are drawn. -->
         <fcs_function name="electrical/lighting/instruments-nvis">
             <function>
                 <product>
                     <property>electrical/lighting/instruments-norm</property>
                     <property>/controls/al3/instrument-light-gain</property>
-                    <property>/controls/al3/instrument-nvis</property>
+                    <gt>
+                        <property>/sim/time/sun-angle-rad</property>
+                        <value>1.5708</value>
+                    </gt>
                 </product>
             </function>
         </fcs_function>
