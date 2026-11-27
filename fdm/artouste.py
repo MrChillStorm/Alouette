@@ -4,7 +4,8 @@ freewheel, the rotor brake and the rotor speed degree of freedom, as a JSBSim sy
 Sources (al3data): [TE] the Artouste III type certificate: 33 500 +-200 rpm in steady operation, output shaft 5773 rpm,
 take-off 420 kW (IIIB) and maximum continuous 405 kW at the reduction gear, T4 limits 630 C starting, 550 C take-off,
 500 C continuous; [TC] 640 kW of thermal power on the ground at sea level, the transmission's 440 kW take-off and 420
-kW continuous; [HA] the gearbox-limited 420 kW held up to 4000-4500 m in the standard atmosphere, a centrifugal clutch;
+kW continuous; [SPEC] the gearbox-limited 420 kW held up to 4500 m in the standard atmosphere, or to +60 C at sea
+level ([HA]: 4000-4500 m), a centrifugal clutch;
 [E77] Turbomeca: the Artouste's hydromechanical governor holds the engine speed constant whatever the power, an
 isochronous PI (remanent error under 0.25 %), and the pilot only selects the collective; [WA] 0.46 kg/kWh, pressure
 ratio 5.2, 4.3 kg/s; [SR] a cockpit recording of an SA 316B's start: idle 16 330 rpm; [AO] the AOPA Pilot's flight
@@ -23,13 +24,16 @@ so the rotor speed is the engine's (94.85 to 1). The engine model (estimates whe
   - fuel at sea level: no load 70 kg/h at 100 % (estimate: a single-shaft engine turns its compressor at full speed),
     186 kg/h at the 405 kW rating (0.46 kg/kWh [WA]), so 253 kg/h at the 640 kW thermal maximum; which gives 205 l/h at
     a 300 kW cruise, the type's quoted 200 l/h [HA];
-  - the thermal maximum lapses with altitude as 640 kW delta theta^-2.2: the gearbox's 420 kW up to 4250 m [HA]
-    (set so, from [HA]'s statement; not fitted to the hover ceilings, which the report reads against the power);
+  - the thermal maximum lapses with altitude as 640 kW delta theta^-1.32: the gearbox's 420 kW up to 4500 m [SPEC]
+    (set so, from [SPEC]'s statement; not fitted to the hover ceilings, which the report reads against the power). At
+    +60 C at sea level it is still 528 kW, so the 420 kW holds there too, as [SPEC] says, with room to spare;
   - T4 from the fuel's share of the thermal maximum's beyond no load, 1.99 T_amb (300 C at sea level) unloaded to
     550 C at the thermal maximum [TE], with a 1.5 s lag;
-  - the governor: an isochronous PI on the engine speed [E77], its fuel limited to the thermal maximum (550 C) and,
-    decelerating, to 40 % of the no-load fuel; gains estimates (1 % of speed error: half the thermal range of fuel;
-    reset 1 s), its fuel reaching the turbine with a 0.1 s lag;
+  - the governor: an isochronous PI on the engine speed [E77], its fuel limited to the lower of the thermal maximum
+    (550 C) and the fuel at which the spool gives 420 kW, the maximum available power, limited by the reduction gearing
+    [SPEC p. 6] (how the aircraft holds that limit the sources do not say: here the fuel stops there, and past it the
+    rotor droops), and, decelerating, to 40 % of the no-load fuel; gains estimates (1 % of speed error: half the thermal
+    range of fuel; reset 1 s), its fuel reaching the turbine with a 0.1 s lag;
   - the fuel flow lever: idle, 16 330 rpm (the recording's [SR], between the Alouette's 15 000 [AO] and the Lama's
     17 000-18 000 [RW]), up to 35 % of its travel [LM], then the governor's reference rises to 33 500 rpm at the stop;
   - the start [E77, RW, SR]: the starter cranks the spool (its torque falling to nothing at 17 %), the start system's
@@ -43,6 +47,7 @@ so the rotor speed is the engine's (94.85 to 1). The engine model (estimates whe
 import math
 from xmlfun import *
 import al3data as U
+from atmosphere import isa
 
 G0 = 32.174
 OMEGA0 = U.OMEGA
@@ -51,7 +56,10 @@ KW_FTLB = 737.562                          # (ft lb/s) per kW
 Q_TH = U.P_THERMAL_KW * KW_FTLB / OMEGA0   # ft lb at the rotor: the thermal maximum at 100 % (12 760)
 WF_NL, WF_MCP = 70.0, U.SFC * U.P_MCP_KW   # kg/h at sea level, 100 %
 WF_TH = WF_NL + (WF_MCP - WF_NL) * U.P_THERMAL_KW / U.P_MCP_KW
-LAPSE_THETA = -2.2                         # P_th = 640 kW delta theta^LAPSE_THETA: 420 kW to 4250 m [HA]
+# P_th = 640 kW delta theta^LAPSE_THETA, the exponent that leaves the gearbox's 420 kW at 4500 m [SPEC] (-1.321)
+FLAT_M = 4500.0
+_T, _P = isa(FLAT_M)[:2]
+LAPSE_THETA = math.log(U.P_TO_KW / (U.P_THERMAL_KW * _P / 101325.0)) / math.log(_T / 288.15)
 # rotating inertias about the shaft, slug ft^2: the blades (rigid), the hub (its 64 kg about 0.2 m [E76]) and the
 # mast and main gearbox's output (estimate), and the Artouste's spool referred to the rotor: about 0.15 kg m^2
 # (compressor impeller, axial stage and three turbine discs; estimate) times 94.85^2
@@ -158,8 +166,13 @@ def build(pm_tank, fcs_name='Alouette III drive'):
                 desc='governed speed over 33 500 rpm')
     err = f.fn('eng/n-err', D(nref, n))
     wf_nl = f.fn('eng/wf-nl-c', M(v(WF_NL), tag('pow', MAX(n, v(0)), v(2.5))))
-    # the fuel's ceiling: the thermal maximum's T4 (550 C) at this airflow (the spool's speed), as the T4 below has it
-    wmax = f.fn('eng/wf-limit-c', S(wf_nl, M(D(p('eng/wf-max-c'), v(WF_NL)), MAX(n, v(0.1)))))
+    # the fuel's ceiling: the lower of the thermal maximum's T4 (550 C) at this airflow (the spool's speed), as the T4
+    # below has it, and the corrected fuel at which the spool's torque (eng/q-next, below) gives U.P_MAX_KW at its speed
+    w_therm = S(wf_nl, M(D(p('eng/wf-max-c'), v(WF_NL)), MAX(n, v(0.1))))
+    w_gear = S(wf_nl, Q(v(U.P_MAX_KW * KW_FTLB * (WF_TH - WF_NL) / Q_TH),
+                        M(MAX(N, v(1.0)), MAX(dsth, v(0.05)), SQ(MAX(n, v(0.01))))))
+    wmax = f.fn('eng/wf-limit-c', MIN(w_therm, w_gear),
+                desc='the fuel\'s ceiling, kg/h corrected: the thermal maximum, or the 420 kW the reduction gearing allows')
     wmin = M(v(0.4), wf_nl)
     pi_out = S(p('eng/gov-int'), M(p('eng/gov-kp'), err), wf_nl)
     # the start: from the starter's press until the spool reaches idle the fuel is the start system's flow (the governor

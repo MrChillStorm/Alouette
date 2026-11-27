@@ -15,11 +15,15 @@ import harness as H
 
 KT_FPS = 1.68781
 CLIMB_KT = (30, 40, 50, 60, 70, 80)
-AUTO_KT = (30, 40, 50, 60, 70, 80, 90, 100)
+WALK_KT = 2.0               # a speed that doesn't trim from its neighbour's solution is walked up to in steps this fine
+ALPHA_MAX = 60.0            # deg: slow and steep, the near-level airframe meets the air 25 to 50 deg off its nose
+# from 40 kt: below about 33 kt the model has no steady autorotation (descent.py's descents): the path steepens into the
+# vortex ring state, where the engine must still give power
+AUTO_KT = (40, 50, 60, 70, 80, 90, 100)
 
 
 def power_kw(f, V, gamma, alt_ft, x0):
-    x, r, e = H.trim(f, V, alt_ft=alt_ft, gamma=gamma, x0=x0, extra=H.ENGINE_POWER)
+    x, r, e = H.trim(f, V, alt_ft=alt_ft, gamma=gamma, x0=x0, extra=H.ENGINE_POWER, alpha_max=ALPHA_MAX)
     return e[0] * e[1] / 737.562, x, float(np.abs(r).max())
 
 
@@ -69,7 +73,21 @@ def solve(f, V, target_kw, alt_ft, g_lo, g_hi, x0=None, tol_kw=1.0, iters=16, re
     return g, p, x, r
 
 
-def by_power(kg=2200.0, V=55.0, powers=(250.0, 300.0, 330.0, 360.0, 405.0), alt_ft=1000.0):
+def walk(f, v_from, v_to, target_kw, alt_ft, g, x):
+    """the point at v_to reached from the converged one at v_from in steps of at most WALK_KT; None if a step fails"""
+    n = max(1, int(math.ceil(abs(v_to - v_from) / WALK_KT)))
+    for i in range(1, n + 1):
+        g1, p, x1, r = solve(f, v_from + (v_to - v_from) * i / n, target_kw, alt_ft, g - 4.0, g + 4.0, x)
+        if r >= 0.05:
+            return None
+        g, x = g1, x1
+    return g, p, x, r
+
+
+BY_POWER_KW = (250.0, 300.0, 330.0, 360.0, 390.0, 405.0, 420.0)     # 390: the hover charts'; 405, 420: the ratings
+
+
+def by_power(kg=2200.0, V=55.0, powers=BY_POWER_KW, alt_ft=1000.0):
     """the rate of climb at one airspeed (about the least power's) against the power available"""
     out = []
     for pa in powers:
@@ -80,11 +98,21 @@ def by_power(kg=2200.0, V=55.0, powers=(250.0, 300.0, 330.0, 360.0, 405.0), alt_
 
 
 def run(stage, kg=2200.0, alt_ft=1000.0, p_avail=None, verbose=True, speeds=None):
-    f = H.load(model='al3-2200')
-    H.set_weight(f, kg)
+    def fresh():                        # a failed trim can leave the rotor's states wild: the next starts afresh
+        f = H.load(model='al3-2200')
+        H.set_weight(f, kg)
+        return f
+    f = fresh()
     pa = p_avail or H.p_avail_kw(alt_ft, rating='mcp')
-    out = dict(kg=kg, alt=alt_ft, p_avail=pa if stage == 'climb' else 0.0, points=[])
+    out = dict(kg=kg, alt=alt_ft, p_avail=pa if stage == 'climb' else 0.0, points=[], missing=[])
     x0, g_prev = None, None
+
+    def point(V, g, p, x, r):
+        rate = V * KT_FPS * math.sin(math.radians(g)) * 60
+        out['points'].append(dict(V=V, gamma=g, kw=p, fpm=rate, x=[float(v) for v in x], res=r, coll07=H.coll_07(x)))
+        if verbose:
+            print('%s %3d kt: path %6.2f deg  %6.0f ft/min  power %6.1f kW  collective 0.7R %5.2f deg  residual %.3f'
+                  % (stage, V, g, rate, p, H.coll_07(x), r))
     # climbs from the slowest speed up, autorotations from the fastest down, each from its neighbour's solution
     order = speeds or (CLIMB_KT if stage == 'climb' else AUTO_KT[::-1])
     for V in order:
@@ -94,17 +122,28 @@ def run(stage, kg=2200.0, alt_ft=1000.0, p_avail=None, verbose=True, speeds=None
         else:
             g0, g1 = g_prev - 4.0, g_prev + 4.0
         g, p, x, r = solve(f, V, target, alt_ft, g0, g1, x0)
-        if r < 0.05:
-            x0, g_prev = x, g
-        rate = V * KT_FPS * math.sin(math.radians(g)) * 60
         if r >= 0.05:
-            if verbose:
-                print('%s %3d kt: no converged trim' % (stage, V))
+            out['missing'].append(V)
+            f = fresh()
             continue
-        out['points'].append(dict(V=V, gamma=g, kw=p, fpm=rate, x=[float(v) for v in x], res=r, coll07=H.coll_07(x)))
-        if verbose:
-            print('%s %3d kt: path %6.2f deg  %6.0f ft/min  power %6.1f kW  collective 0.7R %5.2f deg  residual %.3f'
-                  % (stage, V, g, rate, p, H.coll_07(x), r))
+        x0, g_prev = x, g
+        point(V, g, p, x, r)
+    # the speeds missed: each walked to from the nearest trimmed one, on either side, the nearest first
+    tried = set()
+    while out['points']:
+        left = [v for v in out['missing'] if v not in tried]
+        if not left:
+            break
+        gap = lambda v: min(abs(v - q['V']) for q in out['points'])
+        V = min(left, key=gap)
+        q = min(out['points'], key=lambda q: abs(q['V'] - V))
+        tried.add(V)
+        got = walk(fresh(), q['V'], V, target, alt_ft, q['gamma'], q['x'])
+        if got:
+            point(V, *got)
+            out['missing'].remove(V)
+    if verbose and out['missing']:
+        print('%s: no converged trim at %s kt' % (stage, out['missing']))
     out['points'].sort(key=lambda q: q['V'])
     return out
 

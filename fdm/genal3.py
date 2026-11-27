@@ -133,8 +133,8 @@ class Model:
         coll = c.fn('ctl/coll-norm', p('/controls/al3/collective'), clip=('0', '1'),
                     desc='collective lever, 0 down .. 1 up (FlightGear: the throttle axis, inverted by option)')
         # the original aircraft's autopilot (Systems/autopilot.xml: heading and altitude holds, its commands in the old
-        # model's control radians) and Amelia, the copilot who hovers for the hoist (Systems/amelia.xml, in stick units),
-        # add to the pilot's controls as they did there
+        # model's control radians) adds to the pilot's controls as it did there. Amelia, the copilot who hovers for the
+        # hoist, moves the controls themselves on this model (Systems/amelia.xml), so her three terms here stay at 0
         for n in ('systems/amelia/pitch-cmd', 'systems/amelia/roll-cmd', 'systems/amelia/yaw-cmd',
                   'autopilot/ap-pitch-cmd', 'autopilot/ap-roll-cmd', 'autopilot/ap-yaw-cmd'):
             c.declare(n, 0)
@@ -499,8 +499,8 @@ class Model:
         chi = g.fn('aero/rotor/chi-rad', ATAN2(Vip, MAX(Vn, v(0.5))), 'wake skew angle')
         g.fn('aero/rotor/chi-deg', M(v(R2D), chi))
         # ground effect on the induced velocity [as the UH-60 and Bo 105 models]: the hover's against the hub height
-        # (U.GE_K: the Bo 105's and UH-60's, not fitted), carried into forward flight
-        # with Heyson's ratio [NASA TN D-234]
+        # (U.GE_K, fitted to the flight manual's hover ceilings in and out of ground effect: hovercharts.py),
+        # carried into forward flight with Heyson's ratio [NASA TN D-234]
         hh = g.fn('aero/rotor/hub-agl-ft', S(p('position/h-agl-ft'), Q(D(v(U.WL_MR), p('inertia/cg-z-in')), v(12))))
         zr = g.fn('aero/rotor/ge-z-r', MAX(v(U.GE_ZR_MIN), Q(hh, v(U.R))))
         th_, ph_ = p('attitude/theta-rad'), p('attitude/phi-rad')
@@ -511,7 +511,13 @@ class Model:
         kh = g.fn('aero/rotor/ge-k-hover', tag('pow', S(v(1), Q(v(U.GE_K), SQR(zr))), v(U.GE_EXP)))
         g.fn('aero/rotor/kge', S(v(1), M(D(kh, v(1)), T2('aero/rotor/ge-z-r', 'aero/rotor/ge-chi-deg', HG.ZR, HG.CHI_DEG, HG.RATIO))),
              'induced velocity in / out of ground effect')
-        g.fn('aero/rotor/vi-fps', M(p('aero/rotor/kge'), v0), 'uniform induced velocity with ground effect')
+        # the hover's inflow correction (U.HOVER_VI: the Bo 105's shape, the Alouette's strength; hoverinflow.py)
+        mt = Q(M(p('rotor/omega-rad_sec'), v(U.R)), p('atmosphere/a-fps'))
+        dm = M(v(U.HOVER_VI_MACH / 0.1), D(mt, v(U.HOVER_VI_M0)))
+        g.fn('aero/rotor/khover', S(v(1), M(v(U.HOVER_VI), S(v(1), dm), SQR(COS(chi)))),
+             'induced velocity met in the hover over the wake\'s own')
+        g.fn('aero/rotor/vi-fps', M(p('aero/rotor/kge'), p('aero/rotor/khover'), v0),
+             'uniform induced velocity with ground effect and the hover correction')
         # Peters-He flow parameters against the wake skew X = tan(chi / 2); the gains are the rotor system's (inflow_states)
         WR = g.fn('aero/rotor/ph/omega-r-fps', MAX(M(p('rotor/omega-rad_sec'), v(U.R)), v(30)))
         g.fn('aero/rotor/ph/X', Q(SIN(chi), S(v(1), COS(chi))))
@@ -558,7 +564,7 @@ class Model:
             for (jj, rh) in shapes:
                 lam = S(*[M(p('rotor/ph/%s%d' % (tg, i)), tf(tg, rh)) if rh else p('rotor/ph/%s%d' % (tg, i))
                           for sts, tg in ((U.PH_COS, 'c'), (U.PH_SIN, 's')) for i, st_ in enumerate(sts) if st_ == (jj, rh)])
-                vi_shape[(jj, rh)] = g.fn(b + '/vi-%d-%d' % (jj, rh), M(p('aero/rotor/kge'), WR, lam),
+                vi_shape[(jj, rh)] = g.fn(b + '/vi-%d-%d' % (jj, rh), M(p('aero/rotor/kge'), p('aero/rotor/khover'), WR, lam),
                                           'induced velocity of the inflow shape (%d, %d), ft/s' % (jj, rh))
             # the segment's velocity relative to the air is linear in its distance rho from the hinge: in shaft axes
             # V = V0 + rho V1 (the hub's motion, the rotation and the body's rates at the hinge; the blade's own flap and
@@ -776,8 +782,13 @@ class Model:
 
     def fuselage(s):
         """The pod's coefficients (data/al3_fuselage.py: the 1/5-scale tests of the body with its engine [E94], faired
-        into a cross-flow model) at their reference point, wind axes, in the local flow with the main rotor's wake;
-        flying backwards they are mirrored front to back."""
+        into a cross-flow model) at their reference point, in the local flow with the main rotor's wake; flying
+        backwards they are mirrored front to back. Each push is worked out from the flow it faces: lift and drag (the
+        tests', and at large angles the belly's) from the flow in the plane of symmetry, fore-and-aft and vertical; the
+        side's, square to the side, from the flow square to it. So a flat push never gets a part along its surface,
+        whatever the yaw, and with no side flow this is the tests' wind-axis form. The moments go the same way, each
+        about the helicopter's own axis: pitch from the plane of symmetry's flow, yaw from the fore-and-aft and side
+        flows, and none about the long axis."""
         g = s.g
         t = FUS.tables()
         kw = s.wake('fus')
@@ -785,26 +796,21 @@ class Model:
         Vy = g.fn('aero/fus/Vy-fps', S(p('velocities/v-aero-fps'), kw[1]))
         Vz = g.fn('aero/fus/Vz-fps', S(p('velocities/w-aero-fps'), kw[2]))
         Vxz = g.fn('aero/fus/Vxz-fps', MAX(SQ(S(SQR(Vx), SQR(Vz))), v(0.01)))
-        V = g.fn('aero/fus/V-fps', MAX(SQ(S(SQR(Vx), SQR(Vy), SQR(Vz))), v(0.01)))
         g.fn('aero/fus/alpha-deg', M(v(R2D), ATAN2(Vz, ABS(Vx))), 'tunnel pitch angle (front-back mirrored)')
-        g.fn('aero/fus/psi-deg', M(v(-R2D), ATAN2(Vy, Vxz)), 'tunnel yaw angle = -sideslip (nose right of the wind +)')
-        g.fn('aero/fus/psi-abs-deg', ABS(p('aero/fus/psi-deg')))
         kf = g.fn('aero/fus/kfwd', MAX(v(-1), MIN(v(1), Q(Vx, v(3.0)))))
-        q = g.fn('aero/fus/qbar-psf', M(v(0.5), p('atmosphere/rho-slugs_ft3'), SQR(V)))
-        A_, P_, PA = 'aero/fus/alpha-deg', 'aero/fus/psi-deg', 'aero/fus/psi-abs-deg'
-        Dq = g.fn('aero/fus/D-ft2', S(T1(A_, t['alpha'], t['D0']), T1(PA, t['psi_abs'], t['dD'])))
-        Lq = g.fn('aero/fus/L-ft2', M(kf, S(T1(A_, t['alpha'], t['L0']), T1(PA, t['psi_abs'], t['dL']))))
-        Mq = g.fn('aero/fus/M-ft3', M(kf, T2(A_, PA, t['alpha'], t['psi_abs'], t['M'])))
-        Yq = g.fn('aero/fus/Y-ft2', T1(P_, t['psi'], t['Y']))
-        Rq = g.fn('aero/fus/R-ft3', M(kf, T1(P_, t['psi'], t['R'])))
-        Nq = g.fn('aero/fus/N-ft3', T1(P_, t['psi'], t['N']))
+        qs = g.fn('aero/fus/qbar-sym-psf', M(v(0.5), p('atmosphere/rho-slugs_ft3'), SQR(Vxz)), 'of the plane of symmetry\'s flow')
+        A_ = 'aero/fus/alpha-deg'
+        Dq = g.fn('aero/fus/D-ft2', T1(A_, t['alpha'], t['D0']))
+        Lq = g.fn('aero/fus/L-ft2', M(kf, T1(A_, t['alpha'], t['L0'])))
+        Mq = g.fn('aero/fus/M-ft3', M(kf, T1(A_, t['alpha'], t['M'])))
         ca, sa = Q(Vx, Vxz), Q(Vz, Vxz)
-        cb, sb = Q(Vxz, V), Q(Vy, V)
-        c1 = (Q(Vx, V), Q(Vy, V), Q(Vz, V))
-        c2 = (M(ca, sb), NEG(cb), M(sa, sb))
-        c3 = (NEG(sa), v(0), ca)
-        F = [g.fn('aero/fus/F%s-lbs' % a, M(q, NEG(S(M(Dq, c1[i]), M(Yq, c2[i]), M(Lq, c3[i]))))) for i, a in enumerate('XYZ')]
-        Mw = [g.fn('aero/fus/M%s-wind' % a, M(q, S(M(Rq, c1[i]), NEG(M(Mq, c2[i])), M(Nq, c3[i])))) for i, a in enumerate('LMN')]
+        # the forces: drag along the symmetry plane's flow and lift square to it, and the side's push
+        F = [g.fn('aero/fus/FX-lbs', M(qs, NEG(D(M(Dq, ca), M(Lq, sa))))),
+             g.fn('aero/fus/FY-lbs', M(v(-0.5 * t['side']), p('atmosphere/rho-slugs_ft3'), Vy, ABS(Vy))),
+             g.fn('aero/fus/FZ-lbs', M(qs, NEG(S(M(Dq, sa), M(Lq, ca)))))]
+        # the moments about the reference, body axes: the pitching one, and the yawing one, Munk's, -rho k Vol u v
+        Mw = [v(0), g.fn('aero/fus/Mpitch-ftlb', M(qs, Mq)),
+              g.fn('aero/fus/Nyaw-ftlb', M(v(-t['munk']), p('atmosphere/rho-slugs_ft3'), Vx, Vy))]
         rx, ry, rz = s.arm_rp(FUS.FS_REF, FUS.BL_REF, FUS.WL_REF)
         Mo = (S(Mw[0], D(M(ry, F[2]), M(rz, F[1]))), S(Mw[1], D(M(rz, F[0]), M(rx, F[2]))), S(Mw[2], D(M(rx, F[1]), M(ry, F[0]))))
         Mo = [g.fn('aero/fus/%s-ftlb' % a, e) for a, e in zip('LMN', Mo)]
@@ -1233,7 +1239,7 @@ FUEL_DEFAULT_LB = 0.6 * FUEL_MAX_LB
 
 
 def mass_config(cg=None, weight=None, inertia=None):
-    """Empty mass, CG and inertias from the component build-up (al3data.COMPONENTS), the empty mass the type's [VP]
+    """Empty mass, CG and inertias from the component build-up (al3data.COMPONENTS), the empty mass the type's [SPEC]
     and its CG EMPTY_CG_MM (the build-up's moved to it); loads as point masses. For a test configuration (cg, weight,
     inertia): everything at that CG."""
     comps = U.COMPONENTS

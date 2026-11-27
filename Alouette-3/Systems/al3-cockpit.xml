@@ -188,7 +188,7 @@
 <channel name="gauges" execrate="2">
 <fcs_function name="cockpit/engine-rpm"><function><property>eng/rpm</property></function><output>propulsion/engine/engine-rpm</output><output>propulsion/engine[0]/engine-rpm</output></fcs_function>
 <fcs_function name="cockpit/rotor-rpm"><function><product><value>9.5492966</value><property>rotor/omega-rad_sec</property></product></function><output>propulsion/engine/rotor-rpm</output><output>propulsion/engine[0]/rotor-rpm</output><output>animation/rotor0-rotation</output></fcs_function>
-<fcs_function name="cockpit/tail-rpm"><function><product><value>52.39699</value><property>rotor/omega-rad_sec</property></product></function><output>propulsion/engine[1]/rotor-rpm</output><output>animation/rotor/tail/rpm</output></fcs_function>
+<fcs_function name="cockpit/tail-rpm"><function><product><value>54.100064</value><property>rotor/omega-rad_sec</property></product></function><output>propulsion/engine[1]/rotor-rpm</output><output>animation/rotor/tail/rpm</output></fcs_function>
 <fcs_function name="cockpit/n1"><function><property>eng/n-pct</property></function><output>propulsion/engine/n1</output><output>propulsion/engine[0]/n1</output></fcs_function>
 <fcs_function name="cockpit/t4"><function><property>eng/t4-degc</property></function><output>propulsion/engine[0]/itt-c</output></fcs_function>
 <fcs_function name="cockpit/torque"><function><property>drive/mr-torque-ftlb</property></function><output>propulsion/engine/torque-lbsft</output><output>propulsion/engine[0]/torque-lbsft</output><output>systems/rotor/main/torque</output></fcs_function>

@@ -23,6 +23,7 @@ def load(root=None, dt=None, model='alouette3', hold_rpm=True):     # dt: the ra
         f.set_aircraft_path('aircraft/alouette3')
         f.load_model(model, False)
     f['drive/hold-rpm'] = 1.0 if hold_rpm else 0.0
+    f['ic/lat-geod-deg'] = U.TEST_LAT_DEG           # standard gravity
     return f
 
 
@@ -79,12 +80,13 @@ def residual(f, x, V_kt, alt_ft=1000.0, gamma=0.0, settle_s=1.5, revs=2, wings_l
 
 
 def trim(f, V_kt, alt_ft=1000.0, gamma=0.0, x0=None, tol=None, iters=14, verbose=False, wings_level=False, beta=0.0,
-         extra=('aero/rotor/power-hp',), terrain_ft=None, ned=None):
+         extra=('aero/rotor/power-hp',), terrain_ft=None, ned=None, alpha_max=25.0):
     """Newton trim of collective, cyclic, pedals, angle of attack and roll for steady straight flight (airframe frozen,
-    rotor running), bounded, with a backtracking line search. Returns x, residuals, extra means."""
+    rotor running), bounded (the angle of attack within +-alpha_max, deg), with a backtracking line search. Returns x,
+    residuals, extra means."""
     f['ctl/init'] = 1
     freeze(f)
-    lo = np.array([0.0, -1, -1, -1, -25, -25]); hi = np.array([1.0, 1, 1, 1, 25, 25])
+    lo = np.array([0.0, -1, -1, -1, -alpha_max, -25]); hi = np.array([1.0, 1, 1, 1, alpha_max, 25])
     x = np.array(x0 if x0 is not None else [0.5, 0.0, 0.0, 0.0, 0.0, 0.0], float)
     h = np.array([0.01, 0.01, 0.01, 0.01, 0.3, 0.3])
     scale = np.array([1, 1, 1, 10, 10, 10.0])

@@ -11,10 +11,17 @@
   [TD]  This Day in Aviation, "Sud-Aviation SA 316B Alouette III" and "World record for altitude without payload"
         (Lama), after Aerospatiale's data: main rotor clockwise seen from above (advancing blade on the left), 353.2
         rpm, 270-420 rpm in autorotation; tail rotor three-bladed, on the right side of the boom, a pusher, clockwise
-        seen from the left (advancing blade below: the top blade moves aft), 1.912 m, 2001 rpm (with a main rotor at
-        about 365 rpm: see [SR]); at 2200 kg: cruise 185
+        seen from the left (advancing blade below: the top blade moves aft), 1.912 m, 2001 rpm; at 2200 kg: cruise 185
         km/h, VNE 210 km/h, hover ceiling 1650 m in ground effect and 100 m out of it; at 1750 kg: 5550 m and 1650 m;
         climb 4.3 to 8.7 m/s at those weights
+  [SPEC] Aerospatiale, "SA 316 B Alouette III, multipurpose helicopter: Type Specifications", 1 January 1973
+        (https://www.alouettelama.com/pdf/316B-SPEC-19730101.pdf), appendix I: the performance table and the flight
+        manual's performance curves, among them the hover ceilings in and out of ground effect (digitized in
+        data/al3_hover_charts.py). Its table gives at 2200 kg [TD]'s 1650 m in ground effect and 100 m out of it, but
+        5550 and 4900 m at 1700 kg where [TD] has 5550 and 1650 m at 1750 kg. Its description (pp. 3, 6 and 9, the
+        scan's pages 5, 8 and 11) gives the tail rotor 2001 rpm at a main rotor's 353.2; the engine's 420 kW held up to
+        4500 m in the standard atmosphere, or to +60 C at sea level; the empty weight 1122 kg without the engine oil
+        (7 kg); and a 550 litre fuel tank
   [HA]  heli-archive.ch, "SE 3160 Alouette III": fully articulated rotor, three metal blades (light alloy extruded
         spar, sheet skin, stainless steel leading edge), constant chord, twisted; centrifugal clutch, three-stage main
         gearbox; Artouste IIIB single-spool, constant speed, governed at 33 500 rpm; hydraulic servo controls;
@@ -55,13 +62,16 @@
         Alouette III pilot's handbook: the blade's chord, 355 mm at 0.6 m from the shaft to 340 mm at the tip
   [SR]  sound recordings of governed Alouette III and Lama rotors (seven of eight, in the cabin, the cockpit and
         outside, analysed with the PyWopWop sound model's tools): the tail rotor's blade passing at 5.487 times the
-        main rotor's, so 1938 rpm at 353.2 rpm; HAL's pair, 2001 rpm with a 363 rpm main rotor [HL], gives 5.51.
-        2001 rpm [TD] is thus the tail rotor's speed at a main rotor's of about 365 rpm, not at 353.2; and two recorded
+        main rotor's, which would be 1938 rpm at 353.2 rpm; HAL's pair, 2001 rpm with a 363 rpm main rotor [HL], gives
+        5.51. The model flies the manufacturer's 5.665 [SPEC], 3 % above the recordings' ratio; and two recorded
         starts, the spool's speed from the engine's 11th and 16th orders and the rotor's from the main gearbox's lines:
         ZU-REC's (cockpit, the checklist start: the spool at 10 % 4 s after the starter, light-off at 16 % at about
         14.5 s, 30 % at 27 s, 45 % at 38 s, idle at 16 330 rpm, its tachometer about 16 500, by about 45 s; the spool held at 77-80 % while the clutch slips, the rotor
         from rest to 55 % in 21 s, 75 % in 39 s, locked at 80 % in 45 s) and A-301's (outside, the spool held at
         59-63 %: the rotor locked at about 63 % in 64 s)
+  [BO]  the full-size Bo 105 rotor in hover in NASA Ames' 40 x 80 ft tunnel: R. L. Peterson and W. Warmbrodt, NASA
+        TM-85892, 1984 (appendix A: tabulated collective, thrust and power at 425 rpm), and W. Warmbrodt and R. L.
+        Peterson, NASA TM-85990, 1984 (fig. 3: power and figure of merit at 350-425 rpm), in data/bo105_hover.py
   [AO]  R. W. Sweazey, "Pilot Flight Check: Alouette III", The AOPA Pilot, October 1972 (an SE 3160): the engine
         idles at about 15 000 rpm and the clutch engages as it passes 19 000 (the model's clutch from there);
         autorotation at about 1700 ft/min
@@ -98,6 +108,10 @@ IN_PER_M = 39.3701
 FT_PER_M = 3.28084
 KG_LB = 2.20462
 KGM2 = 0.737562            # kg m^2 -> slug ft^2
+# the offline tests' latitude (harness.py): there JSBSim's gravity on a body at rest is standard gravity, 9.80665 m/s2
+# (measured: 9.7803 at the equator, JSBSim's default, where every weight would be 0.27 % light; 9.8321 at the pole).
+# FlightGear flies with the gravity of wherever the aircraft is.
+TEST_LAT_DEG = 45.447
 
 # ---------------------------------------------------------------- frames
 # the 3-D model's hub (rotor model origin, Alouette-III-sc_jsb.xml offsets -0.0051, 0, 1.59275 m, pitched 1.5 deg
@@ -166,7 +180,7 @@ LAG_C = LAG_ZETA * 2 * I_B * math.sqrt(E_FLAP * S_B / I_B) * OMEGA   # ft lb s /
 # ---------------------------------------------------------------- tail rotor
 R_TR = 0.956 * FT_PER_M     # ft: 1.912 m [TD; TC 1.91]
 NB_TR = 3
-GEAR_TR = 5.487            # tail / main rotor speed [SR]: 1938 rpm at 353.2 (2001 rpm [TD] at 364.7)
+GEAR_TR = 2001.0 / 353.2   # tail / main rotor speed (5.665): 2001 rpm at 353.2 [SPEC p. 9] ([SR] measured 5.487)
 CHORD_TR = 0.17 * FT_PER_M  # ft: a real SA 316B blade's 170 mm width [AC] (the 3-D model's blade 0.16 m)
 R_ROOT_TR = 0.20 * FT_PER_M # ft: the blade's aerodynamic span starts 0.20 m from the hub [3D]
 # a real blade: 840 mm, 1.436 kg [AC]: from 0.116 m to the tip, uniform; its flap hinge at 0.06 m (not published)
@@ -191,6 +205,8 @@ GEAR_ENGINE = N_ENGINE / (OMEGA * 60 / (2 * math.pi))   # engine / main rotor sp
 P_TO_KW, P_MCP_KW = 420.0, 405.0          # engine ratings at the reduction gear [TE, TC]
 P_TRANS_TO_KW, P_TRANS_MCP_KW = 440.0, 420.0   # SA 316 B transmission limits [TC]
 P_THERMAL_KW = 640.0        # maximum thermal power on the ground, sea level [TC]
+P_MAX_KW = 420.0            # the maximum available power at the reduction gear, "as limited by reduction gearing"
+                            # [SPEC p. 6]: the governor's fuel stops at it (artouste.py)
 T4_START, T4_TO, T4_MCP = 630.0, 550.0, 500.0   # C [TE]
 PRESSURE_RATIO, AIR_FLOW = 5.2, 4.3       # at 100 %, sea level [WA]
 SFC = 0.46                  # kg/kWh at the rating [WA]
@@ -206,7 +222,8 @@ S_EP = 0.18 * 10.7639
 FS_EP, BL_EP, WL_EP = model_to_station(-4.95, -1.17, 0.40)   # the right one
 
 # ---------------------------------------------------------------- mass and loading [TC, VP]
-EMPTY_KG = 1143.0           # [VP] (heli-archive: about 1105 kg for the SE 3160; 1122-1230 kg elsewhere)
+EMPTY_KG = 1122.0 + 7.0     # [SPEC p. 3] the standard aircraft's, and the engine's oil, which it leaves out ([VP]
+                            # 1143 kg; heli-archive about 1105 kg for the SE 3160; up to 1230 kg elsewhere)
 MTOW_KG = 2200.0            # [TC]
 CG_FWD_MM, CG_AFT_MM = 2780.0, 3080.0      # from the datum [TC] (3080-3150 mm single-seat, VNE 190 km/h)
 CG_LAT_MM = (-140.0, 120.0)                # left, right [TC]
@@ -240,7 +257,7 @@ TR_PITCH_RANGE = (-8.0, 22.0)    # deg, full left / full right pedal; + = thrust
 COLL_IN, LON_IN, LAT_IN, PED_IN = 9.0, 12.0, 9.0, 4.4    # control travels, in (the cockpit's animations)
 
 # ---------------------------------------------------------------- mass build-up (estimates against the totals)
-# The empty mass and its CG are the type's [VP, TC]; how it is distributed is not published: the components below are
+# The empty mass and its CG are the type's [SPEC, TC]; how it is distributed is not published: the components below are
 # estimates (engine [TE], rotor head [E76] and blades as above) from the 3-D model's layout, scaled so that they add up
 # to the empty mass. Body frame (YASim: x forward, y left, z up, m); each a point mass plus its own radii of gyration
 # (kx, ky, kz, m). They give the inertias; the blades' own rotation (flapping, lag, spin) is the rotor model's, so the
@@ -277,8 +294,23 @@ def twist(r):
 # ---------------------------------------------------------------- inflow, ground effect
 PH_COS = [(1, 0), (3, 0), (5, 0), (2, 1)]
 PH_SIN = [(2, 1)]
-GE_K, GE_EXP = 0.174, -0.5   # the Bo 105's and UH-60's (not fitted: the report sets the ground effect the autopilot flies against
-                             # the published ceilings in and out of it)
+# in the hover the blades meet more induced velocity than the Peters-He wake gives: run on the Bo 105's full-size rotor
+# [BO], the model's own hover method needs less power and less collective than was measured. The induced velocity (at
+# the blades, and in the wake's wash over the tail rotor and surfaces) is the wake's times
+# 1 + HOVER_VI (1 + HOVER_VI_MACH (M - HOVER_VI_M0) / 0.1) cos^2(chi), M the rotor's tip Mach number, chi the wake skew
+# angle. Its shape is the Bo 105's: the same at every blade loading, rising with tip Mach (on the Bo 105 itself HOVER_VI
+# would be 0.14; with it the method's collective rises with thrust as measured, which no fit used). Its strength is the
+# Alouette's, one number: the hover at 100 m density altitude and 2190 kg out of ground effect on the charts' 390 kW
+# [SPEC fig. 3-5] (hoverinflow.py). The cos^2 fade with forward speed is an assumption: [BO] is hover only. It does not
+# close the charts' gap at altitude: at 4000 m the model still needs 24 kW less than 390
+HOVER_VI, HOVER_VI_MACH, HOVER_VI_M0 = 0.0866, 0.364, 0.60
+# the induced velocity in ground effect over that out of it, in the hover, is (1 + GE_K / (z/R)^2)^GE_EXP, z the hub's
+# height. GE_K is fitted to the flight manual's hover ceilings in and out of ground effect [SPEC fig. 3-5], which are
+# flown on the same power below the chart's knee: on one power the model hovers 1.062 times the weight in ground effect
+# that it hovers out of it, as the chart does from 1650 to 4000 m (hovercharts.py --fit). The charts give no wheel
+# height; the fit takes the wheels 1 m up, [LM]'s take-off hover (it would be 0.082 at 0.5 m, 0.137 at 1.5 m and 0.170
+# at 2 m). The Bo 105's and UH-60's 0.174, which the model had, gives 1.095 at 1 m
+GE_K, GE_EXP = 0.108, -0.5
 GE_ZR_MIN = 0.3
 
 if __name__ == '__main__':

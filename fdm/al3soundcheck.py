@@ -31,7 +31,7 @@ LIMIT = 64
 HEARD = 1e-3
 DOORS = ('fdm/jsbsim/animation/left-door-pos-norm', 'fdm/jsbsim/animation/right-door-pos-norm',
          'fdm/jsbsim/animation/left-cabin_door-pos-norm', 'fdm/jsbsim/animation/right-cabin_door-pos-norm')
-NOM, NOM_T, N_IDLE = 353.2, 1938.0, 48.7
+NOM, NOM_T, N_IDLE = 353.2, 2001.0, 48.7
 fails = []
 BANK = os.path.expanduser('~/git/PyWopWop/out/alouette3')
 

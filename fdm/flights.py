@@ -107,11 +107,13 @@ def mode(f, s, m, rec, **targets):
         s['target/' + k.replace('_', '-')] = v
 
 
-def mission(kg=2200.0, verbose=True):
+def mission(kg=2200.0, verbose=True, cruise_ft=1500.0, recover_ft=800.0):
     """a test flight: take-off to a 10 ft hover; accelerate to 40 kt climbing (hover mode: ground speed and height),
-    then to 60 kt and 1000 ft (cruise mode); cruise at 100 kt; slow to 65 kt; a practice autorotation (the fuel flow
-    lever to idle, the collective on the rotor speed, 65 kt) to 300 ft; power back on: the lever to flight, the rotor
-    speed held until the engine has caught the rotor again, then a climb; slow to 20 kt and to a hover at 10 ft; land"""
+    then to 60 kt and cruise_ft (cruise mode); cruise at 100 kt; slow to 65 kt; a practice autorotation (the fuel flow
+    lever to idle, the collective on the rotor speed, 65 kt) to recover_ft; power back on: the lever to flight, the rotor
+    speed held until the engine has caught the rotor again, then a climb; slow to 20 kt and to a hover at 10 ft; land.
+    Stopping the autorotation's descent of some 2000 ft/min within the engine's 420 kW takes height: recovered at 300 ft,
+    as this flight first was, it touches the ground"""
     f, s = on_wheels(kg)
     rec = []
     fly(f, s, 3.0, rec)
@@ -119,15 +121,15 @@ def mission(kg=2200.0, verbose=True):
     phase('take-off', f, s, 40, rec)
     s['target/u-fps'] = 40 * 1.6878; s['target/height-ft'] = 200.0
     phase('accelerate', f, s, 60, rec, until=lambda r: r['kt'] > 35)
-    mode(f, s, 1, rec, alt_ft=1000.0, speed_kt=60.0)
-    phase('climb at 60 kt', f, s, 150, rec, until=lambda r: abs(r['kt'] - 60) < 2 and r['h'] > 990)
+    mode(f, s, 1, rec, alt_ft=cruise_ft, speed_kt=60.0)
+    phase('climb at 60 kt', f, s, 200, rec, until=lambda r: abs(r['kt'] - 60) < 2 and r['h'] > cruise_ft - 10)
     s['target/speed-kt'] = 100.0
     phase('cruise 100 kt', f, s, 60, rec)
     s['target/speed-kt'] = 65.0
     phase('slow to 65 kt', f, s, 40, rec)
     f['eng/flow-lever'] = 0.35
     mode(f, s, 2, rec, nr_rpm=353.2)
-    phase('autorotation', f, s, 60, rec, until=lambda r: r['h'] < 300)
+    phase('autorotation', f, s, 60, rec, until=lambda r: r['h'] < recover_ft)
     f['eng/flow-lever'] = 1.0
     phase('power on', f, s, 30, rec, until=lambda r: f['eng/engaged'] > 0.5)
     mode(f, s, 1, rec, alt_ft=f['position/h-sl-ft'] + 200.0)

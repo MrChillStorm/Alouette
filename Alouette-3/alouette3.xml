@@ -14,8 +14,8 @@
     <location name="VRP" unit="IN"><x>119.41</x><y>0.0</y><z>0.00</z></location>
   </metrics>
   <mass_balance>
-    <ixx unit="SLUG*FT2">700</ixx><iyy unit="SLUG*FT2">3276</iyy><izz unit="SLUG*FT2">2861</izz><ixz unit="SLUG*FT2">178</ixz>
-    <emptywt unit="LBS">2519.9</emptywt>
+    <ixx unit="SLUG*FT2">692</ixx><iyy unit="SLUG*FT2">3236</iyy><izz unit="SLUG*FT2">2826</izz><ixz unit="SLUG*FT2">176</ixz>
+    <emptywt unit="LBS">2489.0</emptywt>
     <location name="CG" unit="IN"><x>121.46</x><y>0.00</y><z>20.64</z></location>
     <pointmass name="Pilot (right seat)">
       <weight unit="LBS">187.4</weight>

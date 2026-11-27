@@ -23,12 +23,14 @@
 	
 	<animation>
 		<!-- The needle's angle at each printed value is the dial's own (the numbers .4 to 1 and the ticks). The blade pitch
-		     at each value, from the original table's notes (decimal degrees, 1.09 deg for each 0.1 from .7 to 1: 13.15, 14.24,
-		     15.33, 16.42 for 1; GP 18.3, PP 5.5), is the pitch at the blade ROOT, the pilot's collective pitch; fcs/x-col is the
-		     pitch at 0.7 R, the root's less the twist (4.55 deg), so each input is the dial's pitch less that. The check: the
-		     computer's worked example (3700 m density altitude, 1940 kg in the hover, needle at the 93 % limit = 15.66 deg) in
-		     this model takes 14.75 deg at the root (10.20 at 0.7 R, which the dial's scale would not reach). The hover at
-		     2200 kg, sea level takes 13.17 deg at the root: .70 -->
+		     at each value is from the original table's notes, read as they are written, in degrees and minutes: 12°06' at
+		     .60 to 16°42' at 1, 1°09' for each 0.1 (the original table, and this one until 2026-11-26, took the minutes
+		     for decimals); GP 18°30', PP 5°50'. The notes name no source. They are taken as the pitch at the blade ROOT,
+		     the pilot's collective pitch, which they don't say (an inference, in part from what fits this model);
+		     fcs/x-col is the pitch at 0.7 R, the root's less the twist (4.55 deg), so each input is the dial's pitch less
+		     that. The computer's worked example (3700 m density altitude, 1940 kg in the hover, needle at the 93 % limit
+		     = 15°54') takes 15.3 deg at the root in this model. The hover at 2200 kg, sea level takes 13.6 deg at the
+		     root: .73 (both out of ground effect, standard atmosphere) -->
 		<type>rotate</type>
 		<object-name>needle-col</object-name>
 		<property>fdm/jsbsim/fcs/x-col</property>
@@ -38,39 +40,39 @@
 				<dep>-5</dep>
 			</entry>
 			<entry>
-				<ind>0.016580628</ind> <!--  PP 10%  5°50 -->
+				<ind>0.022398392</ind><!--PP 10%: 5°50'-->
 				<dep>22</dep> <!--10% ???-->
 			</entry>
 			<entry>
-				<ind>0.093026049</ind><!--40%: 9.88 deg-->
+				<ind>0.091629786</ind><!--40%: 9°48', not in the notes: two steps below 60%-->
 				<dep>70</dep>
 			</entry>
 			<entry>
-				<ind>0.112050138</ind><!--50%: 10.97 deg-->
+				<ind>0.111701072</ind><!--50%: 10°57', not in the notes: one step below 60%-->
 				<dep>93</dep>
 			</entry>
 			<entry>
-				<ind>0.131074227</ind><!--60% : 12.06 deg (12°04') -->
+				<ind>0.131772359</ind><!--60%: 12°06'-->
 				<dep>116</dep>
 			</entry>
 			<entry>
-				<ind>0.150098319</ind><!--70% : 13°15' -->
+				<ind>0.151843645</ind><!--70%: 13°15'-->
 				<dep>143</dep>
 			</entry>
 			<entry>
-				<ind>0.169122409</ind><!--80% : 14°24'-->
+				<ind>0.171914931</ind><!--80%: 14°24'-->
 				<dep>172</dep>
 			</entry>
 			<entry>
-				<ind>0.188146489</ind> <!--90% : 15°33' -->
+				<ind>0.191986218</ind><!--90%: 15°33'-->
 				<dep>201</dep>
 			</entry>
 			<entry>
-				<ind>0.207170579</ind> <!--100% : 16°42' -->
+				<ind>0.212057504</ind><!--100%: 16°42'-->
 				<dep>234</dep>
 			</entry>
 			<entry>
-				<ind>0.239982769</ind><!--GP 18°30'- -->
+				<ind>0.243473431</ind><!--GP: 18°30'-->
 				<dep>270</dep> 
 			</entry>
 		</interpolation>

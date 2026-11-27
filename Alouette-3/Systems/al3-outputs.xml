@@ -4,7 +4,7 @@
 <channel name="rotor" execrate="2">
 <fcs_function name="out/rotor-rpm"><function><product><value>9.5492966</value><property>rotor/omega-rad_sec</property></product></function><output>/rotors/main/rpm</output></fcs_function>
 <fcs_function name="out/rotor-rpm-pct"><function><product><value>2.7036514</value><property>rotor/omega-rad_sec</property></product></function><output>/rotors/main/rpm-pct</output></fcs_function>
-<fcs_function name="out/tail-rpm"><function><product><value>52.39699</value><property>rotor/omega-rad_sec</property></product></function><output>/rotors/tail/rpm</output></fcs_function>
+<fcs_function name="out/tail-rpm"><function><product><value>54.100064</value><property>rotor/omega-rad_sec</property></product></function><output>/rotors/tail/rpm</output></fcs_function>
 <fcs_function name="out/b0-position"><function><ifthen><gt><sum><product><value>57.29578</value><property>rotor/psi-rad</property></product><value>0</value></sum><value>360</value></gt><difference><sum><product><value>57.29578</value><property>rotor/psi-rad</property></product><value>0</value></sum><value>360</value></difference><sum><product><value>57.29578</value><property>rotor/psi-rad</property></product><value>0</value></sum></ifthen></function><output>/rotors/main/blade[0]/position-deg</output></fcs_function>
 <fcs_function name="out/b0-flap"><function><product><value>57.29578</value><property>rotor/b0/beta-rad</property></product></function><output>/rotors/main/blade[0]/flap-deg</output></fcs_function>
 <fcs_function name="out/b0-lag"><function><product><value>57.29578</value><property>rotor/b0/delta-rad</property></product></function><output>/rotors/main/blade[0]/lag-deg</output></fcs_function>

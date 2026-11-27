@@ -123,13 +123,10 @@
 90 0.729977 0.73458 0.763187 0.814748 0.879796 0.936891 0.964826 0.954287 0.909642 0.847788 0.789661 0.748742 0.729977
 </tableData></table><property>aero/rotor/vi-fps</property></product></sum></function></fcs_function>
 <fcs_function name="aero/fus/Vxz-fps"><function><max><sqrt><sum><pow><property>aero/fus/Vx-fps</property><value>2</value></pow><pow><property>aero/fus/Vz-fps</property><value>2</value></pow></sum></sqrt><value>0.01</value></max></function></fcs_function>
-<fcs_function name="aero/fus/V-fps"><function><max><sqrt><sum><pow><property>aero/fus/Vx-fps</property><value>2</value></pow><pow><property>aero/fus/Vy-fps</property><value>2</value></pow><pow><property>aero/fus/Vz-fps</property><value>2</value></pow></sum></sqrt><value>0.01</value></max></function></fcs_function>
 <fcs_function name="aero/fus/alpha-deg"><description>tunnel pitch angle (front-back mirrored)</description><function><product><value>57.29578</value><atan2><property>aero/fus/Vz-fps</property><abs><property>aero/fus/Vx-fps</property></abs></atan2></product></function></fcs_function>
-<fcs_function name="aero/fus/psi-deg"><description>tunnel yaw angle = -sideslip (nose right of the wind +)</description><function><product><value>-57.29578</value><atan2><property>aero/fus/Vy-fps</property><property>aero/fus/Vxz-fps</property></atan2></product></function></fcs_function>
-<fcs_function name="aero/fus/psi-abs-deg"><function><abs><property>aero/fus/psi-deg</property></abs></function></fcs_function>
 <fcs_function name="aero/fus/kfwd"><function><max><value>-1</value><min><value>1</value><quotient><property>aero/fus/Vx-fps</property><value>3</value></quotient></min></max></function></fcs_function>
-<fcs_function name="aero/fus/qbar-psf"><function><product><value>0.5</value><property>atmosphere/rho-slugs_ft3</property><pow><property>aero/fus/V-fps</property><value>2</value></pow></product></function></fcs_function>
-<fcs_function name="aero/fus/D-ft2"><function><sum><table><independentVar lookup="row">aero/fus/alpha-deg</independentVar><tableData>
+<fcs_function name="aero/fus/qbar-sym-psf"><description>of the plane of symmetry's flow</description><function><product><value>0.5</value><property>atmosphere/rho-slugs_ft3</property><pow><property>aero/fus/Vxz-fps</property><value>2</value></pow></product></function></fcs_function>
+<fcs_function name="aero/fus/D-ft2"><function><table><independentVar lookup="row">aero/fus/alpha-deg</independentVar><tableData>
 -90 66.1657
 -75 59.9505
 -60 44.1723
@@ -155,19 +152,8 @@
 60 44.1723
 75 59.9505
 90 66.1657
-</tableData></table><table><independentVar lookup="row">aero/fus/psi-abs-deg</independentVar><tableData>
-0 0
-5 0.250198
-10 0.993188
-15 2.2064
-20 3.85296
-30 8.23438
-45 16.4688
-60 24.7032
-75 30.7311
-90 32.9375
-</tableData></table></sum></function></fcs_function>
-<fcs_function name="aero/fus/L-ft2"><function><product><property>aero/fus/kfwd</property><sum><table><independentVar lookup="row">aero/fus/alpha-deg</independentVar><tableData>
+</tableData></table></function></fcs_function>
+<fcs_function name="aero/fus/L-ft2"><function><product><property>aero/fus/kfwd</property><table><independentVar lookup="row">aero/fus/alpha-deg</independentVar><tableData>
 -90 -3.55271e-15
 -75 -15.9778
 -60 -24.8121
@@ -193,112 +179,10 @@
 60 24.8121
 75 15.9778
 90 4.05231e-15
-</tableData></table><table><independentVar lookup="row">aero/fus/psi-abs-deg</independentVar><tableData>
-0 0
-5 0
-10 0
-15 0
-20 0
-30 0
-45 0
-60 0
-75 0
-90 0
-</tableData></table></sum></product></function></fcs_function>
-<fcs_function name="aero/fus/M-ft3"><function><product><property>aero/fus/kfwd</property><table><independentVar lookup="row">aero/fus/alpha-deg</independentVar><independentVar lookup="column">aero/fus/psi-abs-deg</independentVar><tableData>
-        0 5 10 15 20 30 45 60 75 90
--90 -164.98 -163.727 -160.005 -153.929 -145.681 -123.735 -82.49 -41.245 -11.0516 -6.18576e-31
--75 -153.929 -152.759 -149.287 -143.617 -135.922 -115.446 -76.9643 -38.4821 -10.3113 -5.77139e-31
--60 -123.735 -122.795 -120.004 -115.446 -109.261 -92.8013 -61.8675 -30.9338 -8.28868 -4.63932e-31
--45 -79.8743 -79.2675 -77.4658 -74.5237 -70.5308 -59.9057 -39.9371 -19.9686 -5.35056 -2.99481e-31
--35 -64.693 -64.2016 -62.7423 -60.3594 -57.1254 -48.5198 -32.3465 -16.1733 -4.33361 -2.4256e-31
--25 -67.0484 -66.5391 -65.0266 -62.557 -59.2052 -50.2863 -33.5242 -16.7621 -4.49139 -2.51391e-31
--20 -70.4371 -69.902 -68.3131 -65.7187 -62.1975 -52.8278 -35.2185 -17.6093 -4.71839 -2.64097e-31
--15 -72.027 -71.4799 -69.8551 -67.2021 -63.6015 -54.0203 -36.0135 -18.0068 -4.8249 -2.70058e-31
--12 -58.5921 -58.147 -56.8253 -54.6671 -51.7381 -43.944 -29.296 -14.648 -3.92492 -2.19685e-31
--9 -44.5151 -44.177 -43.1728 -41.5332 -39.3079 -33.3864 -22.2576 -11.1288 -2.98195 -1.66905e-31
--6 -29.9505 -29.723 -29.0474 -27.9442 -26.447 -22.4629 -14.9753 -7.48763 -2.0063 -1.12296e-31
--3 -15.0577 -14.9434 -14.6037 -14.0491 -13.2963 -11.2933 -7.52887 -3.76444 -1.00868 -5.64575e-32
-0 0 0 0 0 0 0 0 0 0 0
-3 15.0577 14.9434 14.6037 14.0491 13.2963 11.2933 7.52887 3.76444 1.00868 5.64575e-32
-6 29.9505 29.723 29.0474 27.9442 26.447 22.4629 14.9753 7.48763 2.0063 1.12296e-31
-9 44.5151 44.177 43.1728 41.5332 39.3079 33.3864 22.2576 11.1288 2.98195 1.66905e-31
-12 58.5921 58.147 56.8253 54.6671 51.7381 43.944 29.296 14.648 3.92492 2.19685e-31
-15 72.027 71.4799 69.8551 67.2021 63.6015 54.0203 36.0135 18.0068 4.8249 2.70058e-31
-20 70.4371 69.902 68.3131 65.7187 62.1975 52.8278 35.2185 17.6093 4.71839 2.64097e-31
-25 67.0484 66.5391 65.0266 62.557 59.2052 50.2863 33.5242 16.7621 4.49139 2.51391e-31
-35 64.693 64.2016 62.7423 60.3594 57.1254 48.5198 32.3465 16.1733 4.33361 2.4256e-31
-45 79.8743 79.2675 77.4658 74.5237 70.5308 59.9057 39.9371 19.9686 5.35056 2.99481e-31
-60 123.735 122.795 120.004 115.446 109.261 92.8013 61.8675 30.9338 8.28868 4.63932e-31
-75 153.929 152.759 149.287 143.617 135.922 115.446 76.9643 38.4821 10.3113 5.77139e-31
-90 164.98 163.727 160.005 153.929 145.681 123.735 82.49 41.245 11.0516 6.18576e-31
 </tableData></table></product></function></fcs_function>
-<fcs_function name="aero/fus/Y-ft2"><function><table><independentVar lookup="row">aero/fus/psi-deg</independentVar><tableData>
--90 -32.9375
--75 -30.7311
--60 -24.7032
--45 -16.4688
--30 -8.23438
--20 -3.85296
--15 -2.2064
--10 -0.993188
--5 -0.250198
-0 0
-5 0.250198
-10 0.993188
-15 2.2064
-20 3.85296
-30 8.23438
-45 16.4688
-60 24.7032
-75 30.7311
-90 32.9375
-</tableData></table></function></fcs_function>
-<fcs_function name="aero/fus/R-ft3"><function><product><property>aero/fus/kfwd</property><table><independentVar lookup="row">aero/fus/psi-deg</independentVar><tableData>
--90 0
--75 0
--60 0
--45 0
--30 0
--20 0
--15 0
--10 0
--5 0
-0 0
-5 0
-10 0
-15 0
-20 0
-30 0
-45 0
-60 0
-75 0
-90 0
-</tableData></table></product></function></fcs_function>
-<fcs_function name="aero/fus/N-ft3"><function><table><independentVar lookup="row">aero/fus/psi-deg</independentVar><tableData>
--90 -1.76415e-14
--75 -72.027
--60 -124.754
--45 -144.054
--30 -124.754
--20 -92.5961
--15 -72.027
--10 -49.2694
--5 -25.0147
-0 0
-5 25.0147
-10 49.2694
-15 72.027
-20 92.5961
-30 124.754
-45 144.054
-60 124.754
-75 72.027
-90 1.76415e-14
-</tableData></table></function></fcs_function>
-<fcs_function name="aero/fus/FX-lbs"><function><product><property>aero/fus/qbar-psf</property><product><value>-1</value><sum><product><property>aero/fus/D-ft2</property><quotient><property>aero/fus/Vx-fps</property><property>aero/fus/V-fps</property></quotient></product><product><property>aero/fus/Y-ft2</property><product><quotient><property>aero/fus/Vx-fps</property><property>aero/fus/Vxz-fps</property></quotient><quotient><property>aero/fus/Vy-fps</property><property>aero/fus/V-fps</property></quotient></product></product><product><property>aero/fus/L-ft2</property><product><value>-1</value><quotient><property>aero/fus/Vz-fps</property><property>aero/fus/Vxz-fps</property></quotient></product></product></sum></product></product></function></fcs_function>
-<fcs_function name="aero/fus/FY-lbs"><function><product><property>aero/fus/qbar-psf</property><product><value>-1</value><sum><product><property>aero/fus/D-ft2</property><quotient><property>aero/fus/Vy-fps</property><property>aero/fus/V-fps</property></quotient></product><product><property>aero/fus/Y-ft2</property><product><value>-1</value><quotient><property>aero/fus/Vxz-fps</property><property>aero/fus/V-fps</property></quotient></product></product><product><property>aero/fus/L-ft2</property><value>0</value></product></sum></product></product></function></fcs_function>
-<fcs_function name="aero/fus/FZ-lbs"><function><product><property>aero/fus/qbar-psf</property><product><value>-1</value><sum><product><property>aero/fus/D-ft2</property><quotient><property>aero/fus/Vz-fps</property><property>aero/fus/V-fps</property></quotient></product><product><property>aero/fus/Y-ft2</property><product><quotient><property>aero/fus/Vz-fps</property><property>aero/fus/Vxz-fps</property></quotient><quotient><property>aero/fus/Vy-fps</property><property>aero/fus/V-fps</property></quotient></product></product><product><property>aero/fus/L-ft2</property><quotient><property>aero/fus/Vx-fps</property><property>aero/fus/Vxz-fps</property></quotient></product></sum></product></product></function></fcs_function>
+<fcs_function name="aero/fus/FX-lbs"><function><product><property>aero/fus/qbar-sym-psf</property><product><value>-1</value><difference><product><property>aero/fus/D-ft2</property><quotient><property>aero/fus/Vx-fps</property><property>aero/fus/Vxz-fps</property></quotient></product><product><property>aero/fus/L-ft2</property><quotient><property>aero/fus/Vz-fps</property><property>aero/fus/Vxz-fps</property></quotient></product></difference></product></product></function></fcs_function>
+<fcs_function name="aero/fus/FY-lbs"><function><product><value>-16.468767</value><property>atmosphere/rho-slugs_ft3</property><property>aero/fus/Vy-fps</property><abs><property>aero/fus/Vy-fps</property></abs></product></function></fcs_function>
+<fcs_function name="aero/fus/FZ-lbs"><function><product><property>aero/fus/qbar-sym-psf</property><product><value>-1</value><sum><product><property>aero/fus/D-ft2</property><quotient><property>aero/fus/Vz-fps</property><property>aero/fus/Vxz-fps</property></quotient></product><product><property>aero/fus/L-ft2</property><quotient><property>aero/fus/Vx-fps</property><property>aero/fus/Vxz-fps</property></quotient></product></sum></product></product></function></fcs_function>
 <fcs_function name="aero/boom/Vx-fps"><function><sum><property>velocities/u-aero-fps</property><difference><product><property>velocities/q-aero-rad_sec</property><quotient><difference><property>inertia/cg-z-in</property><value>11.023628</value></difference><value>12</value></quotient></product><product><property>mir/velocities-r-aero-rad_sec</property><quotient><difference><value>0</value><property>mir/inertia-cg-y-in</property></difference><value>12</value></quotient></product></difference><product><value>-1</value><table><independentVar lookup="row">aero/rotor/chi-deg</independentVar><independentVar lookup="column">aero/rotor/psi-flow-deg</independentVar><independentVar lookup="table">aero/rotor/a1-deg</independentVar><tableData breakPoint="-6">
         0 30 60 90 120 150 180 210 240 270 300 330 360
 0 0.134297 0.134297 0.134297 0.134297 0.134297 0.134297 0.134297 0.134297 0.134297 0.134297 0.134297 0.134297 0.134297
@@ -1090,8 +974,34 @@
 <fcs_function name="aero/airframe/FX-lbs"><function><sum><property>aero/fus/FX-lbs</property><property>aero/boom/FX-lbs</property><property>aero/gear/FX-lbs</property><property>aero/hub/FX-lbs</property><property>aero/misc/FX-lbs</property><property>aero/emp/h/Fx-lbs</property><property>aero/emp/epl/Fx-lbs</property><property>aero/emp/epr/Fx-lbs</property></sum></function></fcs_function>
 <fcs_function name="aero/airframe/FY-lbs"><function><sum><property>aero/fus/FY-lbs</property><property>aero/boom/FY-lbs</property><property>aero/gear/FY-lbs</property><property>aero/hub/FY-lbs</property><property>aero/emp/epl/Fy-lbs</property><property>aero/emp/epr/Fy-lbs</property></sum></function></fcs_function>
 <fcs_function name="aero/airframe/FZ-lbs"><function><sum><property>aero/fus/FZ-lbs</property><property>aero/boom/FZ-lbs</property><property>aero/gear/FZ-lbs</property><property>aero/emp/h/Fz-lbs</property></sum></function></fcs_function>
-<fcs_function name="aero/airframe/ML-ftlb"><function><sum><sum><product><property>aero/fus/qbar-psf</property><sum><product><property>aero/fus/R-ft3</property><quotient><property>aero/fus/Vx-fps</property><property>aero/fus/V-fps</property></quotient></product><product><value>-1</value><product><property>aero/fus/M-ft3</property><product><quotient><property>aero/fus/Vx-fps</property><property>aero/fus/Vxz-fps</property></quotient><quotient><property>aero/fus/Vy-fps</property><property>aero/fus/V-fps</property></quotient></product></product></product><product><property>aero/fus/N-ft3</property><product><value>-1</value><quotient><property>aero/fus/Vz-fps</property><property>aero/fus/Vxz-fps</property></quotient></product></product></sum></product><difference><product><quotient><difference><value>-0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/fus/FZ-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>-4.330711</value></difference><value>12</value></quotient><property>aero/fus/FY-lbs</property></product></difference></sum><difference><product><quotient><difference><value>0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/boom/FZ-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>11.023628</value></difference><value>12</value></quotient><property>aero/boom/FY-lbs</property></product></difference><difference><product><quotient><difference><value>0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/gear/FZ-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>-37.401595</value></difference><value>12</value></quotient><property>aero/gear/FY-lbs</property></product></difference><difference><product><quotient><difference><value>0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><value>0</value></product><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>61.220509</value></difference><value>12</value></quotient><property>aero/hub/FY-lbs</property></product></difference><difference><product><quotient><difference><value>0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><value>0</value></product><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>19.68505</value></difference><value>12</value></quotient><value>0</value></product></difference><product><quotient><difference><value>-0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/emp/h/Fz-lbs</property></product><product><value>-1</value><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>15.74804</value></difference><value>12</value></quotient><property>aero/emp/epl/Fy-lbs</property></product></product><product><value>-1</value><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>15.74804</value></difference><value>12</value></quotient><property>aero/emp/epr/Fy-lbs</property></product></product></sum></function></fcs_function>
-<fcs_function name="aero/airframe/MM-ftlb"><function><sum><sum><product><property>aero/fus/qbar-psf</property><sum><product><property>aero/fus/R-ft3</property><quotient><property>aero/fus/Vy-fps</property><property>aero/fus/V-fps</property></quotient></product><product><value>-1</value><product><property>aero/fus/M-ft3</property><product><value>-1</value><quotient><property>aero/fus/Vxz-fps</property><property>aero/fus/V-fps</property></quotient></product></product></product><product><property>aero/fus/N-ft3</property><value>0</value></product></sum></product><difference><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>-4.330711</value></difference><value>12</value></quotient><property>aero/fus/FX-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>122.55512</value></difference><value>12</value></quotient><property>aero/fus/FZ-lbs</property></product></difference></sum><difference><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>11.023628</value></difference><value>12</value></quotient><property>aero/boom/FX-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>259.56307</value></difference><value>12</value></quotient><property>aero/boom/FZ-lbs</property></product></difference><difference><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>-37.401595</value></difference><value>12</value></quotient><property>aero/gear/FX-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>143.02757</value></difference><value>12</value></quotient><property>aero/gear/FZ-lbs</property></product></difference><difference><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>61.220509</value></difference><value>12</value></quotient><property>aero/hub/FX-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>118.11024</value></difference><value>12</value></quotient><value>0</value></product></difference><difference><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>19.68505</value></difference><value>12</value></quotient><property>aero/misc/FX-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>158.77561</value></difference><value>12</value></quotient><value>0</value></product></difference><difference><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>15.74804</value></difference><value>12</value></quotient><property>aero/emp/h/Fx-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>314.28751</value></difference><value>12</value></quotient><property>aero/emp/h/Fz-lbs</property></product></difference><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>15.74804</value></difference><value>12</value></quotient><property>aero/emp/epl/Fx-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>15.74804</value></difference><value>12</value></quotient><property>aero/emp/epr/Fx-lbs</property></product></sum></function></fcs_function>
-<fcs_function name="aero/airframe/MN-ftlb"><function><sum><sum><product><property>aero/fus/qbar-psf</property><sum><product><property>aero/fus/R-ft3</property><quotient><property>aero/fus/Vz-fps</property><property>aero/fus/V-fps</property></quotient></product><product><value>-1</value><product><property>aero/fus/M-ft3</property><product><quotient><property>aero/fus/Vz-fps</property><property>aero/fus/Vxz-fps</property></quotient><quotient><property>aero/fus/Vy-fps</property><property>aero/fus/V-fps</property></quotient></product></product></product><product><property>aero/fus/N-ft3</property><quotient><property>aero/fus/Vx-fps</property><property>aero/fus/Vxz-fps</property></quotient></product></sum></product><difference><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>122.55512</value></difference><value>12</value></quotient><property>aero/fus/FY-lbs</property></product><product><quotient><difference><value>-0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/fus/FX-lbs</property></product></difference></sum><difference><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>259.56307</value></difference><value>12</value></quotient><property>aero/boom/FY-lbs</property></product><product><quotient><difference><value>0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/boom/FX-lbs</property></product></difference><difference><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>143.02757</value></difference><value>12</value></quotient><property>aero/gear/FY-lbs</property></product><product><quotient><difference><value>0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/gear/FX-lbs</property></product></difference><difference><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>118.11024</value></difference><value>12</value></quotient><property>aero/hub/FY-lbs</property></product><product><quotient><difference><value>0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/hub/FX-lbs</property></product></difference><difference><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>158.77561</value></difference><value>12</value></quotient><value>0</value></product><product><quotient><difference><value>0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/misc/FX-lbs</property></product></difference><product><value>-1</value><product><quotient><difference><value>-0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/emp/h/Fx-lbs</property></product></product><difference><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>314.28751</value></difference><value>12</value></quotient><property>aero/emp/epl/Fy-lbs</property></product><product><quotient><difference><value>-46.063017</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/emp/epl/Fx-lbs</property></product></difference><difference><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>314.28751</value></difference><value>12</value></quotient><property>aero/emp/epr/Fy-lbs</property></product><product><quotient><difference><value>46.063017</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/emp/epr/Fx-lbs</property></product></difference></sum></function></fcs_function>
+<fcs_function name="aero/airframe/ML-ftlb"><function><sum><sum><value>0</value><difference><product><quotient><difference><value>-0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/fus/FZ-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>-4.330711</value></difference><value>12</value></quotient><property>aero/fus/FY-lbs</property></product></difference></sum><difference><product><quotient><difference><value>0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/boom/FZ-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>11.023628</value></difference><value>12</value></quotient><property>aero/boom/FY-lbs</property></product></difference><difference><product><quotient><difference><value>0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/gear/FZ-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>-37.401595</value></difference><value>12</value></quotient><property>aero/gear/FY-lbs</property></product></difference><difference><product><quotient><difference><value>0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><value>0</value></product><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>61.220509</value></difference><value>12</value></quotient><property>aero/hub/FY-lbs</property></product></difference><difference><product><quotient><difference><value>0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><value>0</value></product><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>19.68505</value></difference><value>12</value></quotient><value>0</value></product></difference><product><quotient><difference><value>-0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/emp/h/Fz-lbs</property></product><product><value>-1</value><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>15.74804</value></difference><value>12</value></quotient><property>aero/emp/epl/Fy-lbs</property></product></product><product><value>-1</value><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>15.74804</value></difference><value>12</value></quotient><property>aero/emp/epr/Fy-lbs</property></product></product></sum></function></fcs_function>
+<fcs_function name="aero/airframe/MM-ftlb"><function><sum><sum><product><property>aero/fus/qbar-sym-psf</property><product><property>aero/fus/kfwd</property><table><independentVar lookup="row">aero/fus/alpha-deg</independentVar><tableData>
+-90 -164.98
+-75 -153.929
+-60 -123.735
+-45 -79.8743
+-35 -64.693
+-25 -67.0484
+-20 -70.4371
+-15 -72.027
+-12 -58.5921
+-9 -44.5151
+-6 -29.9505
+-3 -15.0577
+0 0
+3 15.0577
+6 29.9505
+9 44.5151
+12 58.5921
+15 72.027
+20 70.4371
+25 67.0484
+35 64.693
+45 79.8743
+60 123.735
+75 153.929
+90 164.98
+</tableData></table></product></product><difference><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>-4.330711</value></difference><value>12</value></quotient><property>aero/fus/FX-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>122.55512</value></difference><value>12</value></quotient><property>aero/fus/FZ-lbs</property></product></difference></sum><difference><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>11.023628</value></difference><value>12</value></quotient><property>aero/boom/FX-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>259.56307</value></difference><value>12</value></quotient><property>aero/boom/FZ-lbs</property></product></difference><difference><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>-37.401595</value></difference><value>12</value></quotient><property>aero/gear/FX-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>143.02757</value></difference><value>12</value></quotient><property>aero/gear/FZ-lbs</property></product></difference><difference><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>61.220509</value></difference><value>12</value></quotient><property>aero/hub/FX-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>118.11024</value></difference><value>12</value></quotient><value>0</value></product></difference><difference><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>19.68505</value></difference><value>12</value></quotient><property>aero/misc/FX-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>158.77561</value></difference><value>12</value></quotient><value>0</value></product></difference><difference><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>15.74804</value></difference><value>12</value></quotient><property>aero/emp/h/Fx-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>314.28751</value></difference><value>12</value></quotient><property>aero/emp/h/Fz-lbs</property></product></difference><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>15.74804</value></difference><value>12</value></quotient><property>aero/emp/epl/Fx-lbs</property></product><product><quotient><difference><property>metrics/aero-rp-z-in</property><value>15.74804</value></difference><value>12</value></quotient><property>aero/emp/epr/Fx-lbs</property></product></sum></function></fcs_function>
+<fcs_function name="aero/airframe/MN-ftlb"><function><sum><sum><product><value>-144.05403</value><property>atmosphere/rho-slugs_ft3</property><property>aero/fus/Vx-fps</property><property>aero/fus/Vy-fps</property></product><difference><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>122.55512</value></difference><value>12</value></quotient><property>aero/fus/FY-lbs</property></product><product><quotient><difference><value>-0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/fus/FX-lbs</property></product></difference></sum><difference><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>259.56307</value></difference><value>12</value></quotient><property>aero/boom/FY-lbs</property></product><product><quotient><difference><value>0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/boom/FX-lbs</property></product></difference><difference><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>143.02757</value></difference><value>12</value></quotient><property>aero/gear/FY-lbs</property></product><product><quotient><difference><value>0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/gear/FX-lbs</property></product></difference><difference><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>118.11024</value></difference><value>12</value></quotient><property>aero/hub/FY-lbs</property></product><product><quotient><difference><value>0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/hub/FX-lbs</property></product></difference><difference><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>158.77561</value></difference><value>12</value></quotient><value>0</value></product><product><quotient><difference><value>0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/misc/FX-lbs</property></product></difference><product><value>-1</value><product><quotient><difference><value>-0</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/emp/h/Fx-lbs</property></product></product><difference><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>314.28751</value></difference><value>12</value></quotient><property>aero/emp/epl/Fy-lbs</property></product><product><quotient><difference><value>-46.063017</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/emp/epl/Fx-lbs</property></product></difference><difference><product><quotient><difference><property>metrics/aero-rp-x-in</property><value>314.28751</value></difference><value>12</value></quotient><property>aero/emp/epr/Fy-lbs</property></product><product><quotient><difference><value>46.063017</value><property>metrics/aero-rp-y-in</property></difference><value>12</value></quotient><property>aero/emp/epr/Fx-lbs</property></product></difference></sum></function></fcs_function>
 </channel>
 </system>

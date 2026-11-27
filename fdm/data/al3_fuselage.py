@@ -16,10 +16,17 @@ Fluid-Dynamic Drag, ch. 3 and 13], as the Bo 105 model's fuselage. The pitching 
 (slender-body potential flow) on the pod's volume, 0.55 of its 4.4 x 1.96 x 1.72 m box (8.2 m^3), with an apparent
 mass factor of 0.5 for a bluff body (k2 - k1 is 0.9 for a slender one): destabilising, M/q = 0.5 Vol sin 2 alpha.
 
+With yaw, each force is worked out from the flow it faces (the cross-flow principle [Hoerner]): lift and drag, here
+at zero yaw, from the flow in the plane of symmetry (its dynamic pressure and its direction), and the side's push from
+the flow square to the side. So the planform's and the side's pushes stay square to their surfaces at any yaw.
+The moments likewise, each about its body axis: the pitching moment from the flow in the plane of symmetry; the
+yawing moment, Munk's for a slender body, -rho k Vol u v, from the fore-and-aft and side flows alone (at no vertical
+flow the same as 0.5 Vol sin 2 beta times the dynamic pressure); none about the long axis, round which the pod is close
+to a body of revolution.
+
 Units: forces over dynamic pressure in ft^2, moments in ft^3, about the reference point (FS_REF, BL_REF, WL_REF): the
-pod's side-area centroid. Signs as the Bo 105 model's (C-81's): yaw psi + nose right of the wind; side force + right;
-rolling moment + right side down; yawing moment + nose right; pitching moment + nose up; lift + up; drag + along the
-wind.
+pod's side-area centroid. Signs as the Bo 105 model's (C-81's): yaw psi + nose right of the wind; rolling moment +
+right side down; yawing moment + nose right; pitching moment + nose up; lift + up; drag + along the wind.
 """
 import math, os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -47,8 +54,6 @@ FS_REF, BL_REF, WL_REF = U.model_to_station(-0.08, 0.0, -0.11)
 X_TOP = 0.76 * U.FT_PER_M
 
 ALPHA = [-90, -75, -60, -45, -35, -25, -20, -15, -12, -9, -6, -3, 0, 3, 6, 9, 12, 15, 20, 25, 35, 45, 60, 75, 90]
-PSI_ABS = [0, 5, 10, 15, 20, 30, 45, 60, 75, 90]
-PSI = [-90, -75, -60, -45, -30, -20, -15, -10, -5, 0, 5, 10, 15, 20, 30, 45, 60, 75, 90]
 
 
 def _interp(xs, ys, x):
@@ -88,7 +93,7 @@ def munk(a):
 
 
 def tables():
-    """dict of lists for genal3.fuselage(): L0(a), D0(a), dD(|psi|), dL(|psi|), M(a, |psi|), Y(psi), R(psi), N(psi)"""
+    """dict for genal3.fuselage(): L0(a), D0(a), M(a) (zero yaw), the side's drag area and Munk's k Vol"""
     L0, D0, M0 = [], [], []
     for a in ALPHA:
         if abs(a) <= 15:
@@ -102,26 +107,13 @@ def tables():
         # Munk's moment, and beyond 15 deg the planform's normal force at its centroid ahead of the reference
         mc = CN_TOP * A_TOP * math.sin(math.radians(a)) * abs(math.sin(math.radians(a))) * X_TOP
         M0.append(munk(a) if abs(a) <= 15 else _fair(munk(15 if a > 0 else -15), 15, mc, 60, abs(a)))
-    dD, dL = [], []
-    for p in PSI_ABS:
-        s = math.sin(math.radians(p))
-        dD.append(CN_SIDE * A_SIDE * s * s)         # the side's cross-flow drag
-        dL.append(0.0)
-    Mtab = [[m * math.cos(math.radians(p)) ** 2 for p in PSI_ABS] for m in M0]
-    Y, R, N = [], [], []
-    zc = 0.0                                        # the side force acts at the reference (the side area's centroid)
-    for p in PSI:
-        s, c = math.sin(math.radians(p)), math.cos(math.radians(p))
-        # psi + nose right of the wind: the wind from the left pushes the pod right (side force +)
-        Y.append(CN_SIDE * A_SIDE * s * abs(s))
-        R.append(0.0)
-        N.append(-K_MUNK * VOL * math.sin(math.radians(2 * p)) * (-1))   # Munk: destabilising, nose further right
-    return dict(alpha=ALPHA, L0=L0, D0=D0, psi_abs=PSI_ABS, dD=dD, dL=dL, M=Mtab, psi=PSI, Y=Y, R=R, N=N)
+    # the side's push is square to it, at the reference (the side area's centroid): drag area, ft^2; Munk's k Vol, ft^3
+    return dict(alpha=ALPHA, L0=L0, D0=D0, M=M0, side=CN_SIDE * A_SIDE, munk=K_MUNK * VOL)
 
 
 if __name__ == '__main__':
     t = tables()
     print('D/q at 0 deg %.2f ft^2 (%.3f m^2); full scale %.3f m^2' % (t['D0'][ALPHA.index(0)], t['D0'][ALPHA.index(0)] / M2_FT2,
                                                                  CD_FULL[5] * S_REF))
-    for a, l, d, m in zip(t['alpha'], t['L0'], t['D0'], [r[0] for r in t['M']]):
+    for a, l, d, m in zip(t['alpha'], t['L0'], t['D0'], t['M']):
         print('%4d  L %7.2f  D %7.2f  M %8.1f' % (a, l, d, m))

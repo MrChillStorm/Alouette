@@ -5,8 +5,10 @@
              the starter's cut-out (about 14 000 rpm [RW]), idle (16 330 rpm recorded [SR]; 15 000 [AO], 17 000-18 000
              [RW]); then the lever advanced to flight over 10 s, as a pilot does it: the centrifugal clutch engages
              from 19 000 rpm [AO], the rotor turning at 19 500-21 000 rpm [LM], the run-up to the governed 353 rpm
-  governor   hovering at 2200 kg, the airframe held, the collective raised 10 % of its travel in 0.5 s: the rotor's droop
-             and recovery (the isochronous governor [E77] has no droop of its own) and the engine's power and T4
+  governor   hovering at 2200 kg, the airframe held, the collective lowered 10 % of its travel in 0.5 s: the rotor's
+             swing and recovery (the isochronous governor [E77] has no droop of its own) and the engine's power and T4
+  over_limit the same raised 10 %: more than the 420 kW the reduction gearing allows [SPEC], where the fuel stops
+             (artouste.py): the engine holds that and the rotor slows until it takes no more
   failure    at 60 kt level, 2200 kg, the airframe held, the fuel cut: the rotor's decay with the collective held, and
              with it lowered to the autorotation's after a 1 s delay (the TCDS's 270 rpm the lower limit [TC])
 
@@ -20,7 +22,8 @@ import artouste as A
 
 RPM = 30 / np.pi
 KEYS = dict(t='simulation/sim-time-sec', n='eng/n-pct', rpm='eng/rpm', t4='eng/t4-degc', wf='eng/fuel-flow-kgh', lit='eng/lit',
-            engaged='eng/engaged', nr='rotor/omega-rad_sec', load='drive/load-ftlb', coll='/controls/engines/engine[0]/throttle')
+            engaged='eng/engaged', nr='rotor/omega-rad_sec', load='drive/load-ftlb', coll='/controls/engines/engine[0]/throttle',
+            pw='eng/power-kw')
 
 
 def record(f, out, every):
@@ -79,12 +82,18 @@ def held_trim(V, kg=2200.0):
     H.set_weight(f, kg)
     x, r, e = H.trim(f, V, alt_ft=1000.0, extra=H.ENGINE_POWER)
     f['drive/hold-rpm'] = 0; f['ctl/init'] = 0     # the rotor speed free, on the governor; the airframe stays held
+    # held, the airframe does not accelerate, and the rotor must not feel what the model computes for it: after a
+    # collective step or a fuel cut its moments no longer balance, and a yaw acceleration that never happens would drive
+    # the rotor's speed (some 27 kW after a 10 % step). The rotor keeps the trim's specific force, with no rotation
+    f['rotor/accel-hold'] = 1
+    for k in ('rotor/rds-in', 'rotor/pds-in', 'rotor/pds', 'rotor/qds'):
+        f[k] = 0.0
     for _ in range(int(2.0 / f['simulation/dt'])):
         f.run()
     return f, x
 
 
-def governor(step=0.10, ramp=0.5):
+def governor(step=-0.10, ramp=0.5, secs=12.0):
     f, x = held_trim(0.0)
     out = []
     run_for(f, 1.0, out, 0.02)
@@ -93,15 +102,20 @@ def governor(step=0.10, ramp=0.5):
     for i in range(n):
         f['/controls/engines/engine[0]/throttle'] = c0 + step * (i + 1) / n
         f.run()
-    run_for(f, 12.0, out, 0.02)
+    run_for(f, secs, out, 0.02)
     t0 = out[0]['t']
     for r in out:
         r['t'] -= t0 + 1.0
     nr0 = out[0]['nr']
     low = min(out, key=lambda r: r['nr'])
+    last = [r for r in out if r['t'] > out[-1]['t'] - 1.0]
     ev = dict(nr0=nr0, droop_pct=100 * (nr0 - low['nr']) / nr0, droop_t=low['t'], kw0=out[0]['kw'], kw1=out[-1]['kw'],
+              swing_pct=100 * max(abs(r['nr'] - nr0) for r in out) / nr0,
+              pw_peak=max(r['pw'] for r in out), pw_end=float(np.mean([r['pw'] for r in last])),
+              load_end=float(np.mean([r['kw'] for r in last])), nr_end_change=max(r['nr'] for r in last) - min(r['nr'] for r in last),
               t4_0=out[0]['t4'], t4_peak=max(r['t4'] for r in out), nr_end=out[-1]['nr'],
-              settle_t=next((r['t'] for r in reversed(out) if abs(r['nr'] - nr0) > 0.005 * nr0), 0.0))
+              settle_t=next((r['t'] for r in reversed(out) if abs(r['nr'] - nr0) > 0.005 * nr0), 0.0),
+              settle_end_t=next((r['t'] for r in reversed(out) if abs(r['nr'] - out[-1]['nr']) > 1.0), 0.0))
     return dict(rec=out, events=ev)
 
 
@@ -127,7 +141,7 @@ def failure(lower=True, delay=1.0, V=60.0):
     return dict(rec=out, events=ev)
 
 
-STAGES = dict(start=start, governor=governor, failure_held=lambda: failure(lower=False), failure_lowered=lambda: failure(lower=True))
+STAGES = dict(start=start, governor=governor, over_limit=lambda: governor(step=0.10, secs=20.0), failure_held=lambda: failure(lower=False), failure_lowered=lambda: failure(lower=True))
 
 if __name__ == '__main__':
     names = sys.argv[1:] or list(STAGES)

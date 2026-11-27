@@ -16,6 +16,10 @@
     <alt_k type="double">0.2</alt_k>
     <coll_kp type="double">0.02</coll_kp>
     <coll_ti type="double">2.0</coll_ti>
+    <nr_floor type="double">350.0</nr_floor>
+    <nr_droop_k type="double">1.0</nr_droop_k>
+    <nr_blend type="double">2.0</nr_blend>
+    <nr_tau type="double">0.5</nr_tau>
     <nr_kp type="double">-0.004</nr_kp>
     <nr_ti type="double">3.0</nr_ti>
     <u_kp type="double">-0.3</u_kp>

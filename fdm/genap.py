@@ -2,7 +2,8 @@
 model's fdm/genap.py. It holds wheel height, ground velocity and heading in the hover (mode 0); altitude, airspeed,
 heading (by bank) and sideslip in forward flight (mode 1); and in autorotation (mode 2) the rotor speed with the
 collective, as a pilot does, the airspeed, heading and sideslip as in mode 1. It flies like a pilot: its outputs are
-the cyclic, pedal and collective controls (/controls/...). The Alouette has no stability augmentation, so the inner
+the cyclic, pedal and collective controls (/controls/...), and it watches the rotor: past the engine's power it lowers
+the collective as the rotor slows. The Alouette has no stability augmentation, so the inner
 loops damp the aircraft themselves, on its body rates. It flies the report's test flights offline (take-off, the
 hover in and out of ground effect, the autorotation, the landing); in FlightGear it is not wired to the cockpit (the
 original aircraft's own autopilot and Amelia are), but can be set through its properties.
@@ -191,6 +192,11 @@ GAINS = dict(
     alt_k=0.2,          # 1/s: (cruise)
     coll_kp=0.02,       # throttle (1 = collective up) per ft/s of vertical speed error
     coll_ti=2.0,
+    # past the engine's 420 kW the rotor slows (artouste.py), and a lever held up there stalls it: as a pilot watches the
+    # rotor, below nr_floor rpm the collective loop's error is held to at most -nr_droop_k ft/s per rpm below it,
+    # whatever the height asks, so the lever can only come down (blended in over nr_blend rpm, so that it does not
+    # jump; the droop lagged by nr_tau s)
+    nr_floor=350.0, nr_droop_k=1.0, nr_blend=2.0, nr_tau=0.5,
     nr_kp=-0.004, nr_ti=3.0,   # collective per rpm of rotor speed error (autorotation): up slows the rotor
     u_kp=-0.3, u_ti=14.0,      # pitch deg per ft/s of forward ground velocity error
     v_kp=0.6, v_ti=25.0,       # roll deg per ft/s of lateral ground velocity error
@@ -216,7 +222,8 @@ GAINS = dict(
     phc_kp=0.015, phc_ti=2.0, phc_tp=0.3,
     b_kp=-0.02, b_ti=3.0,                 # rudder per deg of sideslip error (cruise)
 )
-LIMITS = dict(coll_up=0.08, coll_down=0.08, vs_accel=3.0, ground_rate=0.15, climb=5.0, descent=4.0, cruise_vs=15.0, accel=3.0, height_rate=2.0, speed_rate=2.0, turn=10.0,
+# (speed_rate, kt/s: a pilot speeds up within the engine's 420 kW; at 2 kt/s the climb to 100 kt asks for more)
+LIMITS = dict(coll_up=0.08, coll_down=0.08, vs_accel=3.0, ground_rate=0.15, climb=5.0, descent=4.0, cruise_vs=15.0, accel=3.0, height_rate=2.0, speed_rate=1.0, turn=10.0,
               theta_hover=(-12.0, 12.0), phi_hover=(-15.0, 15.0), theta_cruise=(-15.0, 10.0), phi_cruise=(-25.0, 25.0))
 CTL = dict(elev='/controls/flight/elevator', ail='/controls/flight/aileron', rud='/controls/flight/rudder',
            thr='/controls/al3/collective')
@@ -312,7 +319,14 @@ def components():
     c.append(Gain('flag: collective not flying', DIF(1, P(I('coll-fly'))), I('coll-idle')))
     c.append(Gain('vertical speed reference follows', J('velocities/h-dot-fps'), I('vs-ref'), cond_on('coll-idle')))
     c.append(RateLimit('vertical speed reference', P(I('vs-cmd')), I('vs-ref'), L['vs_accel'], cond_on('coll-fly'), init='output'))
-    c.append(PID('collective', P(I('vs-ref')), J('velocities/h-dot-fps'), CTL['thr'], 'coll_kp', 'coll_ti', 0.0, 0.9, cond_on('coll-fly')))
+    c.append(Lag('rotor droop', MAX(0, DIF(G('nr_floor'), MUL(J('rotor/omega-rad_sec'), RPM))), I('nr-droop'), 'nr_tau'))
+    err = DIF(P(I('vs-ref')), J('velocities/h-dot-fps'))
+    held = MIN(1, MAX(0, E('div', P(I('nr-droop')), G('nr_blend'))))
+    c.append(Gain('collective: the climb asked for, less what the rotor holds back',
+                  DIF(P(I('vs-ref')), MUL(held, MAX(0, SUM(err, MUL(G('nr_droop_k'), P(I('nr-droop'))))))), I('vs-aim'),
+                  cond_on('coll-fly')))
+    c.append(PID('collective', P(I('vs-aim')), J('velocities/h-dot-fps'), CTL['thr'], 'coll_kp',
+                 'coll_ti', 0.0, 0.9, cond_on('coll-fly')))
     c.append(RateLimit('collective down after touchdown', V(0.0), CTL['thr'], L['coll_down'], cond_on('coll-down'), init='output'))
     # autorotation: the collective keeps the rotor speed (lowered as the power goes, raised to hold it in the flare)
     c.append(PID('collective, autorotation', P(T('nr-rpm')), MUL(J('rotor/omega-rad_sec'), RPM), CTL['thr'], 'nr_kp', 'nr_ti', 0.0, 1.0,

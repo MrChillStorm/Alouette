@@ -59,6 +59,7 @@ import xml.etree.ElementTree as ET
 import numpy as np
 import scipy.io.wavfile as wavfile
 
+import al3data as U
 import al3slap
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -102,6 +103,7 @@ def view_distance():
 
 
 VIEW_DIST = view_distance()
+TAIL_RPM = U.GEAR_TR * U.OMEGA * 60.0 / (2.0 * math.pi)   # the flight model's tail rotor at 100 %
 CONE_REPORT = []        # (state, the loudest direction, the fit) of every loop's cone (the tail rotor's, the engine's), printed by main()
 
 
@@ -402,7 +404,11 @@ def rotor_entries(bank, nbank, door, g_min):
             c = conds[name]
             rot = tail if s == 'tail' else main
             prop = 'rotors/tail/rpm' if s == 'tail' else 'rotors/main/rpm'
+            # the pitch goes by the speed the bank rendered the loop at; the gates, the fade with the rotor's speed and
+            # the pitch floor go by the flight model's rotor at 100 %, so that the tail's come in with the main rotor's
+            # (the bank's tail rotor is geared 5.487, the flight model's by al3data.GEAR_TR)
             ref = rot['nominal_rpm'] * c['rpm_percent'] / 100.0
+            full = TAIL_RPM if s == 'tail' else rot['nominal_rpm']
             if c['ground_run']:
                 vol, g = plan[name + '@' + view]
                 vol = eq_power(vol)
@@ -411,9 +417,9 @@ def rotor_entries(bank, nbank, door, g_min):
             else:
                 vol, g = plan[name]
                 vol = eq_power(vol)
-                vol = vol + [AIRBORNE_VOL, e('clip', e('product', p(prop), v(1.0 / rot['nominal_rpm'])),
+                vol = vol + [AIRBORNE_VOL, e('clip', e('product', p(prop), v(1.0 / full)),
                                              '<clipMin>0</clipMin><clipMax>1</clipMax>')]
-                g = g + [e('not', ON_GROUND), gt(prop, 0.2 * rot['nominal_rpm'])]
+                g = g + [e('not', ON_GROUND), gt(prop, 0.2 * full)]
                 lo_rpm = 0.2 * rot['nominal_rpm']
             gg = gain_near if f['file'] in near else gains[group]
             vol = vol + vv + ([v(gg)] if gg < 0.9999 else [])
@@ -435,19 +441,20 @@ def rotor_entries(bank, nbank, door, g_min):
                 b = max(1.0, min(tab['peak'][key], room))
                 # in flight with the rotor turning, by the flight model's slap alone (its map over the advance ratio
                 # and the inflow has the airspeed and the descent in it), not the reference state's fades
-                vol = [AIRBORNE_VOL, e('clip', e('product', p(prop), v(1.0 / rot['nominal_rpm'])),
+                vol = [AIRBORNE_VOL, e('clip', e('product', p(prop), v(1.0 / full)),
                                        '<clipMin>0</clipMin><clipMax>1</clipMax>')] + vv \
                     + ([v(gg)] if gg < 0.9999 else []) \
                     + [e('clip', e('product', p('rotors/main/slap-' + key), v(1.0 / b)), '<clipMin>0</clipMin><clipMax>1</clipMax>')]
                 # off where it falls 66 dB under the reference state's whole sound (as rendered it stands below that
                 # by its slap less its mix; 6 dB more, as a single layer of another loop may then be the loudest)
                 under = files_old[(name, view, 'slap')]['dba'] - files_old[(name, view, 'mix')]['dba']
-                g = [e('not', ON_GROUND), gt(prop, 0.2 * rot['nominal_rpm']),
+                g = [e('not', ON_GROUND), gt(prop, 0.2 * full),
                      gt('rotors/main/slap-' + key, 0.5 * HEARD * 10.0 ** (-under / 20.0))]
                 if b > 1.0001:
                     fname = fname[:-4] + '_raised.wav'
                     raised[fname] = (os.path.join(bank, f['file']), b)
-            pitch = (f'<pitch>{p(prop)}<factor>{1.0 / ref:.6g}</factor><min>{min(0.2, lo_rpm / ref):.3g}</min>'
+            pitch = (f'<pitch>{p(prop)}<factor>{1.0 / ref:.6g}</factor>'
+                     f'<min>{min(0.2, lo_rpm / ref) * full / rot["nominal_rpm"]:.3g}</min>'
                      f'<max>{m["pitch_headroom"]:g}</max></pitch>')
             ref_d = None if view.startswith('cockpit') else VIEW_DIST
             used.append(fname)

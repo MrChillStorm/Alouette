@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import al3data as U
 import vrs as VRS
 from data import al3_published as PB
+from data import al3_hover_charts as HOV
 
 plt.rcParams.update({'font.family': 'serif', 'font.serif': ['STIX Two Text', 'STIXGeneral', 'DejaVu Serif'], 'mathtext.fontset': 'stix',
                      'font.size': 8.5, 'axes.labelsize': 8.5, 'axes.titlesize': 9, 'legend.fontsize': 7.5, 'xtick.labelsize': 7.5,
@@ -70,8 +71,10 @@ def trims():
         ax.set_xlabel('airspeed, kt'); ax.set_ylabel(lab, fontsize=7.5)
         ax.set_xlim(0, 126)
         tag(ax, 'abcdef'[i])
+        if k == 'att':
+            ax.set_ylim(bottom=-12.5)                      # room for the legend under the curves
         if i in (0, 4):
-            ax.legend(frameon=False, loc='best')
+            ax.legend(frameon=False, loc='lower left' if k == 'att' else 'best')
     fig.tight_layout()
     save(fig, 'trims')
 
@@ -83,18 +86,54 @@ def hover():
         for mode, ls in (('oge', '-'), ('ige', '--')):
             pts = [p for p in h['%d-%s' % (kg, mode)]['points'] if p[3] < 0.05]      # converged trims: above, the rotor stalls
             alt = [p[0] * 0.3048 for p in pts]; pk = [p[1] for p in pts]
+            if (kg, mode) == (2200, 'oge') and 'limit' in h:      # drawn on to where the hover stops trimming
+                alt.append(h['limit']['alt_m']); pk.append(h['limit']['kw'])
             ax.plot(alt, pk, ls, color=c, label='%d kg, %s' % (kg, mode.upper()))
             for (src, k2, m2), cm in PB.HOVER_CEILING_M.items():
                 if k2 == kg and m2 == mode:
                     y = float(np.interp(cm, alt, pk))
                     ax.plot(cm, y, 'o' if src == 'AS' else 's', mfc='none', mec=C_TEST, ms=4, mew=0.8)
                     ax.annotate(src, (cm, y), xytext=(3, -9), textcoords='offset points', fontsize=6.5)
-    ax.axhline(U.P_TO_KW, color=C_REF, lw=0.7, ls=':'); ax.text(100, U.P_TO_KW + 4, 'take-off rating 420 kW', fontsize=6.5, color=C_REF)
+    ax.axhline(U.P_TO_KW, color=C_REF, lw=0.7, ls=':')
+    ax.text(6150, U.P_TO_KW + 4, 'take-off rating 420 kW', fontsize=6.5, color=C_REF, ha='right')
+    ax.axhline(HOV.POWER_USED_KW, color=C_TEST, lw=0.8, ls=(0, (6, 3)))
+    ax.text(6150, HOV.POWER_USED_KW - 5, "manual's hover charts, about 390 kW", fontsize=6.5, color=C_TEST, ha='right', va='top')
     ax.set_xlabel('pressure altitude, m (standard day)'); ax.set_ylabel('engine power to hover, kW')
     ax.legend(frameon=False, fontsize=6.5, ncol=2, loc='lower right')
     ax.set_xlim(0, 6200)
     fig.tight_layout()
     save(fig, 'hover')
+
+
+def charts():
+    """the model against the flight manual's hover charts: (a) its power to hover out of ground effect at the chart's
+    ceilings, with and without the hover correction; (b) the weight it hovers in ground effect over that out of it"""
+    inflow, g = res('hoverinflow'), res('hovercharts')
+    fig, axs = plt.subplots(2, 1, figsize=(W1, 4.1), sharex=True)
+    ax = axs[0]
+    for key, name, c, m in (('with', 'model', C_MOD, 'o'), ('without', 'without the hover correction', C_MOD2, 's')):
+        q = [p for p in inflow[key] if p['temp_c'] is None]
+        ax.plot([p['h_m'] for p in q], [p['kw'] for p in q], m + '-', color=c, ms=3.5, label=name)
+    ax.axhline(HOV.POWER_USED_KW, color=C_TEST, lw=1.1, ls=(0, (6, 3)), label="manual's charts, about 390 kW")
+    ax.plot(*HOV.FIG35_OGE_LOW[0][:1], HOV.POWER_USED_KW, '*', color=C_TEST, ms=8)
+    ax.annotate('strength fitted here', (HOV.FIG35_OGE_LOW[0][0], HOV.POWER_USED_KW), xytext=(2, 6), textcoords='offset points', fontsize=6.5)
+    ax.set_ylim(330, 412)
+    ax.set_ylabel('power to hover, kW'); ax.legend(frameon=False, fontsize=6.5, loc='lower left'); tag(ax, 'a')
+    ax = axs[1]
+    a, b = g['after'], g['before']
+    h = [p['h_m'] for p in a['fig35']]
+    ax.plot(h, [p['ratio_chart'] for p in a['fig35']], '-', color=C_TEST, lw=1.4, label='chart, fig. 3-5')
+    for r, c, m in ((a, C_MOD, 'o'), (b, C_MOD2, 's')):
+        ax.plot(h, [p['ratio'] for p in r['fig35']], m + '-', color=c, ms=3.5, label=r'model, $K_{GE}$ %.3f' % r['ge_k'])
+        ax.plot([p['h_m'] for p in r['off_isa']], [p['ratio'] for p in r['off_isa']], m, mfc='none', mec=c, ms=3.5)
+    ax.plot([p['h_m'] for p in a['off_isa']], [p['ratio_chart'] for p in a['off_isa']], 'x', color=C_TEST, ms=4,
+            label='chart, figs. 3-6, 3-7')
+    ax.set_ylim(1.03, 1.125)
+    ax.set_ylabel('weight in ground effect / out'); ax.set_xlabel('density altitude, m (open and crosses: pressure altitude)')
+    ax.legend(frameon=False, fontsize=6.5, loc='lower center', ncol=2); tag(ax, 'b')
+    ax.set_xlim(0, 4300)
+    fig.tight_layout()
+    save(fig, 'charts')
 
 
 def ge():
@@ -138,9 +177,14 @@ def mission():
         for n in names:
             t0 = next(r['t'] for r in rec if r.get('phase') == n) - rec[0]['t']
             ax.axvline(t0, color=C_REF, lw=0.4)
+    span = {n: [r['t'] for r in rec if r.get('phase') == n] for n in names}
     for n in names:
-        t0 = next(r['t'] for r in rec if r.get('phase') == n) - rec[0]['t']
-        axs[0, 0].text(t0 + 2, axs[0, 0].get_ylim()[1] * 0.98, n, fontsize=5.5, rotation=90, va='top')
+        if span[n][-1] - span[n][0] < 8:                 # too short for a label of its own (the engine coming back)
+            continue
+        axs[0, 0].text(span[n][0] - rec[0]['t'] + 2, axs[0, 0].get_ylim()[1] * 0.98, n, fontsize=5.5, rotation=90, va='top')
+    for ax in (axs[2, 0], axs[2, 1]):                    # room for the legends above the curves
+        lo, hi = ax.get_ylim()
+        ax.set_ylim(lo, hi + 0.35 * (hi - lo))
     for ax in axs[-1]:
         ax.set_xlabel('time, s')
     fig.tight_layout()
@@ -163,25 +207,27 @@ def steps():
 
 def engine():
     e = res('engine')
-    st = e['start']['rec']; gv = e['governor']['rec']; fl = e['failure_held']['rec']
-    fig, axs = plt.subplots(1, 3, figsize=(W2, 2.2))
-    ax = axs[0]
+    st = e['start']['rec']; gv = e['governor']['rec']; ov = e['over_limit']['rec']; fl = e['failure_held']['rec']
+    fig, axs = plt.subplots(2, 2, figsize=(W2, 4.2))
+    ax = axs[0, 0]
     ax.plot([r['t'] for r in st], [r['n'] for r in st], color=C_MOD, label='engine, %')
     ax.plot([r['t'] for r in st], [100 * r['nr'] / PB.NR_RPM for r in st], color=C_MOD2, label='rotor, %')
     ax2 = ax.twinx(); ax2.plot([r['t'] for r in st], [r['t4'] for r in st], color='#4d9221', lw=0.8, label='T4')
     ax2.set_ylabel(r'T4, $^\circ$C', fontsize=7.5); ax2.grid(False)
     ax.set_xlabel('time from the starter, s'); ax.set_ylabel('speed, %'); ax.legend(frameon=False, fontsize=6.5, loc='center right')
     tag(ax, 'a')
-    ax = axs[1]
-    ax.plot([r['t'] for r in gv], [r['nr'] for r in gv], color=C_MOD2)
-    ax.set_xlabel('time, s'); ax.set_ylabel('rotor speed, rpm')
-    ax3 = ax.twinx(); ax3.plot([r['t'] for r in gv], [r['kw'] for r in gv], color=C_MOD, lw=0.8); ax3.set_ylabel('engine power, kW', fontsize=7.5); ax3.grid(False)
-    tag(ax, 'b')
-    ax = axs[2]
+    for ax, rec, name, letter in ((axs[0, 1], gv, 'collective lowered', 'b'), (axs[1, 0], ov, 'collective raised', 'c')):
+        ax.plot([r['t'] for r in rec], [r['nr'] for r in rec], color=C_MOD2)
+        ax.set_xlabel('time, s'); ax.set_ylabel('rotor speed, rpm (blue)', fontsize=7.5)
+        ax3 = ax.twinx(); ax3.plot([r['t'] for r in rec], [r['pw'] for r in rec], color=C_MOD, lw=0.8)
+        ax3.set_ylabel('engine power, kW (red)', fontsize=7.5); ax3.grid(False)
+        ax.set_title('(%s) %s 10 %%' % (letter, name), loc='left', fontsize=8.5, pad=3)
+    axs[0, 1].set_ylim(PB.NR_RPM - 3, PB.NR_RPM + 3)          # a flat line unless the scale is held
+    ax = axs[1, 1]
     ax.plot([r['t'] for r in fl], [r['nr'] for r in fl], color=C_MOD2)
     ax.axhline(PB.NR_AUTO_MIN, color=C_REF, lw=0.7, ls=':'); ax.text(0.2, PB.NR_AUTO_MIN + 4, '270 rpm', fontsize=6.5, color=C_REF)
     ax.set_xlabel('time from the fuel cut, s'); ax.set_ylabel('rotor speed, rpm')
-    tag(ax, 'c')
+    tag(ax, 'd')
     fig.tight_layout()
     save(fig, 'engine')
 
@@ -194,9 +240,16 @@ def climb_autorotation():
         ax.plot([p['V'] for p in pts], [p['fpm'] / 196.85 for p in pts], 'o-', color=col, ms=3, label='climb at 405 kW, ' + name)
     pts = a['points']
     ax.plot([p['V'] for p in pts], [p['fpm'] / 196.85 for p in pts], 's-', color=C_REF, ms=3, label='autorotation, 2200 kg')
-    for k, v in PB.CLIMB_MS.items():
+    names = []                                       # published rates within 0.3 m/s of each other share a label
+    for k, v in sorted(PB.CLIMB_MS.items(), key=lambda q: q[1]):
         ax.axhline(v, color=C_TEST, lw=0.5, ls='--')
-        ax.text(101, v, k, fontsize=6, va='center')
+        if names and v - names[-1][1] < 0.3:
+            names[-1] = (names[-1][0] + ', ' + k, names[-1][1])
+        else:
+            names.append((k, v))
+    for i, (k, v) in enumerate(names):                 # under its line where the next one is close above
+        under = i + 1 < len(names) and names[i + 1][1] - v < 2.0
+        ax.text(109.5, v - 0.2 if under else v + 0.2, k, fontsize=6, va='top' if under else 'bottom', ha='right')
     ax.axhline(0, color='k', lw=0.5)
     ax.set_xlabel('airspeed, kt'); ax.set_ylabel('rate of climb, m/s')
     ax.legend(frameon=False, fontsize=6.5, loc='center left')
@@ -228,7 +281,7 @@ def vrs():
     save(fig, 'vrs')
 
 
-ALL = dict(trims=trims, hover=hover, ge=ge, mission=mission, steps=steps, engine=engine, climb=climb_autorotation, vrs=vrs)
+ALL = dict(trims=trims, hover=hover, charts=charts, ge=ge, mission=mission, steps=steps, engine=engine, climb=climb_autorotation, vrs=vrs)
 
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)

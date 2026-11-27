@@ -1141,7 +1141,7 @@
     </enable>
     <type>noise-spike</type>
     <initialize-to>input</initialize-to>
-    <max-rate-of-change>2.0</max-rate-of-change>
+    <max-rate-of-change>1.0</max-rate-of-change>
     <input>
       <expression>
         <property>/autopilot/al3/target/speed-kt</property>
@@ -1406,6 +1406,72 @@
     </input>
     <output>/autopilot/al3/internal/vs-ref</output>
   </filter>
+  <filter>
+    <name>rotor droop</name>
+    <type>exponential</type>
+    <initialize-to>input</initialize-to>
+    <filter-time>/autopilot/al3/gain/nr_tau</filter-time>
+    <input>
+      <expression>
+        <max>
+          <value>0.0</value>
+          <difference>
+            <property>/autopilot/al3/gain/nr_floor</property>
+            <product>
+              <property>/fdm/jsbsim/rotor/omega-rad_sec</property>
+              <value>9.549296585513721</value>
+            </product>
+          </difference>
+        </max>
+      </expression>
+    </input>
+    <output>/autopilot/al3/internal/nr-droop</output>
+  </filter>
+  <filter>
+    <name>collective: the climb asked for, less what the rotor holds back</name>
+    <enable>
+      <condition>
+        <and>
+          <greater-than><property>/autopilot/al3/internal/coll-fly</property><value>0.5</value></greater-than>
+        </and>
+      </condition>
+    </enable>
+    <type>gain</type>
+    <gain>1.0</gain>
+    <input>
+      <expression>
+        <difference>
+          <property>/autopilot/al3/internal/vs-ref</property>
+          <product>
+            <min>
+              <value>1.0</value>
+              <max>
+                <value>0.0</value>
+                <div>
+                  <property>/autopilot/al3/internal/nr-droop</property>
+                  <property>/autopilot/al3/gain/nr_blend</property>
+                </div>
+              </max>
+            </min>
+            <max>
+              <value>0.0</value>
+              <sum>
+                <difference>
+                  <property>/autopilot/al3/internal/vs-ref</property>
+                  <property>/fdm/jsbsim/velocities/h-dot-fps</property>
+                </difference>
+                <product>
+                  <property>/autopilot/al3/gain/nr_droop_k</property>
+                  <property>/autopilot/al3/internal/nr-droop</property>
+                </product>
+              </sum>
+            </max>
+          </product>
+        </difference>
+      </expression>
+    </input>
+    <output>/autopilot/al3/internal/vs-aim</output>
+  </filter>
   <pid-controller>
     <name>collective</name>
     <enable>
@@ -1422,7 +1488,7 @@
     </input>
     <reference>
       <expression>
-        <property>/autopilot/al3/internal/vs-ref</property>
+        <property>/autopilot/al3/internal/vs-aim</property>
       </expression>
     </reference>
     <config>
