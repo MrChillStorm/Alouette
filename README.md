@@ -44,25 +44,42 @@ are in the report:
   ring state of the [MV-22B](https://github.com/MrChillStorm/MV-22) model
   (Johnson's model): in a steep, slow descent
   the rotor loses thrust at a fixed collective, and the descent runs away until
-  you lower the nose or the collective. A ring-vortex wake carries the
+  you lower the nose or the collective. In the hover the blades meet 9 % more
+  induced velocity than that wake gives on its own (a little more at higher
+  tip Mach numbers), fading out as the wake sweeps back in forward flight.
+  Run on a full-size Bo 105 rotor tested in NASA Ames' 40×80 ft tunnel (NASA
+  TM-85892 and TM-85990), the model's own hover method needs less power than
+  was measured, by about the same factor at every blade loading, and less
+  collective. The correction takes its shape from the Bo 105 and its strength
+  from the Alouette: one number, fitted to the flight manual's hover at 100 m
+  (see *How it compares*). A ring-vortex wake carries the
   rotor's downwash to the tail rotor, stabiliser, end plates, fuselage and
   boom.
 - **Tail rotor** built like the main rotor: three blades on their own flapping
   hinges, six segments each on NACA 0018 (root) to 0015 (tip) tables built the
-  same way, with its hub's toe and a dynamic inflow. It turns at 1938 rpm,
-  5.487 times the main rotor, the ratio of the two rotors' blade-passing
-  frequencies in recordings; the published 2001 rpm goes with a main rotor at
-  about 365 rpm.
+  same way, with its hub's toe and a dynamic inflow. It turns at 2001 rpm
+  with the main rotor at 353.2, 5.665 times its speed, as Aerospatiale's type
+  specification of 1973 gives it. Recordings of governed rotors show 5.487,
+  3 % lower, so the sim's tail rotor tone is about 3 Hz above theirs (100 Hz
+  against 97).
 - **Fuselage** from a wind tunnel test of the Alouette III's (20th ERF), the
-  open tail boom, the gear and the rotor head added by estimates.
+  open tail boom, the gear and the rotor head added by estimates. In a side
+  wind each push on it comes from the airflow that hits that surface.
 - **Engine.** The Artouste III B is a single-shaft engine: its compressor and
   turbine turn at a constant 33 500 rpm, 94.85 times the rotor's speed,
-  whatever the power, held there by an isochronous governor limited by the
-  turbine temperature. It starts as published: the starter drops out at 14 000
-  rpm, it idles at 16 330 rpm, and a centrifugal clutch takes up the rotor as
-  you advance the fuel flow lever; a freewheel lets the rotor overrun the
-  engine in autorotation. Once engaged, the spool's inertia adds to the
-  rotor's, as much again, so the rotor speed hardly droops when you pull.
+  whatever the power, held there by an isochronous governor. Its fuel stops at
+  the turbine's temperature limit, or at 420 kW, the type specification's
+  maximum available power, limited by the reduction gearing, which holds up to
+  4500 m in the standard atmosphere. Pull for more and the rotor slows: at
+  2200 kg the hover at sea level already takes about 391 kW, and from the hover
+  at 1000 ft, 10 % more of the lever's travel slows the rotor to about 330 rpm.
+  Keep pulling and it can stall, so lower the lever when the rotor speed drops.
+  It starts as published: the starter drops out at 14 000 rpm, it idles at
+  16 330 rpm, and a centrifugal clutch takes up the rotor as you advance the
+  fuel flow lever; a freewheel lets the rotor overrun the engine in
+  autorotation. Once engaged, the spool's inertia adds to the rotor's, as much
+  again, so the rotor speed hardly moves when you pull within the engine's
+  power.
 - **Flight controls** with hydraulic servos and no stability augmentation, as
   the real aircraft. The original aircraft's autopilot (heading and altitude
   holds) and Amelia, the co-pilot who hovers for the hoist (in the left seat
@@ -135,35 +152,89 @@ pointing at it), and pick **Sud Aviation SA 316B Alouette III (JSBSim)**.
 
 ## How it compares
 
-Every number comes from the scripted test programme in the report. No
-flight-test time histories, identified derivatives or blade data of the
-Alouette III are public, so the comparisons are with its published
-performance and flight manual, and with theory.
+The numbers come from the scripted test programme in `fdm/`, run on the model
+as it is now; the report is made from the same programme. No flight-test time
+histories, identified derivatives or blade data of the Alouette III are
+public, so the comparisons are with its published performance and flight
+manual, and with theory.
+
+The offline tests run at standard gravity: at latitude 45.447°, where JSBSim's
+gravity on a body at rest is 9.80665 m/s². FlightGear flies with the gravity of
+wherever the aircraft is. A FlightGear 2024.2 flight at Venice airport (LIPZ,
+45.5° N) in the standard atmosphere matched the offline hovers at 2200 kg, with
+the wheels 3, 10 and 100 ft up, within 0.1 kW.
+
+The hover charts are those of the SA 316B flight manual that Aerospatiale's
+type specification of 1 January 1973 reprints in its appendix I
+([public scan](https://www.alouettelama.com/pdf/316B-SPEC-19730101.pdf)):
+the hover ceilings in and out of ground effect against weight and density
+altitude (fig. 3-5), and against pressure altitude and temperature (figs. 3-6
+and 3-7), with its performance table (p. 1.2). The cruise charts are in the
+same appendix: the cruising speed (fig. 3-1) and the fuel consumption per
+kilometre (fig. 3-3).
 
 | | Reference | This model |
 |---|---|---|
-| Hover out of ground effect, 2200 kg, sea level | — | 364 kW (324 kW in ground effect, wheels at 1 m) |
+| Hover out of ground effect, 2200 kg, sea level | the manual's ceiling charts are flown on about 390 kW; their ceiling at this mass is 100 m | 391 kW (361 kW in ground effect, wheels at 1 m); the hover correction's strength is fitted to this chart (without it, about 365 kW) |
+| Ground effect: weight hovered in it over weight out of it, on the same power | 1.060–1.064 from 1650 to 4000 m (fig. 3-5); 1.062–1.069 off the standard temperature (figs. 3-6, 3-7) | wheels at 1 m: 1.062–1.063, fitted to fig. 3-5; the same off the standard temperature (1.094–1.096 before the fit) |
 | Maximum level speed at the 405 kW continuous rating | 210 km/h maximum speed, V<sub>NE</sub> | 208 km/h |
-| Hover ceilings, 2200 kg | out of ground effect 100 m (TD) or 1100 m (Aérostories); in it 1650 or 2850 m | at the ratings far higher (the rotor stalls before the power runs out, at 4877 m); the published ceilings imply 342–378 kW available |
-| Rate of climb, 2200 kg | 4.3 m/s (TD), 5.5 m/s (Aérostories) | 7.0 m/s at 405 kW; 4.5–5.9 m/s at 342–378 kW |
-| Cruise speed, 2200 kg | 180–195 km/h | 197 km/h at 361 kW |
+| Hover ceilings, 2200 kg | out of ground effect 100 m (the manual, TD) or 1100 m (Aérostories); in it 1650 or 2850 m | on the manual's 390 kW, −76 m out of ground effect (fitted at the chart's 2190 kg and 100 m) and 2020 m in it; on the 420 kW take-off rating about 1800 m and 3400 m. At 2100–2200 kg the manual's ceilings imply 378–392 kW, Aérostories' about 407 kW |
+| Rate of climb, 2200 kg | 4.3 m/s (TD), 5.5 m/s (Aérostories) | 6.8 m/s at 405 kW; 5.8–6.4 m/s at 378–392 kW |
+| Cruise speed, 2200 kg | 180–195 km/h | 197 km/h at 362 kW |
+| Cruise fuel flow, 1600–2200 kg, at the manual's speeds (figs. 3-1, 3-3) | 225–226 L/h at sea level, 174–182 L/h at 3000 m | 206–209 L/h at sea level, 7–9 % less; 155–165 L/h at 3000 m; 1–15 % less over the 17 points it flies, of 19 |
 | Engine start | idle about 15 000 rpm (AOPA Pilot flight test), 16 330 rpm (a cockpit recording), 17 000–18 000 rpm (the Lama's engine); the clutch engages from 19 000 rpm (AOPA), the rotor turning at 19 500–21 000 rpm (a simulator manual after the Lama's flight manual); two recorded starts: light-off at 16 % about 14.5 s after the starter, idle about 30 s later, the rotor locked 45 s after take-up with the spool at 80 % | idle 16330 rpm at 299 °C; light-off 14.1 s after the button; rotor taken up at 20823 rpm, at 95 % 22 s after the lever leaves idle |
-| Rotor speed after a power failure at 60 kt, collective held | 270 rpm lower limit in autorotation (TCDS) | 310 rpm in 1.0 s, 270 rpm in 2.4 s |
-| Steady autorotation, 2200 kg | about 1700 ft/min (AOPA Pilot flight test, 1972) | least descent 1918 ft/min at 60 kt |
-| Vortex ring state, vertical descent | Johnson's model | heave mode unstable from 869 to 2819 ft/min; none from 20 kt |
+| Rotor speed after a power failure at 60 kt, collective held | 270 rpm lower limit in autorotation (TCDS) | 310 rpm in 1.3 s, 270 rpm in 2.8 s |
+| Steady autorotation, 2200 kg | about 1700 ft/min (AOPA Pilot flight test, 1972) | least descent 1923 ft/min at 60 kt |
+| Vortex ring state, vertical descent | Johnson's model | heave mode unstable from 774 to 2819 ft/min; none from 20 kt |
 | Flap and lag frequencies, Lock number | theory, the 3-D model's hinge offset | 1.017 and 0.183 per rev, Lock number 5.1 |
 
 ## Known gaps
 
 - **Performance at the rated power.** With the Artouste's 405–420 kW the
-  model hovers higher and climbs faster than any published source gives. The
-  published hover ceilings, climb rates and cruise speeds agree with one
-  another, and with the model, at about four-fifths of that power
-  (342–378 kW). Whether less power reaches the real rotor, or the
-  real rotor and airframe need a fifth more, the public data don't say: the
-  rotor is left untuned and the power at the ratings. The sources also
-  disagree with each other (hover ceilings out of ground effect of 100 m
-  and 1100 m at the same mass).
+  model still hovers higher and climbs faster than any published source gives.
+  The manual's hover ceilings agree with the model at 378–392 kW (Aérostories'
+  at about 407 kW), but the climb rates only at about 340–370 kW, and the
+  cruise speeds at 360 kW or less. Whether less power reaches the real rotor,
+  or the real rotor and airframe need more, the public data don't say: the
+  power is left at the ratings. The sources also disagree with each other
+  (hover ceilings out of ground effect of 100 m and 1100 m at the same mass).
+- **Hover power at altitude** is still under the flight manual's. Without the
+  hover correction the model hovered on 7 % less than the manual's charts say
+  at 100 m density altitude and 13 % less at 4000 m (364 and 337 kW for about
+  390 kW). The correction is fitted at 100 m; the model now takes 388 kW at
+  1000 m, 379 kW at 2500 m and 366 kW at 4000 m, 6 % less, and 5–19 kW less
+  than 390 off the standard temperature (fig. 3-6). The Bo 105's correction is
+  the same at every blade loading, so it doesn't account for that growth with
+  altitude, and nothing found does yet. (The charts don't say where the 390 kW
+  is measured; the model's figure is the engine's shaft power, with both
+  rotors, the gearbox's losses and the accessories.)
+- **The hover correction** rests on one test of another rotor, with another
+  blade section (NACA 23012), in a wind tunnel. Its shape is read from the
+  chart in TM-85990; the numbers TM-85892 tables for the same test, at one
+  rotor speed, put the Bo 105's own strength about 5 % lower (the Alouette's
+  strength is fitted to the Alouette). The table also gives the collective,
+  which nothing was fitted to: its rise from zero thrust is 0.19° rms from the
+  model's method with the correction, 0.80° without. How the correction grows
+  with tip Mach number is less certain than its size: other readings of the
+  Bo 105's power at zero thrust move the Alouette's hover powers by up to
+  about 2.5 kW. How it fades with forward speed, as the square of the cosine of
+  the wake's skew angle, is an assumption: the data are for the hover. So
+  climbs at speed, cruise and autorotation barely change.
+- **Cruise fuel** is under the flight manual's, and nothing is fitted to it.
+  - At the charts' speeds the model burns 7–9 % less at sea level, and up to
+    15 % less (2200 kg at 3000 m). On the model's engine curve the manual's
+    sea level fuel takes 383–387 kW, close to the hover charts' 390, where the
+    model's flight takes 330–338 kW. That conversion rests on the engine's
+    consumption at its rating, 0.46 kg/kWh, a figure from Wikipedia: about
+    0.50–0.51 would close the gap at sea level.
+  - One difference no engine curve can close. At 2000 and 3000 m the manual
+    burns 4 % more at 2200 kg than at 1600 kg, each at its own speed; the
+    model takes 9–12 % less power at 2200 kg than at 1600 kg, and so burns
+    less. Either its rotors charge too little for weight, or its drag, much of
+    it estimated, charges too much for speed, or both.
+  - At 4000 m the model can't fly 1800 and 2000 kg at the charts' speeds: it
+    stops at about 92 kt for 98, and 74 kt for 81, short of lift, with no
+    control near its stop.
 - **No dynamic data.** The trims, derivatives and responses rest on physics
   and on estimates (the blades' mass and inertia, scaled from the
   Alouette II's blade; the lag damper; the control ranges; the servos), which
@@ -174,12 +245,48 @@ performance and flight manual, and with theory.
   at high Mach numbers is an estimate (no high-speed tests of a 63A section
   were found), and the camber of HAL's "63A of 11.5 %" is not given (the
   model's is symmetrical). The control rigging is not public (the type
-  certificate refers to the maintenance manual) and is estimated.
-- **Ground effect** has the Bo 105's and UH-60's strength, not fitted; against
-  the published ceilings it may be somewhat strong.
+  certificate refers to the maintenance manual) and is estimated: the
+  collective's range from what the model itself needs, the cyclic's and
+  pedals' as typical of the type's era. The pitch indicator's degrees come
+  from the original aircraft's notes, read as written, in degrees and
+  minutes; they give no source.
+- **Ground effect** is fitted in one number, its strength, to the manual's
+  ceilings in and out of ground effect, which are flown on the same power: the
+  weight between them is the ground effect, whatever that power is. (With the
+  Bo 105's and UH-60's strength, as before, the model gains 9.5 % of weight
+  in ground effect where the chart gains 6.2 %.) What remains:
+  - The charts give no wheel height. The fit takes the wheels 1 m up, as in
+    the take-off hover. For wheels 0.5, 1.5 or 2 m up the constant
+    (`GE_K`, now 0.108) would be 0.082, 0.137 or 0.170: at 2 m the old
+    strength, 0.174, would nearly have fitted.
+  - The chart in ground effect is flown "with pitch reserve relative to
+    engine limitations", the one out of it "without", and the document doesn't
+    say what the reserve is. If it holds power back in ground effect, the real
+    ground effect is stronger than the fit's.
+  - Off the standard temperature the charts give up to 0.007 more than the
+    model.
+  - How ground effect falls off with height is the Bo 105 and UH-60 models'
+    (the charts have one height), and in forward flight Heyson's ratio, as
+    before.
+  - As altitude, the gain in ground effect is still more than the table's:
+    2050 m for 1550 m at 2200 kg and 1850 m for 1450 m at 2100 kg (2930 and
+    2600 m with the old strength). The model's hover power grows more slowly
+    with altitude than the charts', so the same ground effect buys it more
+    height. Closing that gap with a weaker ground effect would hide the
+    difference out of ground effect.
 - **Not modelled:** blade bending, dynamic stall, failures beyond the engine's.
-  The original aircraft's autopilot and Amelia are kept as they were, tuned
-  for the old flight model.
+  The original aircraft's autopilot is kept as it was, tuned for the old
+  flight model. Amelia, the co-pilot, keeps her voice and requests; her
+  stick, pedals and collective now work the way this model's test autopilot
+  does. She holds one height: 4 ft after a take-off, or the height she takes
+  over at in the air, and 2 ft more or less for each request, from 2 to 18 ft.
+  She also holds her spot: where she stands as she takes off, or where she
+  comes to a stop, until you ask her to move. For a take-off she follows a
+  table by wind and loading, she banks against a crosswind only once the wheels
+  are off the ground, and in the air she answers a change of wind at once. Her
+  hover is tuned to this model's measured response, with the speed she is
+  heading for fed forward, and near the ground she won't rear up to stop. Her
+  flying has been tried in FlightGear.
 
 ## Rebuilding the model and the report
 
@@ -201,14 +308,44 @@ python3 genal3.py root/aircraft/alouette3
   `artouste.py` writes the engine and drive, `data/` holds the transcribed
   tables (the C-81 0012 section, the wind tunnel fuselage, the published
   performance), and `mrwake.py` recomputes the ring-vortex wake tables.
-- `harness.py` drives the model offline. `sweep.py` (level-flight trims),
+- `harness.py` drives the model offline, at standard gravity
+  (`al3data.TEST_LAT_DEG`). `sweep.py` (level-flight trims),
   `performance.py` (hover ceilings), `pathtrims.py` (climbs, autorotations),
   `derivatives.py`, `engine_response.py` (start, governor, power failure) and
   `descent.py` (the vortex ring state) test it; `flights.py` flies it with the
   test autopilot, `genap.py`, the UH-60 model's adapted.
-- `report/mkresults.py` runs the whole programme into `report/results/`;
+- `hovercharts.py` checks the ground effect against the flight manual's hover
+  ceiling charts, in and out of ground effect, as digitized in
+  `data/al3_hover_charts.py`. It writes its tables and a plot into `out/` and
+  exits with an error if the model's ground effect misses its tolerances;
+  `--fit` refits the ground effect's constant (`al3data.GE_K`), also for
+  other wheel heights.
+- `hoverinflow.py` re-derives the hover correction: its shape from the Bo 105
+  (`data/bo105_hover.py`: NASA TM-85990's chart and TM-85892's table, whose
+  collective it isn't fitted to) and its strength from the flight manual's
+  hover at 100 m, refitted on the model. It writes its tables into `out/` and
+  exits with an error if the model's two numbers (`al3data.HOVER_VI`,
+  `HOVER_VI_MACH`) differ from these, or the collective misses by more than its
+  tolerance. After a change to either, refit the ground effect with
+  `hovercharts.py --fit`: it is fitted on this rotor.
+- `cruisecharts.py` sets the model's cruise fuel flow against the flight
+  manual's cruise speed and fuel consumption charts, as digitized in
+  `data/al3_cruise_charts.py`. It writes its tables into `out/`. Nothing is
+  fitted to these charts and there is no pass mark for the model: it exits
+  with an error only if a point doesn't trim or the chart readings disagree
+  with themselves.
+- `report/mkresults.py` runs the whole programme, the three chart comparisons
+  last and one at a time, into `report/results/`, and fails if a climb or
+  autorotation speed doesn't trim;
   `report/build.sh` makes every figure, table and number of the report from
   them and builds the PDF.
+- `ameliatable.py` trims Amelia's take-off table, the model's own (the type
+  specification has none): stick, pedals and attitude for a take-off by wind
+  (0 to 30 kt from every side), weight, air density and centre of gravity, the
+  pedals also with the collective part of the way up. It writes the trims into
+  `data/al3_takeoff_trims.json` and the table into `Systems/amelia.xml`, and
+  writes nothing there if a trim doesn't solve. Run it again after a change to
+  the flight model.
 - `hdrmodel.py` builds the exterior lights for the HDR renderer, `instrlamps.py`
   the instruments' lamp rings, `rotorvis.py` the rotors' blade-by-blade models
   and their blur, `startgains.py` the in-air start's trim gains.

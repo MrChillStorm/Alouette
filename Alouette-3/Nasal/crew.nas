@@ -72,6 +72,13 @@ var movement = {
 
 var amelia = {
 
+	# Her flying is in Systems/amelia.xml; here she sets what it aims for. Her height checks are the original aircraft's:
+	# its altitude-agl read about 2.5 ft on the wheels (on the ground below 2.6-3.0 ft). Here altitude-agl is the CG's,
+	# 6.4 ft up on the wheels, so it is converted where she reads it.
+	height_ft: func {
+		return getprop("/position/altitude-agl-ft") - (getprop("/fdm/jsbsim/instruments/agl-offset-ref") or 0) + 2.5;
+	},
+
 	init: func {
 
 		# movement-related flags
@@ -121,17 +128,11 @@ var amelia = {
 
 		# property node references
 
-		me.nd_ref_acc_x = props.globals.getNode("/accelerations/pilot/x-accel-fps_sec");
-		me.nd_ref_acc_y = props.globals.getNode("/accelerations/pilot/y-accel-fps_sec");
 		me.nd_ref_delta_t = props.globals.getNode("/sim/time/delta-sec");
 
 		# piloting-related flags
 
 		me.hover_loop_flag = 0;
-		me.collective = 1;
-		me.collective_step = 0.005;
-		me.hover_alt_bias = 0.0;
-		me.collective_damping_bias = 0.0;
 		me.landing_flag = 0;
 		me.hover_speed_fwd = 0.0;
 		me.hover_speed_lr = 0.0;
@@ -139,6 +140,10 @@ var amelia = {
 	},
 
 	stop: func {
+
+		# taken out while she flies, she hands back first: she would go on holding the controls, and Ctrl+t does nothing
+		# without her
+		if ((me.running_flag > 0) and (me.hover_loop_flag == 1)) {me.hover_end();}
 
 		if (me.running_flag > 0) {print("Stopping Amelia");}
 		me.running_flag = 0;
@@ -156,6 +161,10 @@ var amelia = {
 		
 		me.run();
 		me.run_fast();
+
+		# the way she sits, set once: her torso does not follow the helicopter's accelerations (this model's rotor
+		# vibration shook her with them)
+		me.hip_bend.execute(10.0);
 
 		gui.menuEnable("amelia-mnu", 1);
 	},
@@ -224,6 +233,9 @@ var amelia = {
 
 		me.landing_flag = 0;
 		me.hover_loop_flag = 0;
+
+		setprop("/fdm/jsbsim/systems/amelia/landing", 0);
+		setprop("/fdm/jsbsim/systems/amelia/lifting-off", 0);
 
 		setprop("/fdm/jsbsim/systems/amelia/hover/v-north-tgt", 0.0);
 		setprop("/fdm/jsbsim/systems/amelia/hover/v-east-tgt", 0.0);
@@ -367,15 +379,6 @@ var amelia = {
 
 	if (me.running_flag == 0) {return;}
 
-	# Amelia follows accelerations
-
-		var acc_x = me.nd_ref_acc_x.getValue() - 1.0;		
-		if (acc_x > 5.0) {acc_x = 5.0;}
-		else if (acc_x < -5.0) {acc_x = -5.0;}	
-
-		me.hip_bend.execute(10.0 - acc_x);
-
-
 	# Amelia breathes
 
 		me.breath_state = me.breath_state + me.breath_flag * 0.6 * me.nd_ref_delta_t.getValue();
@@ -406,15 +409,22 @@ var amelia = {
 
 	hover: func {
 
-
+		# on the ground she begins with a take-off, to a hover with the wheels 4 ft up; in the air she holds the height
+		# she takes over at (2 ft at the least). Set before she takes hold
+		var on_ground = (me.height_ft() < 3.0);
+		var wheels = getprop("/fdm/jsbsim/systems/amelia/wheel-height-ft");
+		var height = 4.0;
+		if (!on_ground) {height = (wheels > 2.0) ? wheels : 2.0;}
+		setprop("/fdm/jsbsim/systems/amelia/hover/height-tgt", height);
+		setprop("/fdm/jsbsim/systems/amelia/lifting-off", on_ground ? 1 : 0);
+		setprop("/fdm/jsbsim/systems/amelia/landing", 0);
+		me.landing_flag = 0;
 
 		me.take_controls();
 
 		var current_heading = getprop("/orientation/heading-deg");
 
 		setprop("/fdm/jsbsim/systems/amelia/yaw/heading-tgt", current_heading);
-
-		me.collective = getprop("/controls/al3/collective");
 
 		me.hover_loop_flag = 1;
 		me.hover_loop();
@@ -444,117 +454,64 @@ var amelia = {
 
 		me.landing_flag = 1;
 
+		# down at 2 ft/s, slower near the ground, aiming below it; from the first wheel's touch the lever goes down
+		setprop("/fdm/jsbsim/systems/amelia/hover/height-tgt", -1.0);
+		setprop("/fdm/jsbsim/systems/amelia/landing", 1);
+
 	},
 
 	hover_loop: func {
 
 		if (me.hover_loop_flag == 0) {return;}
 
-		if (getprop("/fdm/jsbsim/animation/rotor0-rotation") > 250.0)
+		# she lets go once the landing is done: down, with the lever all the way down
+		if ((me.landing_flag == 1) and (getprop("/fdm/jsbsim/systems/amelia/setting-down") == 1) and (getprop("/controls/al3/collective") < 0.005))
 			{
-			var alt_agl = 	getprop("/position/altitude-agl-ft");	
+			me.hover_loop_flag = 0;
 
-			if (alt_agl > 2.75) 
-				{
-				if (me.landing_flag == 0)
-					{me.collective_step = 0.0005;}
-				else
-					{me.collective_step = 0.0001;}
-				}
-			else 
-				{
-				if (me.collective > 0.6) {me.collective_step = 0.02;}
-				else {me.collective_step = 0.005;} 
+			me.speak("Here we are.");
 
-				}
+			me.relinquish_controls();
 
-			if (me.landing_flag == 0)
-				{
-
-				if (alt_agl < 5.0 + me.hover_alt_bias)
-		
-					{
-					me.collective = me.collective - me.collective_step;
-					me.collective_damping_bias = 0.0;
-					}
-				else if (alt_agl > 30.0 + me.hover_alt_bias)
-					{
-					var vspeed = getprop("/fdm/jsbsim/velocities/v-down-fps");
-
-					if (vspeed < 0.0)
-						{
-						me.collective = me.collective + me.collective_step;
-						}
-					else if (vspeed > 5.0)
-						{
-						me.collective = me.collective - me.collective_step;
-						}
-					}
-				else if (alt_agl > 15.0 + me.hover_alt_bias)
-					{
-					me.collective = me.collective + me.collective_step;
-					me.collective_damping_bias = 0.0;
-					}
-				else
-					{
-					var vspeed = getprop("/fdm/jsbsim/velocities/v-down-fps");
-			
-
-					if (vspeed < -3.0)
-						{
-						me.collective_damping_bias = 0.01;
-						}
-					else if (vspeed < -2.0)
-						{
-						me.collective_damping_bias = 0.015;
-						}
-					else if (vspeed < -1.0)
-						{
-						me.collective_damping_bias = 0.005;
-						}
-					else if (vspeed > 3.0)
-						{
-						me.collective_damping_bias = -0.01;
-						}
-					else if (vspeed > 2.0)
-						{
-						me.collective_damping_bias = -0.015;
-						}
-					else if (vspeed > 1.0)
-						{
-						me.collective_damping_bias = -0.005;
-						}
-	
-					}
-
-				}
-
-			else # landing is commanded
-
-				{
-				me.collective_damping_bias = 0;
-				me.collective = me.collective + me.collective_step;
-
-
-				if (me.collective > 1.0)
-					{
-					me.collective = 1.0;
-					me.hover_loop_flag = 0;
-
-					me.speak("Here we are.");
-					
-					me.relinquish_controls();
-
-					}
-
-				}
-
-			setprop("/controls/al3/collective", me.collective + me.collective_damping_bias - 0.005 * me.hover_alt_bias);
-
+			return;
 			}
-		
+
 		settimer (func {me.hover_loop ();}, 0.2);
 
+
+	},
+
+	# "hover higher" and "hover lower": 2 ft at a time, between 2 and 18 ft on the wheels
+	change_height: func(feet) {
+
+		var height = getprop("/fdm/jsbsim/systems/amelia/hover/height-tgt");
+
+		if (me.hover_loop_flag == 0)
+			{
+			me.speak("You are in control right now.");
+			return;
+			}
+		if (me.landing_flag == 1)
+			{
+			me.speak("Not while we're landing.");
+			return;
+			}
+		if ((feet < 0.0) and (height < 2.1))
+			{
+			me.speak("Do you want to land? Then say so.");
+			return;
+			}
+		if ((feet > 0.0) and (height > 17.9))
+			{
+			me.speak("High enough for hover flight I think...");
+			return;
+			}
+
+		me.speak(me.get_affirm_string());
+		height = height + feet;
+		if (height < 2.0) {height = 2.0;}
+		if (height > 18.0) {height = 18.0;}
+		setprop("/fdm/jsbsim/systems/amelia/hover/height-tgt", height);
 
 	},
 
@@ -566,7 +523,7 @@ var amelia = {
 
 		if (request == "... take off?")
 			{
-			var alt_agl = getprop("/position/altitude-agl-ft");
+			var alt_agl = me.height_ft();
 			
 			if (alt_agl < 3.0)
 				{
@@ -582,67 +539,18 @@ var amelia = {
 			
 
 			}
-		else if (request == "... hover lower?")
+		else if ((request == "... hover lower?") or (request == "... hover higher?"))
 			{
-			var alt_agl = getprop("/position/altitude-agl-ft");
-			
-			if (alt_agl < 3.0)
+			if ((me.height_ft() < 3.0) and (me.hover_loop_flag == 0))
 				{
-				if (crew.amelia.hover_loop_flag == 0)
-					{
-					me.speak("Shouldn't we take off first?");
-					return;
-
-					}
+				me.speak("Shouldn't we take off first?");
+				return;
 				}
-			else
-		   		{
-				if (me.hover_alt_bias <  0.0)
-					{
-					me.speak("Do you want to land? Then say so.");
-					}
-				else
-					{
-					me.speak(me.get_affirm_string());
-					me.hover_alt_bias = crew.amelia.hover_alt_bias - 2.0;
-					}
-				}
-
-				
-
-			}
-		else if (request == "... hover higher?")
-			{
-			var alt_agl = getprop("/position/altitude-agl-ft");
-			
-			if (alt_agl < 3.0)
-				{
-				if (me.hover_loop_flag == 0)
-					{
-					me.speak("Shouldn't we take off first?");
-					return;
-
-					}
-				}
-			else
-		   		{
-				if (me.hover_alt_bias >  13.8)
-					{
-					me.speak( "High enough for hover flight I think...");
-					}
-				else
-					{
-					me.speak(me.get_affirm_string());
-					me.hover_alt_bias = me.hover_alt_bias + 2.0;
-					}
-				}
-
-				
-
+			me.change_height((request == "... hover higher?") ? 2.0 : -2.0);
 			}
 		else if (request == "... land?")
 			{
-			var alt_agl = getprop("/position/altitude-agl-ft");
+			var alt_agl = me.height_ft();
 			
 			if (alt_agl < 2.6)
 				{
@@ -824,7 +732,7 @@ var amelia = {
 				me.speak("You are in control right now.");
 				return;
 				}
-			var alt_agl = getprop("/position/altitude-agl-ft");
+			var alt_agl = me.height_ft();
 			
 			if (alt_agl < 2.6)
 				{
@@ -851,7 +759,7 @@ var amelia = {
 				me.speak("You are in control right now.");
 				return;
 				}
-			var alt_agl = getprop("/position/altitude-agl-ft");
+			var alt_agl = me.height_ft();
 			
 			if (alt_agl < 2.6)
 				{
@@ -879,7 +787,7 @@ var amelia = {
 		if (me.hover_loop_flag == 0)
 			{
 
-			var alt_agl = getprop("/position/altitude-agl-ft");
+			var alt_agl = me.height_ft();
 
 			if (alt_agl > 10.0)
 				{
@@ -888,14 +796,6 @@ var amelia = {
 					me.speak("Negative - at least make an attempt to hover first.");
 					return;
 					}
-
-
-				me.hover_alt_bias = 12.0; 
-				}
-			else
-				{
-				me.hover_alt_bias = 0.0;
-
 				}
 
 			me.hover();
