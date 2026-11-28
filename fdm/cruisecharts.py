@@ -33,11 +33,14 @@ from data import al3_cruise_charts as C
 HERE = os.path.dirname(os.path.abspath(__file__))
 WORKERS = 4
 TOL_TAS = 0.015             # the charts' dashed true airspeeds against their indicated ones / sqrt(density ratio)
-TRIM_MAX = 0.15             # the largest weighted acceleration left in a trim that counts (harness.trim's scale)
-# points the model can't fly (kg, altitude m): level flight stops short of the chart's speed, at about 92 kt for 98 and
-# 74 kt for 81, with no control near its stop; what is left over is mostly lift, and the power climbs steeply towards it
-# (which looks like the blades stalling; their angles of attack were not examined)
-SHORT = {(1800, 4000), (2000, 4000)}
+TRIM_MAX = 0.01             # the largest weighted acceleration left in a trim that counts (harness.trim's scale): the
+#                             trim has converged (its aim is 0.008)
+# points the model can't fly (kg, altitude m): level flight stops short of the chart's speed, with no control near its
+# stop, and at the chart's speed what is left over is lift (which looks like the blades stalling; their angles of attack
+# were not examined). At 4000 m it stops at about 92 kt for 98 (1800 kg) and 73 kt for 81 (2000 kg); at 3000 m, half a
+# knot short (2000 and 2200 kg). Each 3000 m point stops with the same controls as the 4000 m one of nearly the same
+# weight over air density.
+SHORT = {(1800, 4000), (2000, 4000), (2000, 3000), (2200, 3000)}
 STEPS_KT = (10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 95.0, 105.0)    # from the hover: a poor start can find
 #                                              another equilibrium (at 4000 m, 2000 kg, steps of 20 kt lost it at 40 kt)
 EXTRA = H.ENGINE_POWER + ('eng/wf-for-load', 'eng/delta-sqrt-theta')

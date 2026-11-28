@@ -8,14 +8,14 @@
    "tas_kmh": 202.4,
    "chart_l_km": 1.111,
    "chart_lh": 224.8664,
-   "model_lh": 208.9840354640331,
-   "model_kw": 338.4426148239164,
+   "model_lh": 208.97976010680333,
+   "model_kw": 338.4306942629856,
    "chart_kw_on_model_curve": 382.68793145122805,
-   "sfc_for_chart": 0.49754109682330716,
-   "collective_shaft_deg": 13.803855375278104,
+   "sfc_for_chart": 0.4975525338033486,
+   "collective_shaft_deg": 13.80362881412174,
    "tas_vs_ias": 0.0,
-   "curve_check_kw": -0.0013395176003996312,
-   "trim_residual": 0.007319083512566797
+   "curve_check_kw": -0.001329668126516026,
+   "trim_residual": 0.006352549566698394
   },
   {
    "kg": 1600,
@@ -24,14 +24,14 @@
    "tas_kmh": 208.0,
    "chart_l_km": 0.968,
    "chart_lh": 201.344,
-   "model_lh": 196.69905812097278,
-   "model_kw": 334.21424773591605,
+   "model_lh": 196.69111615265413,
+   "model_kw": 334.1921086980912,
    "chart_kw_on_model_curve": 347.1525236384288,
-   "sfc_for_chart": 0.4711167064917393,
-   "collective_shaft_deg": 14.208088456974902,
+   "sfc_for_chart": 0.4711364662947038,
+   "collective_shaft_deg": 14.207633683276168,
    "tas_vs_ias": 0.0012258721320170807,
-   "curve_check_kw": -0.002060888586186138,
-   "trim_residual": 0.0072749541887944975
+   "curve_check_kw": -0.0020473686911941513,
+   "trim_residual": 0.0072700694506771905
   },
   {
    "kg": 1600,
@@ -40,14 +40,14 @@
    "tas_kmh": 208.6,
    "chart_l_km": 0.873,
    "chart_lh": 182.1078,
-   "model_lh": 180.57862844205525,
-   "model_kw": 316.173133753205,
+   "model_lh": 180.59203099526204,
+   "model_kw": 316.21042735499344,
    "chart_kw_on_model_curve": 320.432865125186,
-   "sfc_for_chart": 0.46386885042960024,
-   "collective_shaft_deg": 14.322812905565296,
+   "sfc_for_chart": 0.46383452666436503,
+   "collective_shaft_deg": 14.323410345835448,
    "tas_vs_ias": -0.007962449057507537,
-   "curve_check_kw": -0.0003854360506920784,
-   "trim_residual": 0.004047195780261041
+   "curve_check_kw": -0.0003408844514183329,
+   "trim_residual": 0.006216750657349005
   },
   {
    "kg": 1600,
@@ -56,14 +56,14 @@
    "tas_kmh": 207.0,
    "chart_l_km": 0.842,
    "chart_lh": 174.29399999999998,
-   "model_lh": 165.28522530061906,
-   "model_kw": 297.57526761166855,
+   "model_lh": 165.28547253199633,
+   "model_kw": 297.57647257757355,
    "chart_kw_on_model_curve": 322.6738793886521,
-   "sfc_for_chart": 0.48422019077761613,
-   "collective_shaft_deg": 14.42926615158646,
+   "sfc_for_chart": 0.48421892991480275,
+   "collective_shaft_deg": 14.429421338704252,
    "tas_vs_ias": -0.005435265031194514,
-   "curve_check_kw": 0.0010795104365115549,
-   "trim_residual": 0.003955777053523325
+   "curve_check_kw": 0.0005633060640661824,
+   "trim_residual": 0.003820562960845776
   },
   {
    "kg": 1600,
@@ -72,14 +72,14 @@
    "tas_kmh": 200.4,
    "chart_l_km": 0.858,
    "chart_lh": 171.9432,
-   "model_lh": 155.7577002592723,
-   "model_kw": 292.4275169663454,
-   "chart_kw_on_model_curve": 337.52054383594253,
-   "sfc_for_chart": 0.5042808392259652,
-   "collective_shaft_deg": 14.865867625606732,
+   "model_lh": 155.75102377612737,
+   "model_kw": 292.40985366213727,
+   "chart_kw_on_model_curve": 337.520543835941,
+   "sfc_for_chart": 0.5043008602649934,
+   "collective_shaft_deg": 14.865447450936436,
    "tas_vs_ias": 0.004120194756368267,
-   "curve_check_kw": 0.0018668008458462282,
-   "trim_residual": 0.007442126136853073
+   "curve_check_kw": 0.0009301004182589168,
+   "trim_residual": 0.005965788587226443
   },
   {
    "kg": 1800,
@@ -88,14 +88,14 @@
    "tas_kmh": 197.7,
    "chart_l_km": 1.139,
    "chart_lh": 225.1803,
-   "model_lh": 207.34181760745633,
-   "model_kw": 333.8678877626964,
+   "model_lh": 207.33637793204488,
+   "model_kw": 333.85273368326057,
    "chart_kw_on_model_curve": 383.5624250023888,
-   "sfc_for_chart": 0.5027423791784528,
-   "collective_shaft_deg": 13.547312349221773,
+   "sfc_for_chart": 0.5027573539677513,
+   "collective_shaft_deg": 13.547026066946486,
    "tas_vs_ias": 0.0005060728744938903,
-   "curve_check_kw": -0.0016647825272002592,
-   "trim_residual": 0.000578231729724074
+   "curve_check_kw": -0.0016650868687406728,
+   "trim_residual": 0.0005864564950466324
   },
   {
    "kg": 1800,
@@ -104,14 +104,14 @@
    "tas_kmh": 199.8,
    "chart_l_km": 1.006,
    "chart_lh": 200.99880000000002,
-   "model_lh": 192.1781929994502,
-   "model_kw": 321.62023475577416,
+   "model_lh": 192.17269130131143,
+   "model_kw": 321.60491255880527,
    "chart_kw_on_model_curve": 346.19083146302125,
-   "sfc_for_chart": 0.481937999919187,
-   "collective_shaft_deg": 13.799857171548258,
+   "sfc_for_chart": 0.4819527262738509,
+   "collective_shaft_deg": 13.799554370189131,
    "tas_vs_ias": -0.0003612965879965513,
-   "curve_check_kw": -0.0027194421780336597,
-   "trim_residual": 0.0002314974938987597
+   "curve_check_kw": -0.0027244180118941586,
+   "trim_residual": 0.0004781142972406349
   },
   {
    "kg": 1800,
@@ -120,14 +120,14 @@
    "tas_kmh": 200.8,
    "chart_l_km": 0.924,
    "chart_lh": 185.53920000000002,
-   "model_lh": 178.63619895143012,
-   "model_kw": 310.7638975635816,
+   "model_lh": 178.6298694730484,
+   "model_kw": 310.74626036940776,
    "chart_kw_on_model_curve": 329.9923973693821,
-   "sfc_for_chart": 0.4777680404418902,
-   "collective_shaft_deg": 14.093793611758326,
+   "sfc_for_chart": 0.47778534743622586,
+   "collective_shaft_deg": 14.093444130297357,
    "tas_vs_ias": 0.008377637692664752,
-   "curve_check_kw": -0.0025607250390180525,
-   "trim_residual": 0.002003061877554404
+   "curve_check_kw": -0.0025568154368329488,
+   "trim_residual": 0.002052583338938061
   },
   {
    "kg": 1800,
@@ -136,19 +136,19 @@
    "tas_kmh": 193.4,
    "chart_l_km": 0.907,
    "chart_lh": 175.4138,
-   "model_lh": 161.72306963123282,
-   "model_kw": 287.6524090203245,
+   "model_lh": 161.72141055269898,
+   "model_kw": 287.6477897294334,
    "chart_kw_on_model_curve": 325.7935285717992,
-   "sfc_for_chart": 0.49807589431572735,
-   "collective_shaft_deg": 14.134865971469903,
+   "sfc_for_chart": 0.4980811172360447,
+   "collective_shaft_deg": 14.134770864650918,
    "tas_vs_ias": 5.6352393536629464e-05,
-   "curve_check_kw": 0.00013382937180494991,
-   "trim_residual": 0.0050468861715050675
+   "curve_check_kw": 0.00013109580066839044,
+   "trim_residual": 0.005762948962299129
   },
   {
    "kg": 1800,
    "alt_m": 4000,
-   "error": "no level trim: 1800 kg, 4000 m, 98 kt (residual 1.17)"
+   "error": "no level trim: 1800 kg, 4000 m, 98 kt (residual 1.18)"
   },
   {
    "kg": 2000,
@@ -157,14 +157,14 @@
    "tas_kmh": 192.0,
    "chart_l_km": 1.173,
    "chart_lh": 225.216,
-   "model_lh": 206.0488444449822,
-   "model_kw": 330.2658946859036,
+   "model_lh": 206.04379000989329,
+   "model_kw": 330.2518076717695,
    "chart_kw_on_model_curve": 383.6618815802049,
-   "sfc_for_chart": 0.5064268887937663,
-   "collective_shaft_deg": 13.384032291212474,
+   "sfc_for_chart": 0.506441118088095,
+   "collective_shaft_deg": 13.383784455138215,
    "tas_vs_ias": -0.0015600624024961762,
-   "curve_check_kw": -0.001763749084545907,
-   "trim_residual": 0.005331901288252217
+   "curve_check_kw": -0.001757878276350766,
+   "trim_residual": 0.0047092478732443195
   },
   {
    "kg": 2000,
@@ -173,14 +173,14 @@
    "tas_kmh": 191.0,
    "chart_l_km": 1.06,
    "chart_lh": 202.46,
-   "model_lh": 189.338894418119,
-   "model_kw": 313.70567174382734,
+   "model_lh": 189.3328690691729,
+   "model_kw": 313.68888782472834,
    "chart_kw_on_model_curve": 350.26158640713055,
-   "sfc_for_chart": 0.493462622619045,
-   "collective_shaft_deg": 13.572052868516504,
+   "sfc_for_chart": 0.49347977755393935,
+   "collective_shaft_deg": 13.571741668838577,
    "tas_vs_ias": 0.0035755817528031475,
-   "curve_check_kw": 0.0018458023448602034,
-   "trim_residual": 0.0014052095109857378
+   "curve_check_kw": 0.0018437106223814226,
+   "trim_residual": 0.0015790247731606905
   },
   {
    "kg": 2000,
@@ -189,30 +189,19 @@
    "tas_kmh": 184.7,
    "chart_l_km": 1.01,
    "chart_lh": 186.547,
-   "model_lh": 171.9668649950149,
-   "model_kw": 292.18205980840656,
+   "model_lh": 171.95984659222987,
+   "model_kw": 292.16250955446986,
    "chart_kw_on_model_curve": 332.8000259162451,
-   "sfc_for_chart": 0.4999198883512224,
-   "collective_shaft_deg": 13.6658064051466,
+   "sfc_for_chart": 0.4999417751584622,
+   "collective_shaft_deg": 13.665439037519764,
    "tas_vs_ias": -0.0028674279187227425,
-   "curve_check_kw": -0.000810690228263411,
-   "trim_residual": 0.0036698216474950513
+   "curve_check_kw": -0.0008129943514063598,
+   "trim_residual": 0.0038232879472846334
   },
   {
    "kg": 2000,
    "alt_m": 3000,
-   "pitch": 0.9,
-   "tas_kmh": 172.0,
-   "chart_l_km": 1.049,
-   "chart_lh": 180.428,
-   "model_lh": 157.76303674064238,
-   "model_kw": 276.61965499402663,
-   "chart_kw_on_model_curve": 339.7625810223568,
-   "sfc_for_chart": 0.5255490435789124,
-   "collective_shaft_deg": 13.8714751213652,
-   "tas_vs_ias": -0.00621187347777552,
-   "curve_check_kw": 0.0006380142986017745,
-   "trim_residual": 0.11367629658301835
+   "error": "no level trim: 2000 kg, 3000 m, 93 kt (residual 0.11)"
   },
   {
    "kg": 2000,
@@ -226,14 +215,14 @@
    "tas_kmh": 185.9,
    "chart_l_km": 1.217,
    "chart_lh": 226.24030000000002,
-   "model_lh": 205.86430326312072,
-   "model_kw": 329.7488147907063,
+   "model_lh": 205.85746374668787,
+   "model_kw": 329.7297659410041,
    "chart_kw_on_model_curve": 386.5154774529479,
-   "sfc_for_chart": 0.5094350310049046,
-   "collective_shaft_deg": 13.332105568499387,
+   "sfc_for_chart": 0.5094544764970175,
+   "collective_shaft_deg": 13.331788446008328,
    "tas_vs_ias": 0.0,
-   "curve_check_kw": 0.0012031373154854919,
-   "trim_residual": 0.001958143186276202
+   "curve_check_kw": 0.001197788185038462,
+   "trim_residual": 0.0019798543793458512
   },
   {
    "kg": 2200,
@@ -242,14 +231,14 @@
    "tas_kmh": 177.6,
    "chart_l_km": 1.143,
    "chart_lh": 202.9968,
-   "model_lh": 185.11481233534218,
-   "model_kw": 301.9381098756469,
+   "model_lh": 185.10821714684698,
+   "model_kw": 301.9197357120272,
    "chart_kw_on_model_curve": 351.7570567424702,
-   "sfc_for_chart": 0.5073806813923488,
-   "collective_shaft_deg": 13.32416952251462,
+   "sfc_for_chart": 0.5074010408242241,
+   "collective_shaft_deg": 13.323847493239604,
    "tas_vs_ias": -0.0036319375492975814,
-   "curve_check_kw": 0.00154357061404653,
-   "trim_residual": 0.0023895148617835227
+   "curve_check_kw": 0.0015442082453773764,
+   "trim_residual": 0.0026317629266636115
   },
   {
    "kg": 2200,
@@ -258,37 +247,26 @@
    "tas_kmh": 164.4,
    "chart_l_km": 1.155,
    "chart_lh": 189.882,
-   "model_lh": 167.08930189943993,
-   "model_kw": 278.59161996728585,
+   "model_lh": 167.0817624987325,
+   "model_kw": 278.57060691753867,
    "chart_kw_on_model_curve": 342.0909975413526,
-   "sfc_for_chart": 0.5254524806741407,
-   "collective_shaft_deg": 13.377866338280437,
+   "sfc_for_chart": 0.5254790788642968,
+   "collective_shaft_deg": 13.37749109274015,
    "tas_vs_ias": -0.0038908638034867993,
-   "curve_check_kw": 0.0012332526439990943,
-   "trim_residual": 0.007484170112509658
+   "curve_check_kw": 0.0012422969809335882,
+   "trim_residual": 0.007715609005814443
   },
   {
    "kg": 2200,
    "alt_m": 3000,
-   "pitch": 0.9,
-   "tas_kmh": 141.2,
-   "chart_l_km": 1.288,
-   "chart_lh": 181.8656,
-   "model_lh": 155.2831491003642,
-   "model_kw": 269.7110398484264,
-   "chart_kw_on_model_curve": 343.7675887609651,
-   "sfc_for_chart": 0.5388477741541878,
-   "collective_shaft_deg": 13.67190604629102,
-   "tas_vs_ias": 0.005292231627054944,
-   "curve_check_kw": 0.0005378077923978708,
-   "trim_residual": 0.0931330405365951
+   "error": "no level trim: 2200 kg, 3000 m, 76 kt (residual 0.10)"
   }
  ],
  "checks": [
   {
    "check": "points that trimmed, but for those the model can't fly",
    "limit": "none",
-   "worst": "2 of 19 not flown, 0 of them unexpected",
+   "worst": "4 of 19 not flown, 0 of them unexpected",
    "ok": true
   },
   {

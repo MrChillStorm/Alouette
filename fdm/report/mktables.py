@@ -297,16 +297,17 @@ def cruise_table():
     span('CrSeaChartKw', [p['chart_kw_on_model_curve'] for p in sea], '%.0f')
     span('CrSeaSfc', [p['sfc_for_chart'] for p in sea], '%.2f')
     num('Sfc', '%.2f' % U.SFC)
-    # the order of the weights at 2000 and 3000 m, heaviest less lightest: no engine curve changes it
+    # the order of the weights at 2000 m, heaviest less lightest: no engine curve changes it (higher up, the heaviest
+    # can't be flown)
     chart, power = [], []
-    for alt in (2000, 3000):
+    for alt in (2000,):
         q = sorted((p for p in ok if p['alt_m'] == alt), key=lambda p: p['kg'])
         assert (q[0]['kg'], q[-1]['kg']) == (1600, 2200)
         chart.append(100 * (q[-1]['chart_lh'] / q[0]['chart_lh'] - 1))
         power.append(-100 * (q[-1]['model_kw'] / q[0]['model_kw'] - 1))
     span('CrWeightChart', chart, '%.0f'); span('CrWeightModel', power, '%.0f')
     failed = sorted((p['kg'], p['alt_m']) for p in d['points'] if 'error' in p)
-    assert failed == [(1800, 4000), (2000, 4000)], 'the text names the two points the model cannot fly: %s' % failed
+    assert failed == [(1800, 4000), (2000, 3000), (2000, 4000), (2200, 3000)], 'the text names the points the model cannot fly: %s' % failed
 
 
 # ---------------------------------------------------------------- derivatives and modes

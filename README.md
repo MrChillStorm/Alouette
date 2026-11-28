@@ -178,14 +178,14 @@ kilometre (fig. 3-3).
 | Hover out of ground effect, 2200 kg, sea level | the manual's ceiling charts are flown on about 390 kW; their ceiling at this mass is 100 m | 391 kW (361 kW in ground effect, wheels at 1 m); the hover correction's strength is fitted to this chart (without it, about 365 kW) |
 | Ground effect: weight hovered in it over weight out of it, on the same power | 1.060–1.064 from 1650 to 4000 m (fig. 3-5); 1.062–1.069 off the standard temperature (figs. 3-6, 3-7) | wheels at 1 m: 1.062–1.063, fitted to fig. 3-5; the same off the standard temperature (1.094–1.096 before the fit) |
 | Maximum level speed at the 405 kW continuous rating | 210 km/h maximum speed, V<sub>NE</sub> | 208 km/h |
-| Hover ceilings, 2200 kg | out of ground effect 100 m (the manual, TD) or 1100 m (Aérostories); in it 1650 or 2850 m | on the manual's 390 kW, −76 m out of ground effect (fitted at the chart's 2190 kg and 100 m) and 2020 m in it; on the 420 kW take-off rating about 1800 m and 3400 m. At 2100–2200 kg the manual's ceilings imply 378–392 kW, Aérostories' about 407 kW |
+| Hover ceilings, 2200 kg | out of ground effect 100 m (the manual, TD) or 1100 m (Aérostories); in it 1650 or 2850 m | on the manual's 390 kW, −75 m out of ground effect (fitted at the chart's 2190 kg and 100 m) and 2020 m in it; on the 420 kW take-off rating about 1800 m and 3400 m. At 2100–2200 kg the manual's ceilings imply 378–392 kW, Aérostories' about 407 kW |
 | Rate of climb, 2200 kg | 4.3 m/s (TD), 5.5 m/s (Aérostories) | 6.8 m/s at 405 kW; 5.8–6.4 m/s at 378–392 kW |
 | Cruise speed, 2200 kg | 180–195 km/h | 197 km/h at 362 kW |
-| Cruise fuel flow, 1600–2200 kg, at the manual's speeds (figs. 3-1, 3-3) | 225–226 L/h at sea level, 174–182 L/h at 3000 m | 206–209 L/h at sea level, 7–9 % less; 155–165 L/h at 3000 m; 1–15 % less over the 17 points it flies, of 19 |
+| Cruise fuel flow, 1600–2200 kg, at the manual's speeds (figs. 3-1, 3-3) | 225–226 L/h at sea level, 174–175 L/h at 3000 m (1600 and 1800 kg) | 206–209 L/h at sea level, 7–9 % less; 162–165 L/h at 3000 m; 1–12 % less over the 15 points it flies, of 19 |
 | Engine start | idle about 15 000 rpm (AOPA Pilot flight test), 16 330 rpm (a cockpit recording), 17 000–18 000 rpm (the Lama's engine); the clutch engages from 19 000 rpm (AOPA), the rotor turning at 19 500–21 000 rpm (a simulator manual after the Lama's flight manual); two recorded starts: light-off at 16 % about 14.5 s after the starter, idle about 30 s later, the rotor locked 45 s after take-up with the spool at 80 % | idle 16330 rpm at 299 °C; light-off 14.1 s after the button; rotor taken up at 20823 rpm, at 95 % 22 s after the lever leaves idle |
 | Rotor speed after a power failure at 60 kt, collective held | 270 rpm lower limit in autorotation (TCDS) | 310 rpm in 1.3 s, 270 rpm in 2.8 s |
 | Steady autorotation, 2200 kg | about 1700 ft/min (AOPA Pilot flight test, 1972) | least descent 1923 ft/min at 60 kt |
-| Vortex ring state, vertical descent | Johnson's model | heave mode unstable from 774 to 2819 ft/min; none from 20 kt |
+| Vortex ring state, vertical descent | Johnson's model | heave mode unstable from 774 to 2822 ft/min; none from 20 kt |
 | Flap and lag frequencies, Lock number | theory, the 3-D model's hinge offset | 1.017 and 0.183 per rev, Lock number 5.1 |
 
 ## Known gaps
@@ -222,19 +222,20 @@ kilometre (fig. 3-3).
   climbs at speed, cruise and autorotation barely change.
 - **Cruise fuel** is under the flight manual's, and nothing is fitted to it.
   - At the charts' speeds the model burns 7–9 % less at sea level, and up to
-    15 % less (2200 kg at 3000 m). On the model's engine curve the manual's
+    12 % less (2200 kg at 2000 m). On the model's engine curve the manual's
     sea level fuel takes 383–387 kW, close to the hover charts' 390, where the
     model's flight takes 330–338 kW. That conversion rests on the engine's
     consumption at its rating, 0.46 kg/kWh, a figure from Wikipedia: about
     0.50–0.51 would close the gap at sea level.
-  - One difference no engine curve can close. At 2000 and 3000 m the manual
-    burns 4 % more at 2200 kg than at 1600 kg, each at its own speed; the
-    model takes 9–12 % less power at 2200 kg than at 1600 kg, and so burns
-    less. Either its rotors charge too little for weight, or its drag, much of
-    it estimated, charges too much for speed, or both.
-  - At 4000 m the model can't fly 1800 and 2000 kg at the charts' speeds: it
-    stops at about 92 kt for 98, and 74 kt for 81, short of lift, with no
-    control near its stop.
+  - One difference no engine curve can close. At 2000 m the manual burns 4 %
+    more at 2200 kg than at 1600 kg, each at its own speed; the model takes
+    12 % less power at 2200 kg than at 1600 kg, and so burns less. Either its
+    rotors charge too little for weight, or its drag, much of it estimated,
+    charges too much for speed, or both.
+  - Four of the points it can't fly at the charts' speeds, short of lift, with
+    no control near its stop: at 3000 m, 2000 and 2200 kg, it stops about half
+    a knot short, and at 4000 m, 1800 and 2000 kg, at about 92 kt for 98 and
+    73 kt for 81.
 - **No dynamic data.** The trims, derivatives and responses rest on physics
   and on estimates (the blades' mass and inertia, scaled from the
   Alouette II's blade; the lag damper; the control ranges; the servos), which
@@ -332,8 +333,8 @@ python3 genal3.py root/aircraft/alouette3
   manual's cruise speed and fuel consumption charts, as digitized in
   `data/al3_cruise_charts.py`. It writes its tables into `out/`. Nothing is
   fitted to these charts and there is no pass mark for the model: it exits
-  with an error only if a point doesn't trim or the chart readings disagree
-  with themselves.
+  with an error only if a point other than the four it can't fly doesn't
+  converge, or the chart readings disagree with themselves.
 - `report/mkresults.py` runs the whole programme, the three chart comparisons
   last and one at a time, into `report/results/`, and fails if a climb or
   autorotation speed doesn't trim;

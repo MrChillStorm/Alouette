@@ -221,7 +221,9 @@ critical Mach number with thickness~\cite{n824}.
 
 \subsection{Airframe}
 The fuselage's lift and drag against angle of attack are the 20th ERF's wind tunnel data for the Alouette III~\cite{e94}, on the rotor
-disc's 95\,m$^2$; side force and yawing moment by the cross-flow principle, with the body's Munk moments. The parts the tests leave out
+disc's 95\,m$^2$; side force and yawing moment by the cross-flow principle, with the body's Munk moments. In a side wind each is worked out
+from the flow it faces: lift, drag and pitching moment from the flow in the plane of symmetry, the side force from the flow square to the
+side, the yawing moment from the fore-and-aft and side flows, and the pod has no rolling moment of its own. The parts the tests leave out
 (the open tail boom, the gear, the rotor head and mast, and the rest) are cross-flow and flat-plate estimates; the last, 4\,ft$^2$, is a
 round figure, not fitted. The stabiliser (0.8\,m$^2$ between its end plates) and the end plates are lifting surfaces in the rotor's wake.
 
@@ -415,14 +417,16 @@ the manual's fuel.}\label{tab:cruise}
 \Tab{cruise}
 \end{table*}
 Table~\ref{tab:cruise} sets the model's fuel flow in level flight against the manual's, its speed (fig.\ 3-1) times its fuel per
-kilometre (fig.\ 3-3), at 1600 to 2200\,kg. The model flies \NCrFlown{} of the \NCrN{} points; at 4000\,m it cannot fly 1800 or
-2000\,kg at the charts' speeds. Where it flies, it burns \NCrLessLo--\NCrLessHi\,\% less: at sea level \NCrSeaModelLo--\NCrSeaModelHi\,L/h
+kilometre (fig.\ 3-3), at 1600 to 2200\,kg. The model flies \NCrFlown{} of the \NCrN{} points. The other four it cannot fly at
+the charts' speeds: short of lift, with no control near its stop, level flight stops about half a knot short at 3000\,m at 2000 and
+2200\,kg, and at 4000\,m at about 92\,kt for 98 and 73\,kt for 81 (1800 and 2000\,kg). Each 3000\,m point stops with the same
+controls as the 4000\,m one of nearly the same weight over air density. Where it flies, it burns \NCrLessLo--\NCrLessHi\,\% less: at sea level \NCrSeaModelLo--\NCrSeaModelHi\,L/h
 for \NCrSeaChartLo--\NCrSeaChartHi\,L/h. The charts give no power. On the model's engine curve the manual's sea level fuel takes
 \NCrSeaChartKwLo--\NCrSeaChartKwHi\,kW, close to the hover charts' \NChartKw\,kW, where the model's flight takes
 \NCrSeaKwLo--\NCrSeaKwHi\,kW. That conversion rests on the engine's consumption at its rating, \NSfc\,kg/kWh, a general
-figure~\cite{wa}; \NCrSeaSfcLo--\NCrSeaSfcHi\,kg/kWh would close the gap at sea level. One difference no engine curve can close: at 2000
-and 3000\,m the manual burns \NCrWeightChartHi\,\% more at 2200\,kg than at 1600\,kg, each at its own speed, where
-the model takes \NCrWeightModelLo--\NCrWeightModelHi\,\% less power at 2200\,kg, and so burns less. Either its rotors charge too little for
+figure~\cite{wa}; \NCrSeaSfcLo--\NCrSeaSfcHi\,kg/kWh would close the gap at sea level. One difference no engine curve can close: at 2000\,m
+the manual burns \NCrWeightChartHi\,\% more at 2200\,kg than at 1600\,kg, each at its own speed, where
+the model takes \NCrWeightModelHi\,\% less power at 2200\,kg, and so burns less. Either its rotors charge too little for
 weight, or its drag, much of it estimated, too much for speed, or both. Nothing is fitted to these charts.
 
 \subsection{Climb and autorotation}\label{sec:climb}
@@ -562,6 +566,14 @@ collective step or a fuel cut drove the rotor's speed, by some 27\,kW after a 10
 270\,rpm 0.5\,s too soon.
 \item \emph{The test flight's recovery} from its autorotation, begun at 300\,ft, touched the ground, which the report did not say;
 it now begins at \NMiRecoverFt\,ft.
+\item \emph{The fuselage in a side wind.} The side's force was counted twice; the belly's turned with the side flow, pushing the aircraft
+fore, aft and sideways; and the pitching and yawing moments turned about tilted axes, which at 1441\,kg in a 25\,kt side wind gave a false
+rolling moment of 300--350\,ft\,lb. At 2200\,kg in a 25\,kt wind from either side, the wheels 1\,ft up, the hover's bank went from
+10.0$^\circ$ and $-$3.7$^\circ$ to 6.0$^\circ$ and 0.2$^\circ$, and its power from 303--305\,kW to 285\,kW. The hover's growing
+oscillation now doubles in \NModeOscDouble\,s, from 36\,s. No side wind measurements of the Alouette III's fuselage are public.
+\item \emph{The cruise comparison} counted two points the model cannot fly, 2000 and 2200\,kg at 3000\,m: their trims never converged
+but left little enough to pass a loose limit, and the power there moved by some 5\,kW with the way there. It now requires converged
+trims.
 \end{itemize}
 
 % =====================================================================================================================
